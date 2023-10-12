@@ -1,0 +1,45 @@
+import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
+import { getEnvByKey } from "./env";
+
+let request: AxiosInstance | null = null;
+
+export function initAxiosInstance() {
+  request = axios.create({
+    baseURL: getEnvByKey("BASE_URL"),
+    headers: {
+      "Content-Type": "application/json",
+    },
+    timeout: 60000,
+  });
+
+  // Add request interceptor
+  request.interceptors.request.use(
+    (config: any) => {
+      // Do something before request is sent
+      return config;
+    },
+    (error: any) => {
+      // Do something with request error
+      return Promise.reject(error);
+    }
+  );
+
+  // Add response interceptor
+  request.interceptors.response.use(
+    (response: any) => {
+      // Do something with response data
+      return response;
+    },
+    (error: any) => {
+      // Do something with response error
+      return Promise.reject(error);
+    }
+  );
+}
+
+export default function requestInstance() {
+    if (!request) {
+        initAxiosInstance();
+    }
+    return request!;
+};

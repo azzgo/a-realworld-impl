@@ -1,0 +1,58 @@
+{
+  "consumer": {
+    "name": "realworldWeb"
+  },
+  "interactions": [
+    {
+      "description": "a request to login",
+      "providerStates": [
+        {
+          "name": "user exists"
+        }
+      ],
+      "request": {
+        "body": {
+          "user": {
+            "email": "jake@jake.jake",
+            "password": "jakejake"
+          }
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "method": "POST",
+        "path": "/login"
+      },
+      "response": {
+        "body": {
+          "user": {
+            "bio": "I work at statefarm",
+            "email": "jake@jake.jake",
+            "image": "http://image.url",
+            "token": "jwt.token.here",
+            "username": "jake"
+          }
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "status": 201
+      }
+    }
+  ],
+  "metadata": {
+    "pact-js": {
+      "version": "12.1.0"
+    },
+    "pactRust": {
+      "ffi": "0.4.9",
+      "models": "1.1.11"
+    },
+    "pactSpecification": {
+      "version": "3.0.0"
+    }
+  },
+  "provider": {
+    "name": "realworldServer"
+  }
+}
