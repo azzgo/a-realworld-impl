@@ -1,9 +1,7 @@
 package how.realworld.server.controller
 
-import how.realworld.server.dto.ErrorResponseDTO
-import how.realworld.server.dto.UserLoginDto
-import how.realworld.server.dto.UserLoginResponseDto
-import how.realworld.server.dto.UserLoginResponseDtoUser
+import how.realworld.server.dto.*
+import how.realworld.server.model.Users
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -13,22 +11,18 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/user")
 class AuthController(
+        private val users: Users
 ) {
     @PostMapping("/login")
     fun login(@RequestBody userLoginDto: UserLoginDto): ResponseEntity<*> {
-        if (userLoginDto.user.email != "jake@jake.jake") {
+        val user = users.getByEmail(userLoginDto.user.email)
+        if (user == null || !user.matched(userLoginDto.user.password)) {
             return ResponseEntity.status(403).body(ErrorResponseDTO(
                     errors = mapOf(Pair("email or password", listOf("is invalid")))
             ))
         }
         return ResponseEntity.status(201).body(UserLoginResponseDto(
-                user = UserLoginResponseDtoUser(
-                        email = "jake@jake.jake",
-                        token = "jwt.token.here",
-                        bio = "I work at statefarm",
-                        image = "http://image.url",
-                        username = "jake"
-                )
+                user = UserLoginResponseDto_User.fromUser(user, user.generateToken())
         ))
     }
 }

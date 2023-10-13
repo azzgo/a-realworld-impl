@@ -1,10 +1,10 @@
 package how.realworld.server.dto
 
 data class UserLoginDto(
-    val user: UserLoginDtoUser
+    val user: UserLoginDto_User
 )
 
-data class UserLoginDtoUser (
+data class UserLoginDto_User (
     val email: String,
     val password: String
 )
