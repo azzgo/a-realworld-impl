@@ -34,7 +34,7 @@ export function useUserController(): UserController {
 export const UserControllerContext = createContext<UserController | null>(null);
 
 export async function login(email: string, password: string) {
-  const res = await request().post<{ user: LoginUserResponse }>("/login", {
+  const res = await request().post<{ user: LoginUserResponse }>("/user/login", {
     user: { email, password },
   });
   const user = res.data.user;

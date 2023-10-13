@@ -19,7 +19,7 @@ describe("comsumer test for login", () => {
       .uponReceiving("a request to login")
       .withRequest({
         method: "POST",
-        path: "/login",
+        path: "/user/login",
         headers: {
           "Content-Type": "application/json",
         },
@@ -65,7 +65,7 @@ describe("comsumer test for login", () => {
       .uponReceiving("a request to login")
       .withRequest({
         method: "POST",
-        path: "/login",
+        path: "/user/login",
         headers: {
           "Content-Type": "application/json",
         },

@@ -21,7 +21,7 @@
           "Content-Type": "application/json"
         },
         "method": "POST",
-        "path": "/login"
+        "path": "/user/login"
       },
       "response": {
         "body": {
