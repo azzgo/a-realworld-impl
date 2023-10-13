@@ -1,21 +1,36 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { UserControllerContext } from "../model/user";
 import Form, { Field } from "rc-field-form";
 import { useNavigate } from "react-router";
 import { Input } from "../components/Input";
+import { AxiosError } from "axios";
+import { ErrorBody } from "../type";
+import { ErrorCodeKey } from "../utils/request";
 
 type LoginFormData = {
   email: string;
   password: string;
-}
+};
 
 export default function Login() {
   const userController = useContext(UserControllerContext);
   const [formRef] = Form.useForm<LoginFormData>();
   const navigate = useNavigate();
+  const [showFormError, setShowFormError] = useState<string[]>([]);
 
   const summit = (values: LoginFormData) => {
-    userController?.login(values.email, values.password).then(() => navigate("/"));
+    userController?.login(values.email, values.password).then(
+      () => navigate("/"),
+      (e: AxiosError<ErrorBody>) => {
+        if (e.response?.data?.errors?.[ErrorCodeKey.emailOrPasssword]) {
+          const errorReason =
+            e.response?.data.errors[ErrorCodeKey.emailOrPasssword];
+          setShowFormError([
+            `${ErrorCodeKey.emailOrPasssword}} ${errorReason}}`,
+          ]);
+        }
+      }
+    );
   };
 
   return (
@@ -28,16 +43,21 @@ export default function Login() {
               <a href="/register">Need an account?</a>
             </p>
 
-            <ul className="error-messages">
-              <li>That email is already taken</li>
-            </ul>
+            {showFormError.length > 0 && (
+              <ul className="error-messages" data-testid="error-messages">
+                {showFormError.map((it) => (
+                  <li>{it}</li>
+                ))}
+              </ul>
+            )}
 
             <Form form={formRef as any} onFinish={summit}>
               <fieldset className="form-group">
                 <Field name="email">
                   <Input
                     className="form-control form-control-lg"
-                    type="text"
+                    type="email"
+                    required
                     data-testid="email-input"
                     placeholder="Email"
                   />
@@ -48,6 +68,7 @@ export default function Login() {
                   <Input
                     className="form-control form-control-lg"
                     type="password"
+                    required
                     data-testid="password-input"
                     placeholder="Password"
                   />

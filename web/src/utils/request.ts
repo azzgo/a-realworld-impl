@@ -1,7 +1,11 @@
-import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
+import axios, { AxiosInstance } from "axios";
 import { getEnvByKey } from "./env";
 
 let request: AxiosInstance | null = null;
+
+export const ErrorCodeKey = {
+  "emailOrPasssword": "email or passsword"
+}
 
 export function initAxiosInstance() {
   request = axios.create({

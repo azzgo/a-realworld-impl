@@ -13,7 +13,7 @@ describe("Login component", () => {
       login: vi.fn(),
     };
   });
-  test("should call login and redirect to home page when summit email and password", () => {
+  test("should call login and redirect to home page when summit email and password", async () => {
     (mockUserController.login as any).mockResolvedValueOnce(undefined);
 
     const { getByTestId } = renderLogin();
@@ -24,12 +24,32 @@ describe("Login component", () => {
     const submitButton = getByTestId("submit-button");
     fireEvent.click(submitButton);
 
-    waitFor(() => {
+    await waitFor(() => {
       expect(mockUserController.login).toHaveBeenCalledWith(
         "jake@jake.jake",
         "jakejake"
       );
       expect(getByTestId("home")).toBeDefined();
+    }, { timeout: 2000 });
+  });
+
+  test("should display error message when login failed", () => {
+    (mockUserController.login as any).mockResolvedValueOnce(undefined);
+
+    const { getByTestId, queryByTestId } = renderLogin();
+    expect(queryByTestId("error-messages")).toBeNull();
+
+    const emailInput = getByTestId("email-input");
+    const passwordInput = getByTestId("password-input");
+    fireEvent.change(emailInput, { target: { value: "fake@jake.jake" } });
+    fireEvent.change(passwordInput, { target: { value: "fakefake" } });
+    const submitButton = getByTestId("submit-button");
+    fireEvent.click(submitButton);
+    waitFor(() => {
+      expect(getByTestId("error-messages")).toBeDefined();
+      expect(getByTestId("error-messages").textContent).toEqual(
+        "email or password is invalid"
+      );
     });
   });
 
@@ -42,7 +62,7 @@ describe("Login component", () => {
           <MemoryRouter initialEntries={["/login"]}>
             <Routes>
               <Route element={<Login />} path="/login" />
-              <Route element={<div date-testid="home">Home</div>} path="/" />
+              <Route element={<div data-testid="home">Home</div>} path="/" />
             </Routes>
           </MemoryRouter>
         </UserControllerContext.Provider>

@@ -6,7 +6,6 @@ import { useUserController, userAtom } from "../../src/model/user";
 import { initAxiosInstance } from "../../src/utils/request";
 import { getDefaultStore } from "jotai";
 import { getToken } from "../../src/utils/token";
-import exp from "constants";
 import { AxiosError } from "axios";
 
 describe("comsumer test for login", () => {
