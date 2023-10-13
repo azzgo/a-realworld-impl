@@ -61,7 +61,7 @@ describe("comsumer test for login", () => {
 
   test("when login failed should not update store and token and throw error", async () => {
     provider
-      .given("user exists")
+      .given("user not or password invalid")
       .uponReceiving("a request to login")
       .withRequest({
         method: "POST",

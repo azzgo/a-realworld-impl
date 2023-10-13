@@ -13,6 +13,42 @@
       "request": {
         "body": {
           "user": {
+            "email": "jake@jake.jake",
+            "password": "jakejake"
+          }
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "method": "POST",
+        "path": "/user/login"
+      },
+      "response": {
+        "body": {
+          "user": {
+            "bio": "I work at statefarm",
+            "email": "jake@jake.jake",
+            "image": "http://image.url",
+            "token": "jwt.token.here",
+            "username": "jake"
+          }
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "status": 201
+      }
+    },
+    {
+      "description": "a request to login",
+      "providerStates": [
+        {
+          "name": "user not or password invalid"
+        }
+      ],
+      "request": {
+        "body": {
+          "user": {
             "email": "fake@jake.jake",
             "password": "fakefake"
           }
