@@ -13,8 +13,8 @@
       "request": {
         "body": {
           "user": {
-            "email": "jake@jake.jake",
-            "password": "jakejake"
+            "email": "fake@jake.jake",
+            "password": "fakefake"
           }
         },
         "headers": {
@@ -25,18 +25,16 @@
       },
       "response": {
         "body": {
-          "user": {
-            "bio": "I work at statefarm",
-            "email": "jake@jake.jake",
-            "image": "http://image.url",
-            "token": "jwt.token.here",
-            "username": "jake"
+          "errors": {
+            "email or password": [
+              "is invalid"
+            ]
           }
         },
         "headers": {
           "Content-Type": "application/json"
         },
-        "status": 201
+        "status": 403
       }
     }
   ],
