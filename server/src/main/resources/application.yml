@@ -1,0 +1,16 @@
+server:
+  port: 8080
+jwt:
+  secret: secret
+  expiration: 86400000
+spring:
+  dataSource:
+    driver: org.h2.Driver
+    url: jdbc:h2:mem:realworld
+    username: sa
+    password:
+    platform: h2
+    ddl-auto: create-drop
+    show-sql: true
+  jpa:
+    spring.jpa.database-platform: org.hibernate.dialect.H2Dialect
