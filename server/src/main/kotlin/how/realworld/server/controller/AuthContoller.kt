@@ -22,7 +22,7 @@ class AuthController(
             ))
         }
         return ResponseEntity.status(201).body(UserLoginResponseDto(
-                user = UserLoginResponseDto_User.fromUser(user, user.generateToken())
+                user = UserLoginResponseDto_User.fromUser(user, users.generateTokenForUser(user))
         ))
     }
 }

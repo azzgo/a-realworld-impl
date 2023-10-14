@@ -11,8 +11,6 @@ plugins {
 group = "how.realworld"
 version = "0.0.1-SNAPSHOT"
 
-val jsonwebtokenVersion = "0.11.2"
-
 java {
 	sourceCompatibility = JavaVersion.VERSION_18
 }
@@ -23,10 +21,8 @@ repositories {
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-	implementation("io.jsonwebtoken:jjwt-api:${jsonwebtokenVersion}")
-	runtimeOnly("io.jsonwebtoken:jjwt-impl:${jsonwebtokenVersion}")
+	implementation("com.auth0:java-jwt:4.4.0")
 	runtimeOnly("com.h2database:h2")
-	runtimeOnly("io.jsonwebtoken:jjwt-jackson:${jsonwebtokenVersion}")
 	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")

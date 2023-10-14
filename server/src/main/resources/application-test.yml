@@ -1,0 +1,3 @@
+auth:
+  jwt:
+    secret: 123456

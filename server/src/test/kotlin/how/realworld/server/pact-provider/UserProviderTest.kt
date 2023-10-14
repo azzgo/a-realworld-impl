@@ -7,16 +7,12 @@ import au.com.dius.pact.provider.junitsupport.StateChangeAction
 import au.com.dius.pact.provider.junitsupport.loader.PactFilter
 import au.com.dius.pact.provider.junitsupport.loader.PactFolder
 import au.com.dius.pact.provider.spring.junit5.PactVerificationSpringProvider
-import how.realworld.server.controller.AuthController
 import how.realworld.server.model.User
 import how.realworld.server.model.Users
-import how.realworld.server.model.impl.UsersImpl
-import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.TestTemplate
 import org.junit.jupiter.api.extension.ExtendWith
-import org.mockito.InjectMocks
-import org.mockito.Mockito.*
-import org.mockito.MockitoAnnotations
+import org.mockito.Mockito.mock
+import org.mockito.Mockito.`when`
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
@@ -46,7 +42,7 @@ class UserProviderTest() {
         `when`(user.username).thenReturn("jake")
         `when`(user.bio).thenReturn("I work at statefarm")
         `when`(user.image).thenReturn("http://image.url")
-        `when`(user.generateToken()).thenReturn("jwt.token.here")
+        `when`(users.generateTokenForUser(user)).thenReturn("jwt.token.here")
     }
 
     @State("user not or password invalid", comment = "用户不存在，或密码错误")
