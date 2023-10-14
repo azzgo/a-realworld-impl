@@ -12,7 +12,8 @@ export interface User {
 }
 
 export interface UserController {
-  login(email: string, password: string): Promise<void>
+  login(email: string, password: string): Promise<void>;
+  register(email: string, username: string, password: string): Promise<void>;
 }
 
 export interface LoginUserResponse extends User {
@@ -27,8 +28,12 @@ export function useUserController(): UserController {
     async login(email: string, password: string) {
       const user = await login(email, password);
       setUser(user);
-    }
-  }
+    },
+    async register(email: string, username: string, password: string) {
+      const user = await register(email, username, password);
+      setUser(user);
+    },
+  };
 }
 
 export const UserControllerContext = createContext<UserController | null>(null);
@@ -39,5 +44,14 @@ export async function login(email: string, password: string) {
   });
   const user = res.data.user;
   persistToken(user.token);
-  return omit(user, ['token']);
+  return omit(user, ["token"]);
+}
+
+export async function register(email: string, username: string, password: string) {
+  const res = await request().post<{ user: LoginUserResponse }>("/user", {
+    user: { email, username, password },
+  });
+  const user = res.data.user;
+  persistToken(user.token);
+  return omit(user, ["token"]);
 }

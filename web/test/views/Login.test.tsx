@@ -11,7 +11,7 @@ describe("Login component", () => {
   beforeEach(() => {
     mockUserController = {
       login: vi.fn(),
-    };
+    } as any;
   });
   test("should call login and redirect to home page when summit email and password", async () => {
     (mockUserController.login as any).mockResolvedValueOnce(undefined);

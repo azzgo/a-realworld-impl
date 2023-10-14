@@ -51,7 +51,7 @@ export default function Login() {
               </ul>
             )}
 
-            <Form form={formRef as any} onFinish={summit}>
+            <Form form={formRef} onFinish={summit}>
               <fieldset className="form-group">
                 <Field name="email">
                   <Input

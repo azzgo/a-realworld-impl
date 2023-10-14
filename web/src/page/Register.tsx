@@ -1,4 +1,26 @@
+import Form, { Field } from "rc-field-form";
+import { Input } from "../components/Input";
+import { UserControllerContext } from "../model/user";
+import { useContext } from "react";
+import { useNavigate } from "react-router";
+
+type RegisterFormData = {
+  username: string;
+  email: string;
+  password: string;
+};
+
 export default function Register() {
+  const userController = useContext(UserControllerContext);
+  const [formRef] = Form.useForm<RegisterFormData>();
+  const navigate = useNavigate();
+
+  const summit = (values: RegisterFormData) => {
+    userController?.register(values.email, values.username, values.password).then(
+      () => navigate("/"),
+    );
+  };
+  
   return (
     <div className="auth-page">
       <div className="container page">
@@ -13,32 +35,48 @@ export default function Register() {
               <li>That email is already taken</li>
             </ul>
 
-            <form>
+            <Form form={formRef} onFinish={summit}>
               <fieldset className="form-group">
-                <input
-                  className="form-control form-control-lg"
-                  type="text"
-                  placeholder="Username"
-                />
+                <Field name="username">
+                  <Input
+                    className="form-control form-control-lg"
+                    type="text"
+                    required
+                    data-testid="username-input"
+                    placeholder="Username"
+                  />
+                </Field>
               </fieldset>
               <fieldset className="form-group">
-                <input
-                  className="form-control form-control-lg"
-                  type="text"
-                  placeholder="Email"
-                />
+                <Field name="email">
+                  <Input
+                    className="form-control form-control-lg"
+                    type="email"
+                    required
+                    data-testid="email-input"
+                    placeholder="Email"
+                  />
+                </Field>
               </fieldset>
               <fieldset className="form-group">
-                <input
-                  className="form-control form-control-lg"
-                  type="password"
-                  placeholder="Password"
-                />
+                <Field name="password">
+                  <Input
+                    className="form-control form-control-lg"
+                    type="password"
+                    required
+                    data-testid="password-input"
+                    placeholder="Password"
+                  />
+                </Field>
               </fieldset>
-              <button className="btn btn-lg btn-primary pull-xs-right">
+              <button
+                data-testid="submit-button"
+                type="submit"
+                className="btn btn-lg btn-primary pull-xs-right"
+              >
                 Sign up
               </button>
-            </form>
+            </Form>
           </div>
         </div>
       </div>
