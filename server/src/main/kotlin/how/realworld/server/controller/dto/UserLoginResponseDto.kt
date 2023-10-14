@@ -1,4 +1,4 @@
-package how.realworld.server.dto
+package how.realworld.server.controller.dto
 
 import how.realworld.server.model.User
 

@@ -1,4 +1,4 @@
-package how.realworld.server.dto
+package how.realworld.server.controller.dto
 
 data class UserLoginDto(
     val user: UserLoginDto_User

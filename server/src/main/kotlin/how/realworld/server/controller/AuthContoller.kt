@@ -1,5 +1,6 @@
 package how.realworld.server.controller
 
+import how.realworld.server.controller.dto.*
 import how.realworld.server.dto.*
 import how.realworld.server.model.Users
 import org.springframework.http.ResponseEntity
