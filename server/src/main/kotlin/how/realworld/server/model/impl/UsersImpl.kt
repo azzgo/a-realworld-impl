@@ -36,6 +36,7 @@ open class UsersImpl(private val userRepository: UserRepository, @Value("\${auth
 
 private fun User.Companion.from(userMapper: UserMapper): User {
     return User(
+            userId = userMapper.id,
             email = userMapper.email,
             username = userMapper.username,
             password = userMapper.password,
