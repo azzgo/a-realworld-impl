@@ -1,4 +1,4 @@
-package how.realworld.server.pact_provider
+package how.realworld.server.pact.provider
 
 import au.com.dius.pact.provider.junit5.PactVerificationContext
 import au.com.dius.pact.provider.junitsupport.Provider
@@ -11,10 +11,10 @@ import how.realworld.server.model.User
 import how.realworld.server.model.Users
 import org.junit.jupiter.api.TestTemplate
 import org.junit.jupiter.api.extension.ExtendWith
-import org.mockito.Mockito.mock
-import org.mockito.Mockito.`when`
+import org.mockito.Mockito.*
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.test.context.junit.jupiter.SpringExtension
 
 
@@ -23,9 +23,12 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 @PactFolder("./../contacts/pacts")
 @PactFilter("user exists", "user not or password invalid")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-class UserProviderTest() {
+class UserProviderTest {
     @MockBean
-    private lateinit var users: Users;
+    private lateinit var users: Users
+
+    @MockBean
+    private lateinit var passwordEncoder: PasswordEncoder
 
     @TestTemplate
     @ExtendWith(PactVerificationSpringProvider::class)
@@ -37,8 +40,9 @@ class UserProviderTest() {
     fun userExists() {
         val user = mock(User::class.java)
         `when`(users.getByEmail("jake@jake.jake")).thenReturn(user)
-        `when`(user.matched("jakejake")).thenReturn(true)
+        `when`(passwordEncoder.matches(eq("jakejake"), any())).thenReturn(true)
         `when`(user.email).thenReturn("jake@jake.jake")
+        `when`(user.password).thenReturn("")
         `when`(user.username).thenReturn("jake")
         `when`(user.bio).thenReturn("I work at statefarm")
         `when`(user.image).thenReturn("http://image.url")
@@ -49,6 +53,6 @@ class UserProviderTest() {
     fun userDoesNotExistOrPasswordInvalid() {
         val user = mock(User::class.java)
         `when`(users.getByEmail("fake@jake.jake")).thenReturn(user)
-        `when`(user.matched("fakefake")).thenReturn(false)
+        `when`(passwordEncoder.matches(eq("fakefake"), any())).thenReturn(false)
     }
 }

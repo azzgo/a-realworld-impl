@@ -13,7 +13,8 @@ spring:
     ddl-auto: create-drop
     show-sql: true
   jpa:
-    spring.jpa.database-platform: org.hibernate.dialect.H2Dialect
+    database-platform: org.hibernate.dialect.H2Dialect
+    open-in-view: false
 auth:
   jwt:
     secret: secret

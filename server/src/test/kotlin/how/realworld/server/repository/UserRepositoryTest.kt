@@ -9,10 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureTestEntityManager
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager
 import org.springframework.boot.test.context.SpringBootTest
-import java.util.UUID
+import org.springframework.test.context.ActiveProfiles
 
 @SpringBootTest
 @AutoConfigureTestEntityManager
+@ActiveProfiles("test")
 class UserRepositoryTest {
     @Autowired
     private lateinit var userRepository: UserRepository
