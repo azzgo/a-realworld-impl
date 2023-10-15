@@ -1,6 +1,6 @@
 import request from "../utils/request";
 import { atom, useAtom } from "jotai";
-import { persistToken } from "../utils/token";
+import { clearToken, persistToken } from "../utils/token";
 import { omit } from "lodash";
 import { createContext } from "react";
 
@@ -34,7 +34,10 @@ export function useUserController(): UserController {
       const user = await register(email, username, password);
       setUser(user);
     },
-    logout() {},
+    logout() {
+      clearToken();
+      setUser(null);
+    },
   };
 }
 
