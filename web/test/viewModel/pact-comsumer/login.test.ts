@@ -1,11 +1,11 @@
 import { beforeEach, describe, expect, test } from "vitest";
 import { renderHook } from "@testing-library/react";
 import { provider } from "./pact.utils";
-import { configEnv } from "../../src/utils/env";
-import { useUserController, userAtom } from "../../src/model/user";
-import { initAxiosInstance } from "../../src/utils/request";
+import { configEnv } from "../../../src/utils/env";
+import { useUserController, userAtom } from "../../../src/model/user";
+import { initAxiosInstance } from "../../../src/utils/request";
 import { getDefaultStore } from "jotai";
-import { getToken } from "../../src/utils/token";
+import { getToken } from "../../../src/utils/token";
 import { AxiosError } from "axios";
 
 describe("comsumer test for login", () => {
