@@ -37,12 +37,16 @@ By Github Copilot to quick code a [readworld application](https://www.realworld.
 
 ### Business Features
 
-- [ ] Authenticate users via JWT (login/signup pages + logout button on settings page)
+- [x] Authenticate users via JWT (login/signup pages + logout button on settings page)
     - [x] Fake API login API, setup Login Page, when login load User Model to global store and set jwt token to localStorage
     - [x] Stub Provider Server, when login request comes, server should return jwt token and user info
     - [x] user register on user not registered and user username or email exist case
-    - [ ] logout on user setting page
+    - [x] create user and save to database
+    - [x] logout on user setting page
 - [ ] CRU- users (sign up & settings page - no deleting required)
+    - [x] create new user via signup page
+    - [ ] load user info in setting page
+    - [ ] update user info in settings page
 - [ ] CRUD Articles
 - [ ] CR-D Comments on articles (no updating required)
 - [ ] GET and display paginated lists of articles
