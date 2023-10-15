@@ -1,8 +1,11 @@
 import Form, { Field } from "rc-field-form";
 import { Input } from "../components/Input";
 import { UserControllerContext } from "../model/user";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router";
+import { AxiosError } from "axios";
+import { ErrorBody } from "../type";
+import { ErrorCodeKey } from "../utils/request";
 
 type RegisterFormData = {
   username: string;
@@ -14,13 +17,27 @@ export default function Register() {
   const userController = useContext(UserControllerContext);
   const [formRef] = Form.useForm<RegisterFormData>();
   const navigate = useNavigate();
+  const [showFormError, setShowFormError] = useState<string[]>([]);
 
   const summit = (values: RegisterFormData) => {
-    userController?.register(values.email, values.username, values.password).then(
-      () => navigate("/"),
-    );
+    userController
+      ?.register(values.email, values.username, values.password)
+      .then(
+        () => navigate("/"),
+        (e: AxiosError<ErrorBody>) => {
+          const errorKeys = Object.keys(e.response?.data?.errors ?? {});
+          if (errorKeys.length > 0) {
+            setShowFormError(
+              errorKeys.map(
+                (errorKey) =>
+                  `${errorKey} ${e.response?.data.errors[errorKey]}`
+              )
+            );
+          }
+        }
+      );
   };
-  
+
   return (
     <div className="auth-page">
       <div className="container page">
@@ -31,9 +48,13 @@ export default function Register() {
               <a href="/login">Have an account?</a>
             </p>
 
-            <ul className="error-messages">
-              <li>That email is already taken</li>
-            </ul>
+            {showFormError.length > 0 && (
+              <ul className="error-messages" data-testid="error-messages">
+                {showFormError.map((it) => (
+                  <li key={it}>{it}</li>
+                ))}
+              </ul>
+            )}
 
             <Form form={formRef} onFinish={summit}>
               <fieldset className="form-group">

@@ -46,7 +46,7 @@ export default function Login() {
             {showFormError.length > 0 && (
               <ul className="error-messages" data-testid="error-messages">
                 {showFormError.map((it) => (
-                  <li>{it}</li>
+                  <li key={it}>{it}</li>
                 ))}
               </ul>
             )}

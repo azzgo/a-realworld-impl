@@ -37,7 +37,36 @@ describe("Register Page", () => {
     }, { timeout: 2000 });
   });
 
-  test.todo("should show error tip to user when user username already exist", async () => {});
+  test("should show error tip to user when user username already exist", async () => {
+    (mockUserController.register as any).mockRejectedValueOnce({
+      response: {
+        data: {
+          errors: {
+            username: ["has already been taken"],
+          },
+        },
+      },
+    });
+
+    const { getByTestId, queryByTestId } = renderRegisterPage();
+    expect(queryByTestId("error-messages")).toBeNull();
+    const usernameInput = getByTestId("username-input");
+    const emailInput = getByTestId("email-input");
+    const passwordInput = getByTestId("password-input");
+    fireEvent.change(usernameInput, { target: { value: "jake" } });
+    fireEvent.change(emailInput, { target: { value: "jaek@jake.jake" } });
+    fireEvent.change(passwordInput, { target: { value: "jakejake" } });
+
+    const submitButton = getByTestId("submit-button");
+    fireEvent.click(submitButton);
+
+    await waitFor(() => {
+      expect(getByTestId("error-messages")).toBeDefined();
+      expect(getByTestId("error-messages").textContent).toEqual(
+        "username has already been taken"
+      );
+    });
+  });
   test.todo("should show error tip to user when user email already exist", async () => {});
 
   function renderRegisterPage() {
