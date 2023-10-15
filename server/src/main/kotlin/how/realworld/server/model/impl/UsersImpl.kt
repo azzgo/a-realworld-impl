@@ -39,7 +39,9 @@ class UsersImpl(private val userRepository: UserRepository, @Value("\${auth.jwt.
     }
 
     override fun checkUserExist(email: String, username: String): UserExist {
-        TODO("Not yet implemented")
+        val isEmailExist = userRepository.existsByEmail(email)
+        val isUsernameExist = userRepository.existsByUsername(username)
+        return UserExist(isEmailExist, isUsernameExist)
     }
 }
 

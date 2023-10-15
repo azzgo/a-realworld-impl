@@ -58,4 +58,15 @@ class UsersImplTest {
 
         assertThat(token, equalTo("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiaWQiLCJ1c2VybmFtZSI6Impha2UiLCJlbWFpbCI6Impha2UifQ.xs_1wdAD6LpKwL67Y3OrvJf4X2ZRZl9vw0X3gHnrUOk"))
     }
+
+    @Test
+    fun should_return_no_user_exists_status() {
+        `when`(userRepository.existsByEmail("jake.jake.jake")).thenReturn(false)
+        `when`(userRepository.existsByUsername("jake")).thenReturn(false)
+        val users = UsersImpl(userRepository, "")
+        val userExist = users.checkUserExist("jake@jake.jake", "jake")
+
+        assertThat(userExist.email, equalTo(false))
+        assertThat(userExist.username, equalTo(false))
+    }
 }
