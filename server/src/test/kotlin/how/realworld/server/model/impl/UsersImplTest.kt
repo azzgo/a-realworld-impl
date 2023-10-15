@@ -3,21 +3,25 @@ package how.realworld.server.model.impl
 import how.realworld.server.model.User
 import how.realworld.server.repository.UserRepository
 import how.realworld.server.repository.mapper.UserMapper
-import org.hamcrest.CoreMatchers.equalTo
+import org.hamcrest.CoreMatchers.*
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.mockito.Mockito.mock
-import org.mockito.Mockito.`when`
+import org.mockito.ArgumentCaptor
+import org.mockito.Mockito.*
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.test.context.ActiveProfiles
 
 @ActiveProfiles("test")
 class UsersImplTest {
     private lateinit var userRepository: UserRepository
+    private lateinit var passwordEncoder: PasswordEncoder
 
     @BeforeEach
     fun setup() {
         userRepository = mock(UserRepository::class.java)
+        passwordEncoder = mock(BCryptPasswordEncoder::class.java)
     }
 
     @Test
@@ -30,7 +34,7 @@ class UsersImplTest {
         `when`(userMapper.bio).thenReturn("bio")
         `when`(userMapper.image).thenReturn("image")
 
-        val users = UsersImpl(userRepository, "")
+        val users = UsersImpl(userRepository, passwordEncoder, "")
 
         val byEmailUser = users.getByEmail("jake@jake.jake")
 
@@ -53,7 +57,7 @@ class UsersImplTest {
                         image = "image"
                 )
 
-        val users = UsersImpl(userRepository, "a625cbe1-b347-4c56-a98c-f6678b9ae0a4")
+        val users = UsersImpl(userRepository, passwordEncoder, "a625cbe1-b347-4c56-a98c-f6678b9ae0a4")
         val token = users.generateTokenForUser(user)
 
         assertThat(token, equalTo("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiaWQiLCJ1c2VybmFtZSI6Impha2UiLCJlbWFpbCI6Impha2UifQ.xs_1wdAD6LpKwL67Y3OrvJf4X2ZRZl9vw0X3gHnrUOk"))
@@ -63,10 +67,31 @@ class UsersImplTest {
     fun should_return_no_user_exists_status() {
         `when`(userRepository.existsByEmail("jake.jake.jake")).thenReturn(false)
         `when`(userRepository.existsByUsername("jake")).thenReturn(false)
-        val users = UsersImpl(userRepository, "")
+        val users = UsersImpl(userRepository, passwordEncoder, "")
         val userExist = users.checkUserExist("jake@jake.jake", "jake")
 
         assertThat(userExist.email, equalTo(false))
         assertThat(userExist.username, equalTo(false))
+    }
+
+    @Test
+    fun should_createUser() {
+        val userMapper = UserMapper(
+            id = "id",
+            email = "jake@jake.jake",
+            username = "jake",
+            password = "encodedJakeJake"
+        )
+
+        `when`(userRepository.save(any())).thenReturn(userMapper)
+        `when`(passwordEncoder.encode("jakejake")).thenReturn("encodedJakeJake")
+        val users = UsersImpl(userRepository, passwordEncoder, "")
+
+        val user = users.createUser("jake@jake.jake", "jake", "jakejake")
+
+        assertThat(user.userId, equalTo("id"))
+        val savedArgumentCaptor = ArgumentCaptor.forClass(UserMapper::class.java)
+        verify(userRepository).save(savedArgumentCaptor.capture())
+        assertThat(savedArgumentCaptor.value.password, equalTo("encodedJakeJake"))
     }
 }

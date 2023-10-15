@@ -8,10 +8,11 @@ import how.realworld.server.model.Users
 import how.realworld.server.repository.UserRepository
 import how.realworld.server.repository.mapper.UserMapper
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
 @Service
-class UsersImpl(private val userRepository: UserRepository, @Value("\${auth.jwt.secret") private val secret: String) :
+class UsersImpl(private val userRepository: UserRepository, private val passwordEncoder: PasswordEncoder, @Value("\${auth.jwt.secret") private val secret: String) :
     Users {
 
     override fun getById(id: String): User? {
@@ -34,8 +35,14 @@ class UsersImpl(private val userRepository: UserRepository, @Value("\${auth.jwt.
             .sign(Algorithm.HMAC256(secret))
     }
 
-    override fun createUser(email: String, username: String, password: String): User {
-        TODO("Not yet implemented")
+    override fun createUser(email: String, username: String, rawPassword: String): User {
+        val userMapper = UserMapper(
+            email = email,
+            username = username,
+            password = passwordEncoder.encode(rawPassword)
+        )
+        val savedUserMapper = userRepository.save(userMapper)
+        return User.from(savedUserMapper)
     }
 
     override fun checkUserExist(email: String, username: String): UserExist {
