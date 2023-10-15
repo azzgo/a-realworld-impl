@@ -14,6 +14,7 @@ export interface User {
 export interface UserController {
   login(email: string, password: string): Promise<void>;
   register(email: string, username: string, password: string): Promise<void>;
+  logout(): void;
 }
 
 export interface LoginUserResponse extends User {
@@ -33,6 +34,7 @@ export function useUserController(): UserController {
       const user = await register(email, username, password);
       setUser(user);
     },
+    logout() {},
   };
 }
 
@@ -47,7 +49,11 @@ export async function login(email: string, password: string) {
   return omit(user, ["token"]);
 }
 
-export async function register(email: string, username: string, password: string) {
+export async function register(
+  email: string,
+  username: string,
+  password: string
+) {
   const res = await request().post<{ user: LoginUserResponse }>("/user", {
     user: { email, username, password },
   });
