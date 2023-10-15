@@ -36,6 +36,10 @@ class UsersImpl(private val userRepository: UserRepository, @Value("\${auth.jwt.
     override fun createUser(email: String, username: String, password: String): User {
         TODO("Not yet implemented")
     }
+
+    override fun checkUserExist(email: String, username: String): Boolean {
+        TODO("Not yet implemented")
+    }
 }
 
 private fun User.Companion.from(userMapper: UserMapper): User {

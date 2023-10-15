@@ -18,6 +18,9 @@ class AuthController(
 ) {
     @PostMapping()
     fun createUser(@RequestBody userRegisterDto: UserRegisterDto): ResponseEntity<UserAuthenticationResponseDto> {
+        if (users.checkUserExist(userRegisterDto.user.email, userRegisterDto.user.username)) {
+            throw BusinessException(422, mapOf(Pair("email", listOf("has already been taken"))))
+        }
         val user = users.createUser(userRegisterDto.user.email, userRegisterDto.user.username, userRegisterDto.user.password)
 
         return ResponseEntity.status(201).body(UserAuthenticationResponseDto(
