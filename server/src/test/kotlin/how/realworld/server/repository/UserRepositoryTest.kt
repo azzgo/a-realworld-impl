@@ -46,11 +46,28 @@ class UserRepositoryTest {
         assertThat(userExist, equalTo(true))
     }
 
+    @Test
+    @Transactional
+    fun should_save_new_user() {
+        val savedUserMapper = userRepository.save(UserMapper(
+            email = "jake@jake.jake",
+            username = "jake",
+            password = "encodedPassword"
+        ))
+
+        val dbSavedUserMapper = testEntityManager.find(UserMapper::class.java, savedUserMapper.id)
+
+        assertThat(dbSavedUserMapper, notNullValue())
+        assertThat(dbSavedUserMapper.email, equalTo("jake@jake.jake"))
+        assertThat(dbSavedUserMapper.username, equalTo("jake"))
+        assertThat(dbSavedUserMapper.password, equalTo("encodedPassword"))
+    }
+
     fun stubUser(email: String, username: String): UserMapper {
         return UserMapper(
-                email = email,
-                username = username,
-                password = "password"
+            email = email,
+            username = username,
+            password = "password"
         )
     }
 }
