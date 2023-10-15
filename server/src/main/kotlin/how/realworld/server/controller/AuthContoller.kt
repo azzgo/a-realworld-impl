@@ -18,15 +18,26 @@ class AuthController(
 ) {
     @PostMapping()
     fun createUser(@RequestBody userRegisterDto: UserRegisterDto): ResponseEntity<UserAuthenticationResponseDto> {
-        val checkUserExist = users.checkUserExist(userRegisterDto.user.email, userRegisterDto.user.username)
-        if (checkUserExist.email) {
-            throw BusinessException(422, mapOf(Pair("email", listOf("has already been taken"))))
-        }
+       verityUserExist(userRegisterDto)
         val user = users.createUser(userRegisterDto.user.email, userRegisterDto.user.username, userRegisterDto.user.password)
 
         return ResponseEntity.status(201).body(UserAuthenticationResponseDto(
             user = UserAuthenticationResponseDtoUserField.fromUser(user, users.generateTokenForUser(user))
         ))
+    }
+
+    private fun verityUserExist(userRegisterDto: UserRegisterDto) {
+        val checkUserExist = users.checkUserExist(userRegisterDto.user.email, userRegisterDto.user.username)
+        val errors = mutableMapOf<String, List<String>>()
+        if (checkUserExist.email) {
+            errors.put("email", listOf("has already been taken"))
+        }
+        if (checkUserExist.username) {
+            errors.put("username", listOf("has already been taken"))
+        }
+        if (!errors.isEmpty()) {
+            throw BusinessException(422, errors)
+        }
     }
 
     @PostMapping("/login")

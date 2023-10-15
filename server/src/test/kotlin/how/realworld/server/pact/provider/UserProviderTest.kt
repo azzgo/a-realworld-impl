@@ -22,7 +22,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 @ExtendWith(SpringExtension::class)
 @Provider("realworldServer")
 @PactFolder("./../contacts/pacts")
-@PactFilter("user exists", "user not or password invalid", "user not registered", "email already exist when registering")
+@PactFilter("user exists", "user not or password invalid", "user not registered", "email already exist when registering", "username already exist when registering")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 class UserProviderTest {
     @MockBean
@@ -74,5 +74,9 @@ class UserProviderTest {
     @State("email already exist when registering", comment = "注册时邮箱已存在")
     fun emailAlreadyExistWhenRegistering() {
         `when`(users.checkUserExist("jake@jake.taken", "jake")).thenReturn(UserExist(email = true, username = false))
+    }
+    @State("username already exist when registering", comment = "注册时用户名已存在")
+    fun usernameAlreadyExistWhenRegistering() {
+        `when`(users.checkUserExist("jake@jake.jake", "jake_exist")).thenReturn(UserExist(email = false, username = true))
     }
 }
