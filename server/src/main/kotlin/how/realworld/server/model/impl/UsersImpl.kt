@@ -10,8 +10,8 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 
 @Service
-class UsersImpl(private val userRepository: UserRepository, @Value("\${auth.jwt.secret") private val secret: String)
-    : Users {
+class UsersImpl(private val userRepository: UserRepository, @Value("\${auth.jwt.secret") private val secret: String) :
+    Users {
 
     override fun getById(id: String): User? {
         TODO("Not yet implemented")
@@ -27,10 +27,10 @@ class UsersImpl(private val userRepository: UserRepository, @Value("\${auth.jwt.
             throw IllegalArgumentException("cannot generate token for non exists user ${user.username}")
         }
         return JWT.create()
-                .withClaim("user_id", user.userId)
-                .withClaim("username", user.username)
-                .withClaim("email", user.username)
-                .sign(Algorithm.HMAC256(secret))
+            .withClaim("user_id", user.userId)
+            .withClaim("username", user.username)
+            .withClaim("email", user.username)
+            .sign(Algorithm.HMAC256(secret))
     }
 
     override fun createUser(email: String, username: String, password: String): User {
@@ -40,11 +40,11 @@ class UsersImpl(private val userRepository: UserRepository, @Value("\${auth.jwt.
 
 private fun User.Companion.from(userMapper: UserMapper): User {
     return User(
-            userId = userMapper.id,
-            email = userMapper.email,
-            username = userMapper.username,
-            password = userMapper.password,
-            bio = userMapper.bio,
-            image = userMapper.image
+        userId = userMapper.id,
+        email = userMapper.email,
+        username = userMapper.username,
+        password = userMapper.password,
+        bio = userMapper.bio,
+        image = userMapper.image
     )
 }

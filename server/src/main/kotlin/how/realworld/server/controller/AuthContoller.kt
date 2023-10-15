@@ -1,6 +1,7 @@
 package how.realworld.server.controller
 
 import how.realworld.server.controller.dto.*
+import how.realworld.server.controller.exception.BusinessException
 import how.realworld.server.model.Users
 import org.springframework.http.ResponseEntity
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -25,12 +26,10 @@ class AuthController(
     }
 
     @PostMapping("/login")
-    fun login(@RequestBody userLoginDto: UserLoginDto): ResponseEntity<*> {
+    fun login(@RequestBody userLoginDto: UserLoginDto): ResponseEntity<UserAuthenticationResponseDto> {
         val user = users.getByEmail(userLoginDto.user.email)
         if (user == null || !passwordEncoder.matches(userLoginDto.user.password, user.password)) {
-            return ResponseEntity.status(403).body(ErrorResponseDTO(
-                    errors = mapOf(Pair("email or password", listOf("is invalid")))
-            ))
+            throw BusinessException(403, mapOf(Pair("email or password", listOf("is invalid"))))
         }
         return ResponseEntity.status(201).body(UserAuthenticationResponseDto(
                 user = UserAuthenticationResponseDtoUserField.fromUser(user, users.generateTokenForUser(user))
