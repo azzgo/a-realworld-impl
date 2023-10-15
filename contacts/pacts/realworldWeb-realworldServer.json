@@ -72,6 +72,43 @@
         },
         "status": 403
       }
+    },
+    {
+      "description": "a request to register",
+      "providerStates": [
+        {
+          "name": "user not registered"
+        }
+      ],
+      "request": {
+        "body": {
+          "user": {
+            "email": "jake@jake.jake",
+            "password": "jakejake",
+            "username": "jake"
+          }
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "method": "POST",
+        "path": "/user"
+      },
+      "response": {
+        "body": {
+          "user": {
+            "bio": "I work at statefarm",
+            "email": "jake@jake.jake",
+            "image": "http://image.url",
+            "token": "jwt.token.here",
+            "username": "jake"
+          }
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "status": 201
+      }
     }
   ],
   "metadata": {
