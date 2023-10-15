@@ -3,6 +3,7 @@ package how.realworld.server.repository
 import how.realworld.server.repository.mapper.UserMapper
 import jakarta.transaction.Transactional
 import org.hamcrest.CoreMatchers.notNullValue
+import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -27,6 +28,22 @@ class UserRepositoryTest {
         testEntityManager.persist(stubUser("jake@jake.jake", "jake"))
         val userMapper = userRepository.findByEmail("jake@jake.jake")
         assertThat(userMapper, notNullValue())
+    }
+
+    @Test
+    @Transactional
+    fun should_email_exist() {
+        testEntityManager.persist(stubUser("jake@jake.jake", "jake"))
+        val existsByEmail = userRepository.existsByEmail("jake@jake.jake")
+        assertThat(existsByEmail, equalTo(true))
+    }
+
+    @Test
+    @Transactional
+    fun should_username_exist() {
+        testEntityManager.persist(stubUser("jake@jake.jake", "jake"))
+        val userExist = userRepository.existsByUsername("jake")
+        assertThat(userExist, equalTo(true))
     }
 
     fun stubUser(email: String, username: String): UserMapper {
