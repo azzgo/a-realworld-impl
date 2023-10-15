@@ -8,6 +8,7 @@ import au.com.dius.pact.provider.junitsupport.loader.PactFilter
 import au.com.dius.pact.provider.junitsupport.loader.PactFolder
 import au.com.dius.pact.provider.spring.junit5.PactVerificationSpringProvider
 import how.realworld.server.model.User
+import how.realworld.server.model.UserExist
 import how.realworld.server.model.Users
 import org.junit.jupiter.api.TestTemplate
 import org.junit.jupiter.api.extension.ExtendWith
@@ -63,7 +64,7 @@ class UserProviderTest {
             password = "",
             username = "jake",
         )
-        `when`(users.checkUserExist("jake@jake.taken", "jake")).thenReturn(false)
+        `when`(users.checkUserExist("jake@jake.jake", "jake")).thenReturn(UserExist(email = false, username = false))
         `when`(users.createUser("jake@jake.jake", "jake", "jakejake")).thenReturn(
             user
         )
@@ -72,6 +73,6 @@ class UserProviderTest {
 
     @State("email already exist when registering", comment = "注册时邮箱已存在")
     fun emailAlreadyExistWhenRegistering() {
-        `when`(users.checkUserExist("jake@jake.taken", "jake")).thenReturn(true)
+        `when`(users.checkUserExist("jake@jake.taken", "jake")).thenReturn(UserExist(email = true, username = false))
     }
 }

@@ -5,5 +5,10 @@ interface Users {
     fun getByEmail(email: String): User?
     fun generateTokenForUser(user: User): String
     fun createUser(email: String, username: String, password: String): User
-    fun checkUserExist(email: String, username: String): Boolean
+    fun checkUserExist(email: String, username: String): UserExist
 }
+
+data class UserExist(
+    val email: Boolean,
+    val username: Boolean
+)

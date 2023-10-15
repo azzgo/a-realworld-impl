@@ -3,6 +3,7 @@ package how.realworld.server.model.impl
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import how.realworld.server.model.User
+import how.realworld.server.model.UserExist
 import how.realworld.server.model.Users
 import how.realworld.server.repository.UserRepository
 import how.realworld.server.repository.mapper.UserMapper
@@ -37,7 +38,7 @@ class UsersImpl(private val userRepository: UserRepository, @Value("\${auth.jwt.
         TODO("Not yet implemented")
     }
 
-    override fun checkUserExist(email: String, username: String): Boolean {
+    override fun checkUserExist(email: String, username: String): UserExist {
         TODO("Not yet implemented")
     }
 }
