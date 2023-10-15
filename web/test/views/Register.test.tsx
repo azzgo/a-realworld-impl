@@ -7,7 +7,6 @@ import { MockAppWrapper } from "./utils.utils";
 import Register from "../../src/page/Register";
 
 describe("Register Page", () => {
-
   let mockUserController: UserController;
   beforeEach(() => {
     mockUserController = {
@@ -18,7 +17,7 @@ describe("Register Page", () => {
   test("should regiest new user", async () => {
     (mockUserController.register as any).mockResolvedValueOnce(undefined);
 
-    const { getByTestId } = renderRegisterPage();
+    const { getByTestId, queryByTestId } = renderRegisterPage();
     const usernameInput = getByTestId("username-input");
     const emailInput = getByTestId("email-input");
     const passwordInput = getByTestId("password-input");
@@ -28,14 +27,17 @@ describe("Register Page", () => {
     const submitButton = getByTestId("submit-button");
     fireEvent.click(submitButton);
 
-    await waitFor(() => {
-      expect(mockUserController.register).toHaveBeenCalledWith(
-        "jake@jake.jake",
-        "jake",
-        "jakejake"
-      );
-      expect(getByTestId("home")).toBeDefined();
-    }, { timeout: 2000 });
+    await waitFor(
+      () => {
+        expect(mockUserController.register).toHaveBeenCalledWith(
+          "jake@jake.jake",
+          "jake",
+          "jakejake"
+        );
+        expect(queryByTestId("home")).not.toBeNull();
+      },
+      { timeout: 2000 }
+    );
   });
 
   test("should show error tip to user when user username already exist", async () => {
