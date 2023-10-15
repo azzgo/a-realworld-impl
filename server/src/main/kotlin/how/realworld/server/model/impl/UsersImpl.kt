@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 
 @Service
-open class UsersImpl(private val userRepository: UserRepository, @Value("\${auth.jwt.secret") private val secret: String)
+class UsersImpl(private val userRepository: UserRepository, @Value("\${auth.jwt.secret") private val secret: String)
     : Users {
 
     override fun getById(id: String): User? {
@@ -31,6 +31,10 @@ open class UsersImpl(private val userRepository: UserRepository, @Value("\${auth
                 .withClaim("username", user.username)
                 .withClaim("email", user.username)
                 .sign(Algorithm.HMAC256(secret))
+    }
+
+    override fun createUser(email: String, username: String, password: String): User {
+        TODO("Not yet implemented")
     }
 }
 

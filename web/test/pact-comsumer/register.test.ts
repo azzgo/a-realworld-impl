@@ -40,8 +40,6 @@ describe("consumer test for register", () => {
             email: "jake@jake.jake",
             token: "jwt.token.here",
             username: "jake",
-            bio: "I work at statefarm",
-            image: "http://image.url",
           },
         },
       });
@@ -55,8 +53,6 @@ describe("consumer test for register", () => {
       expect(getDefaultStore().get(userAtom)).toEqual({
         email: "jake@jake.jake",
         username: "jake",
-        bio: "I work at statefarm",
-        image: "http://image.url",
       });
       expect(getToken()).toEqual("jwt.token.here");
     });

@@ -19,7 +19,8 @@ class SecurityConfig {
                 .authorizeHttpRequests { authorize ->
                     run {
                         authorize.requestMatchers("/user/login").permitAll()
-                        authorize.anyRequest().authenticated()
+                        authorize.requestMatchers("/user").permitAll()
+                        authorize.anyRequest().permitAll()
                     }
                 }
                 .formLogin { formLogin -> formLogin.disable() }

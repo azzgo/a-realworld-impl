@@ -1,7 +1,6 @@
 package how.realworld.server.controller
 
 import how.realworld.server.controller.dto.*
-import how.realworld.server.dto.*
 import how.realworld.server.model.Users
 import org.springframework.http.ResponseEntity
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -16,6 +15,15 @@ class AuthController(
         private val users: Users,
         private val passwordEncoder: PasswordEncoder
 ) {
+    @PostMapping()
+    fun createUser(@RequestBody userRegisterDto: UserRegisterDto): ResponseEntity<UserAuthenticationResponseDto> {
+        val user = users.createUser(userRegisterDto.user.email, userRegisterDto.user.username, userRegisterDto.user.password)
+
+        return ResponseEntity.status(201).body(UserAuthenticationResponseDto(
+            user = UserAuthenticationResponseDtoUserField.fromUser(user, users.generateTokenForUser(user))
+        ))
+    }
+
     @PostMapping("/login")
     fun login(@RequestBody userLoginDto: UserLoginDto): ResponseEntity<*> {
         val user = users.getByEmail(userLoginDto.user.email)
@@ -24,8 +32,8 @@ class AuthController(
                     errors = mapOf(Pair("email or password", listOf("is invalid")))
             ))
         }
-        return ResponseEntity.status(201).body(UserLoginResponseDto(
-                user = UserLoginResponseDto_User.fromUser(user, users.generateTokenForUser(user))
+        return ResponseEntity.status(201).body(UserAuthenticationResponseDto(
+                user = UserAuthenticationResponseDtoUserField.fromUser(user, users.generateTokenForUser(user))
         ))
     }
 }

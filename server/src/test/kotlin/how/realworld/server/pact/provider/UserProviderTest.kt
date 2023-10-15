@@ -21,7 +21,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 @ExtendWith(SpringExtension::class)
 @Provider("realworldServer")
 @PactFolder("./../contacts/pacts")
-@PactFilter("user exists", "user not or password invalid")
+@PactFilter("user exists", "user not or password invalid", "user not registered")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 class UserProviderTest {
     @MockBean
@@ -54,5 +54,18 @@ class UserProviderTest {
         val user = mock(User::class.java)
         `when`(users.getByEmail("fake@jake.jake")).thenReturn(user)
         `when`(passwordEncoder.matches(eq("fakefake"), any())).thenReturn(false)
+    }
+
+    @State("user not registered", comment = "用户未注册")
+    fun userNotRegistered() {
+        val user = User(
+            email = "jake@jake.jake",
+            password = "",
+            username = "jake",
+        )
+        `when`(users.createUser("jake@jake.jake", "jake", "jakejake")).thenReturn(
+            user
+        )
+        `when`(users.generateTokenForUser(user)).thenReturn("jwt.token.here")
     }
 }

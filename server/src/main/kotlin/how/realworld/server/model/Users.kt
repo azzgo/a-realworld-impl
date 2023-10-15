@@ -4,4 +4,5 @@ interface Users {
    fun getById(id: String): User?
    fun getByEmail(email: String): User?
    fun generateTokenForUser(user: User): String
+   fun createUser(email: String, username: String, password: String): User
 }
