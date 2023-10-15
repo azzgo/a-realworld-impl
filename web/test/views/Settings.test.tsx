@@ -24,6 +24,7 @@ describe("Setting Page", () => {
 
     await waitFor(() => {
       expect(mockUserController.logout).toHaveBeenCalled();
+      expect(queryByTestId("home")).not.toBeNull();
     });
   });
 

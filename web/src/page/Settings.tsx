@@ -1,8 +1,15 @@
-import {useContext} from "react";
-import {UserControllerContext} from "../model/user";
+import { useContext } from "react";
+import { UserControllerContext } from "../model/user";
+import { useNavigate } from "react-router";
 
 export default function Settings() {
-  const userController = useContext(UserControllerContext)
+  const userController = useContext(UserControllerContext);
+  const navigate = useNavigate();
+
+  function logout() {
+    userController?.logout();
+    navigate("/");
+  }
 
   return (
     <div className="settings-page">
@@ -58,7 +65,11 @@ export default function Settings() {
               </fieldset>
             </form>
             <hr />
-            <button onClick={userController?.logout} className="btn btn-outline-danger" data-testid="logout-btn">
+            <button
+              onClick={logout}
+              className="btn btn-outline-danger"
+              data-testid="logout-btn"
+            >
               Or click here to logout.
             </button>
           </div>
