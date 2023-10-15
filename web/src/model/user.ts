@@ -23,7 +23,7 @@ export interface LoginUserResponse extends User {
 export const userAtom = atom<User | null>(null);
 
 export function useUserController(): UserController {
-  const [_, setUser] = useAtom(userAtom);
+  const [, setUser] = useAtom(userAtom);
   return {
     async login(email: string, password: string) {
       const user = await login(email, password);
