@@ -13,17 +13,20 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/user")
 class AuthController(
-        private val users: Users,
-        private val passwordEncoder: PasswordEncoder
+    private val users: Users,
+    private val passwordEncoder: PasswordEncoder
 ) {
     @PostMapping()
     fun createUser(@RequestBody userRegisterDto: UserRegisterDto): ResponseEntity<UserAuthenticationResponseDto> {
-       verityUserExist(userRegisterDto)
-        val user = users.createUser(userRegisterDto.user.email, userRegisterDto.user.username, userRegisterDto.user.password)
+        verityUserExist(userRegisterDto)
+        val user =
+            users.createUser(userRegisterDto.user.email, userRegisterDto.user.username, userRegisterDto.user.password)
 
-        return ResponseEntity.status(201).body(UserAuthenticationResponseDto(
-            user = UserAuthenticationResponseDtoUserField.fromUser(user, users.generateTokenForUser(user))
-        ))
+        return ResponseEntity.status(201).body(
+            UserAuthenticationResponseDto(
+                user = UserAuthenticationResponseDtoUserField.fromUser(user, users.generateTokenForUser(user))
+            )
+        )
     }
 
     private fun verityUserExist(userRegisterDto: UserRegisterDto) {
@@ -46,8 +49,10 @@ class AuthController(
         if (user == null || !passwordEncoder.matches(userLoginDto.user.password, user.password)) {
             throw BusinessException(403, mapOf(Pair("email or password", listOf("is invalid"))))
         }
-        return ResponseEntity.status(201).body(UserAuthenticationResponseDto(
+        return ResponseEntity.status(201).body(
+            UserAuthenticationResponseDto(
                 user = UserAuthenticationResponseDtoUserField.fromUser(user, users.generateTokenForUser(user))
-        ))
+            )
+        )
     }
 }

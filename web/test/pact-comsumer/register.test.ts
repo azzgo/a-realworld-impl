@@ -6,7 +6,7 @@ import { configEnv } from "../../src/utils/env";
 import { initAxiosInstance } from "../../src/utils/request";
 import { renderHook } from "@testing-library/react";
 import { getToken } from "../../src/utils/token";
-import {AxiosError} from "axios";
+import { AxiosError } from "axios";
 
 describe("consumer test for register", () => {
   beforeEach(() => {
@@ -80,7 +80,7 @@ describe("consumer test for register", () => {
         status: 422,
         body: {
           errors: {
-            "username": ["has already been taken"],
+            username: ["has already been taken"],
           },
         },
       });
@@ -95,7 +95,7 @@ describe("consumer test for register", () => {
       expect(capturedError.response?.status).toEqual(422);
       expect(capturedError.response?.data).toEqual({
         errors: {
-          "username": ["has already been taken"],
+          username: ["has already been taken"],
         },
       });
 
@@ -126,7 +126,7 @@ describe("consumer test for register", () => {
         status: 422,
         body: {
           errors: {
-            "email": ["has already been taken"],
+            email: ["has already been taken"],
           },
         },
       });
@@ -141,7 +141,54 @@ describe("consumer test for register", () => {
       expect(capturedError.response?.status).toEqual(422);
       expect(capturedError.response?.data).toEqual({
         errors: {
-          "email": ["has already been taken"],
+          email: ["has already been taken"],
+        },
+      });
+
+      expect(getDefaultStore().get(userAtom)).toEqual(null);
+      expect(getToken()).toEqual(null);
+    });
+  });
+  test("when register email and username already exist", async () => {
+    provider
+      .given("both email and username already exist when registering")
+      .uponReceiving("a request to register")
+      .withRequest({
+        method: "POST",
+        path: "/user",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: {
+          user: {
+            email: "jake@jake.taken",
+            username: "jake_exist",
+            password: "fakefake",
+          },
+        },
+      })
+      .willRespondWith({
+        status: 422,
+        body: {
+          errors: {
+            email: ["has already been taken"],
+            username: ["has already been taken"],
+          },
+        },
+      });
+    return provider.executeTest(async (mockServer) => {
+      configEnv({ BASE_URL: mockServer.url });
+      initAxiosInstance();
+      const { result } = renderHook(() => useUserController());
+
+      const capturedError: AxiosError = await result.current
+        .register("jake@jake.taken", "jake_exist", "fakefake")
+        .catch((e) => e);
+      expect(capturedError.response?.status).toEqual(422);
+      expect(capturedError.response?.data).toEqual({
+        errors: {
+          email: ["has already been taken"],
+          username: ["has already been taken"],
         },
       });
 

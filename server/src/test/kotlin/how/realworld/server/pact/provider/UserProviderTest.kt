@@ -22,7 +22,14 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 @ExtendWith(SpringExtension::class)
 @Provider("realworldServer")
 @PactFolder("./../contacts/pacts")
-@PactFilter("user exists", "user not or password invalid", "user not registered", "email already exist when registering", "username already exist when registering")
+@PactFilter(
+    "user exists",
+    "user not or password invalid",
+    "user not registered",
+    "email already exist when registering",
+    "username already exist when registering",
+    "both email and username already exist when registering"
+)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 class UserProviderTest {
     @MockBean
@@ -75,8 +82,24 @@ class UserProviderTest {
     fun emailAlreadyExistWhenRegistering() {
         `when`(users.checkUserExist("jake@jake.taken", "jake")).thenReturn(UserExist(email = true, username = false))
     }
+
     @State("username already exist when registering", comment = "注册时用户名已存在")
     fun usernameAlreadyExistWhenRegistering() {
-        `when`(users.checkUserExist("jake@jake.jake", "jake_exist")).thenReturn(UserExist(email = false, username = true))
+        `when`(users.checkUserExist("jake@jake.jake", "jake_exist")).thenReturn(
+            UserExist(
+                email = false,
+                username = true
+            )
+        )
+    }
+
+    @State("both email and username already exist when registering", comment = "注册时邮箱和用户名都已存在")
+    fun bothEmailAndUsernameAlreadyExistWhenRegistering() {
+        `when`(users.checkUserExist("jake@jake.taken", "jake_exist")).thenReturn(
+            UserExist(
+                email = true,
+                username = true
+            )
+        )
     }
 }

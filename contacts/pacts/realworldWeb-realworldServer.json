@@ -7,6 +7,44 @@
       "description": "a request to register",
       "providerStates": [
         {
+          "name": "both email and username already exist when registering"
+        }
+      ],
+      "request": {
+        "body": {
+          "user": {
+            "email": "jake@jake.taken",
+            "password": "fakefake",
+            "username": "jake_exist"
+          }
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "method": "POST",
+        "path": "/user"
+      },
+      "response": {
+        "body": {
+          "errors": {
+            "email": [
+              "has already been taken"
+            ],
+            "username": [
+              "has already been taken"
+            ]
+          }
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "status": 422
+      }
+    },
+    {
+      "description": "a request to register",
+      "providerStates": [
+        {
           "name": "email already exist when registering"
         }
       ],
