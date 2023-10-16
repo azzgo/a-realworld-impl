@@ -1,10 +1,15 @@
 import { useContext } from "react";
-import { UserControllerContext } from "../model/user";
+import { UserControllerContext, userAtom } from "../model/user";
 import { useNavigate } from "react-router";
+import { useAtom } from "jotai";
+import Form, { Field } from "rc-field-form";
+import { Input } from "../components/Input";
+import { Textarea } from "../components/Textarea";
 
 export default function Settings() {
   const userController = useContext(UserControllerContext);
   const navigate = useNavigate();
+  const [user] = useAtom(userAtom);
 
   function logout() {
     userController?.logout();
@@ -22,48 +27,63 @@ export default function Settings() {
               <li>That name is required</li>
             </ul>
 
-            <form>
+            <Form initialValues={user ?? {}}>
               <fieldset>
                 <fieldset className="form-group">
-                  <input
-                    className="form-control"
-                    type="text"
-                    placeholder="URL of profile picture"
-                  />
+                  <Field name="image">
+                    <Input
+                      className="form-control"
+                      type="text"
+                      data-testid="profile-image"
+                      placeholder="URL of profile picture"
+                    />
+                  </Field>
                 </fieldset>
                 <fieldset className="form-group">
-                  <input
-                    className="form-control form-control-lg"
-                    type="text"
-                    placeholder="Your Name"
-                  />
+                  <Field name="username">
+                    <Input
+                      className="form-control form-control-lg"
+                      type="text"
+                      data-testid="profile-username"
+                      placeholder="Your Name"
+                    />
+                  </Field>
                 </fieldset>
                 <fieldset className="form-group">
-                  <textarea
-                    className="form-control form-control-lg"
-                    rows={8}
-                    placeholder="Short bio about you"
-                  ></textarea>
+                  <Field name="bio">
+                    <Textarea
+                      className="form-control form-control-lg"
+                      rows={8}
+                      data-testid="profile-bio"
+                      placeholder="Short bio about you"
+                    />
+                  </Field>
                 </fieldset>
                 <fieldset className="form-group">
-                  <input
-                    className="form-control form-control-lg"
-                    type="text"
-                    placeholder="Email"
-                  />
+                  <Field name="email">
+                    <input
+                      className="form-control form-control-lg"
+                      type="email"
+                      data-testid="profile-email"
+                      placeholder="Email"
+                    />
+                  </Field>
                 </fieldset>
                 <fieldset className="form-group">
-                  <input
-                    className="form-control form-control-lg"
-                    type="password"
-                    placeholder="New Password"
-                  />
+                  <Field name="password">
+                    <input
+                      className="form-control form-control-lg"
+                      type="password"
+                      data-testid="profile-password"
+                      placeholder="New Password"
+                    />
+                  </Field>
                 </fieldset>
                 <button className="btn btn-lg btn-primary pull-xs-right">
                   Update Settings
                 </button>
               </fieldset>
-            </form>
+            </Form>
             <hr />
             <button
               onClick={logout}

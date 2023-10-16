@@ -10,7 +10,7 @@ import Login from "./page/Login.tsx";
 import Register from "./page/Register.tsx";
 import Layout from "./layout/Layout.tsx";
 import { getToken } from "./utils/token.ts";
-import { Provider } from "jotai";
+import { createStore, Provider } from "jotai";
 import { UserControllerContext, useUserController } from "./model/user.ts";
 
 const simpleGuard = () => {
@@ -33,11 +33,13 @@ const routes = createBrowserRouter([
   },
 ]);
 
+const appStore = createStore()
+
 export default function App() {
   const userController = useUserController(); 
   return (
     <React.StrictMode>
-      <Provider>
+      <Provider store={appStore}>
         <UserControllerContext.Provider value={userController} >
           <RouterProvider router={routes} />
         </UserControllerContext.Provider>

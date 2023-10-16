@@ -1,4 +1,4 @@
-import { describe } from "node:test";
+import { describe } from "vitest";
 import { expect, test } from "vitest";
 import { User, useUserController, userAtom } from "../../src/model/user";
 import { getDefaultStore } from "jotai";
