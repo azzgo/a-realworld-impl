@@ -12,6 +12,7 @@ import Layout from "./layout/Layout.tsx";
 import { getToken } from "./utils/token.ts";
 import { createStore, Provider } from "jotai";
 import { UserControllerContext, useUserController } from "./model/user.ts";
+import Settings from "./page/Settings.tsx";
 
 const simpleGuard = () => {
   if (getToken() == null) {
@@ -28,7 +29,7 @@ const routes = createBrowserRouter([
       { path: "/login", element: <Login /> },
       { path: "/register", element: <Register /> },
       { path: "/", element: <Home /> },
-      { path: "/settings", loader: simpleGuard, element: <Home /> },
+      { path: "/settings", loader: simpleGuard, element: <Settings /> },
     ],
   },
 ]);

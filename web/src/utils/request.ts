@@ -1,11 +1,12 @@
 import axios, { AxiosInstance } from "axios";
 import { getEnvByKey } from "./env";
+import { getToken } from "./token";
 
 let request: AxiosInstance | null = null;
 
 export const ErrorCodeKey = {
-  "emailOrPasssword": "email or passsword"
-}
+  emailOrPasssword: "email or passsword",
+};
 
 export function initAxiosInstance() {
   request = axios.create({
@@ -20,6 +21,9 @@ export function initAxiosInstance() {
   request.interceptors.request.use(
     (config: any) => {
       // Do something before request is sent
+      if (getToken()) {
+        config.headers.Authorization = `Token ${getToken()}`;
+      }
       return config;
     },
     (error: any) => {
@@ -42,8 +46,8 @@ export function initAxiosInstance() {
 }
 
 export default function requestInstance() {
-    if (!request) {
-        initAxiosInstance();
-    }
-    return request!;
-};
+  if (!request) {
+    initAxiosInstance();
+  }
+  return request!;
+}

@@ -77,6 +77,35 @@
       }
     },
     {
+      "description": "a request to get user",
+      "providerStates": [
+        {
+          "name": "user exist and get user info"
+        }
+      ],
+      "request": {
+        "headers": {
+          "Authorization": "Token jwt.token.here"
+        },
+        "method": "GET",
+        "path": "/user"
+      },
+      "response": {
+        "body": {
+          "user": {
+            "bio": "I work at statefarm",
+            "email": "jake@jake.jake",
+            "image": "http://image.url",
+            "username": "jake"
+          }
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "status": 200
+      }
+    },
+    {
       "description": "a request to login",
       "providerStates": [
         {

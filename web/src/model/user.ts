@@ -12,6 +12,7 @@ export interface User {
 }
 
 export interface UserController {
+  loadCurrentUser(): Promise<void>;
   login(email: string, password: string): Promise<void>;
   register(email: string, username: string, password: string): Promise<void>;
   logout(): void;
@@ -34,6 +35,10 @@ export function useUserController(): UserController {
       const user = await register(email, username, password);
       setUser(user);
     },
+    async loadCurrentUser() {
+      const user = await getCurrentUser();
+      setUser(user);
+    },
     logout() {
       clearToken();
       setUser(null);
@@ -43,7 +48,7 @@ export function useUserController(): UserController {
 
 export const UserControllerContext = createContext<UserController | null>(null);
 
-export async function login(email: string, password: string) {
+async function login(email: string, password: string) {
   const res = await request().post<{ user: LoginUserResponse }>("/user/login", {
     user: { email, password },
   });
@@ -52,7 +57,7 @@ export async function login(email: string, password: string) {
   return omit(user, ["token"]);
 }
 
-export async function register(
+async function register(
   email: string,
   username: string,
   password: string
@@ -63,4 +68,9 @@ export async function register(
   const user = res.data.user;
   persistToken(user.token);
   return omit(user, ["token"]);
+}
+
+async function getCurrentUser() {
+  const res = await request().get<{ user: LoginUserResponse }>("/user");
+  return res.data.user;
 }
