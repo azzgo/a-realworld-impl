@@ -31,7 +31,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
     "both email and username already exist when registering"
 )
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-class UserProviderTest {
+class UsersAuthProviderTest {
     @MockBean
     private lateinit var users: Users
 
