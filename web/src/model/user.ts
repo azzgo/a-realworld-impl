@@ -49,7 +49,7 @@ export function useUserController(): UserController {
 export const UserControllerContext = createContext<UserController | null>(null);
 
 async function login(email: string, password: string) {
-  const res = await request().post<{ user: LoginUserResponse }>("/user/login", {
+  const res = await request().post<{ user: LoginUserResponse }>("/users/login", {
     user: { email, password },
   });
   const user = res.data.user;
@@ -62,7 +62,7 @@ async function register(
   username: string,
   password: string
 ) {
-  const res = await request().post<{ user: LoginUserResponse }>("/user", {
+  const res = await request().post<{ user: LoginUserResponse }>("/users", {
     user: { email, username, password },
   });
   const user = res.data.user;

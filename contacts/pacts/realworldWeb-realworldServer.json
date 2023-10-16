@@ -22,7 +22,7 @@
           "Content-Type": "application/json"
         },
         "method": "POST",
-        "path": "/user"
+        "path": "/users"
       },
       "response": {
         "body": {
@@ -60,7 +60,7 @@
           "Content-Type": "application/json"
         },
         "method": "POST",
-        "path": "/user"
+        "path": "/users"
       },
       "response": {
         "body": {
@@ -123,7 +123,7 @@
           "Content-Type": "application/json"
         },
         "method": "POST",
-        "path": "/user/login"
+        "path": "/users/login"
       },
       "response": {
         "body": {
@@ -159,7 +159,7 @@
           "Content-Type": "application/json"
         },
         "method": "POST",
-        "path": "/user/login"
+        "path": "/users/login"
       },
       "response": {
         "body": {
@@ -194,7 +194,7 @@
           "Content-Type": "application/json"
         },
         "method": "POST",
-        "path": "/user"
+        "path": "/users"
       },
       "response": {
         "body": {
@@ -229,7 +229,7 @@
           "Content-Type": "application/json"
         },
         "method": "POST",
-        "path": "/user"
+        "path": "/users"
       },
       "response": {
         "body": {

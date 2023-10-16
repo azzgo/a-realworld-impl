@@ -25,7 +25,7 @@ describe("consumer test for register", () => {
       .uponReceiving("a request to register")
       .withRequest({
         method: "POST",
-        path: "/user",
+        path: "/users",
         headers: {
           "Content-Type": "application/json",
         },
@@ -69,7 +69,7 @@ describe("consumer test for register", () => {
       .uponReceiving("a request to register")
       .withRequest({
         method: "POST",
-        path: "/user",
+        path: "/users",
         headers: {
           "Content-Type": "application/json",
         },
@@ -115,7 +115,7 @@ describe("consumer test for register", () => {
       .uponReceiving("a request to register")
       .withRequest({
         method: "POST",
-        path: "/user",
+        path: "/users",
         headers: {
           "Content-Type": "application/json",
         },
@@ -160,7 +160,7 @@ describe("consumer test for register", () => {
       .uponReceiving("a request to register")
       .withRequest({
         method: "POST",
-        path: "/user",
+        path: "/users",
         headers: {
           "Content-Type": "application/json",
         },
@@ -217,7 +217,7 @@ describe("comsumer test for login", () => {
       .uponReceiving("a request to login")
       .withRequest({
         method: "POST",
-        path: "/user/login",
+        path: "/users/login",
         headers: {
           "Content-Type": "application/json",
         },
@@ -263,7 +263,7 @@ describe("comsumer test for login", () => {
       .uponReceiving("a request to login")
       .withRequest({
         method: "POST",
-        path: "/user/login",
+        path: "/users/login",
         headers: {
           "Content-Type": "application/json",
         },
