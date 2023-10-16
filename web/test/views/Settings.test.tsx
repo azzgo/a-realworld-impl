@@ -9,7 +9,7 @@ import {
 import { MemoryRouter, Route, Routes } from "react-router";
 import { MockAppWrapper } from "./utils.utils";
 import Settings from "../../src/page/Settings";
-import { createStore, getDefaultStore } from "jotai";
+import { createStore } from "jotai";
 import { JotaiStore } from "../../src/type";
 
 describe("Setting Page", () => {

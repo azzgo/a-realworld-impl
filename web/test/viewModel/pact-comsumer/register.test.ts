@@ -1,4 +1,4 @@
-import { getDefaultStore } from "jotai";
+import { createStore } from "jotai";
 import { describe, beforeEach, test, expect } from "vitest";
 import { useUserController, userAtom } from "../../../src/model/user";
 import { provider } from "./pact.utils";
@@ -7,11 +7,16 @@ import { initAxiosInstance } from "../../../src/utils/request";
 import { renderHook } from "@testing-library/react";
 import { getToken } from "../../../src/utils/token";
 import { AxiosError } from "axios";
+import { JotaiStore } from "../../../src/type";
+import { MockHeadlessStoreWrapper } from "../../views/utils.utils";
 
 describe("consumer test for register", () => {
+  let store: JotaiStore
+  let wrapper: any;
   beforeEach(() => {
     localStorage.clear();
-    getDefaultStore().set(userAtom, null);
+    store = createStore();
+    wrapper = MockHeadlessStoreWrapper(store);
   });
 
   test("when user is not registered", () => {
@@ -47,10 +52,10 @@ describe("consumer test for register", () => {
     return provider.executeTest(async (mockServer) => {
       configEnv({ BASE_URL: mockServer.url });
       initAxiosInstance();
-      const { result } = renderHook(() => useUserController());
+      const { result } = renderHook(() => useUserController(), { wrapper });
 
       await result.current.register("jake@jake.jake", "jake", "jakejake");
-      expect(getDefaultStore().get(userAtom)).toEqual({
+      expect(store.get(userAtom)).toEqual({
         email: "jake@jake.jake",
         username: "jake",
       });
@@ -87,7 +92,7 @@ describe("consumer test for register", () => {
     return provider.executeTest(async (mockServer) => {
       configEnv({ BASE_URL: mockServer.url });
       initAxiosInstance();
-      const { result } = renderHook(() => useUserController());
+      const { result } = renderHook(() => useUserController(), { wrapper });
 
       const capturedError: AxiosError = await result.current
         .register("jake@jake.jake", "jake_exist", "fakefake")
@@ -99,7 +104,7 @@ describe("consumer test for register", () => {
         },
       });
 
-      expect(getDefaultStore().get(userAtom)).toEqual(null);
+      expect(store.get(userAtom)).toEqual(null);
       expect(getToken()).toEqual(null);
     });
   });
@@ -133,7 +138,7 @@ describe("consumer test for register", () => {
     return provider.executeTest(async (mockServer) => {
       configEnv({ BASE_URL: mockServer.url });
       initAxiosInstance();
-      const { result } = renderHook(() => useUserController());
+      const { result } = renderHook(() => useUserController(), { wrapper });
 
       const capturedError: AxiosError = await result.current
         .register("jake@jake.taken", "jake", "fakefake")
@@ -145,7 +150,7 @@ describe("consumer test for register", () => {
         },
       });
 
-      expect(getDefaultStore().get(userAtom)).toEqual(null);
+      expect(store.get(userAtom)).toEqual(null);
       expect(getToken()).toEqual(null);
     });
   });
@@ -179,7 +184,7 @@ describe("consumer test for register", () => {
     return provider.executeTest(async (mockServer) => {
       configEnv({ BASE_URL: mockServer.url });
       initAxiosInstance();
-      const { result } = renderHook(() => useUserController());
+      const { result } = renderHook(() => useUserController(), { wrapper });
 
       const capturedError: AxiosError = await result.current
         .register("jake@jake.taken", "jake_exist", "fakefake")
@@ -192,7 +197,7 @@ describe("consumer test for register", () => {
         },
       });
 
-      expect(getDefaultStore().get(userAtom)).toEqual(null);
+      expect(store.get(userAtom)).toEqual(null);
       expect(getToken()).toEqual(null);
     });
   });

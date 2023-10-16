@@ -4,14 +4,19 @@ import { provider } from "./pact.utils";
 import { configEnv } from "../../../src/utils/env";
 import { useUserController, userAtom } from "../../../src/model/user";
 import { initAxiosInstance } from "../../../src/utils/request";
-import { getDefaultStore } from "jotai";
+import { createStore } from "jotai";
 import { getToken } from "../../../src/utils/token";
 import { AxiosError } from "axios";
+import { JotaiStore } from "../../../src/type";
+import { MockHeadlessStoreWrapper } from "../../views/utils.utils";
 
 describe("comsumer test for login", () => {
+  let store: JotaiStore
+  let wrapper: any;
   beforeEach(() => {
     localStorage.clear();
-    getDefaultStore().set(userAtom, null);
+    store = createStore();
+    wrapper = MockHeadlessStoreWrapper(store);
   });
   test("when login succuess should update store and token", async () => {
     provider
@@ -47,9 +52,9 @@ describe("comsumer test for login", () => {
     return provider.executeTest(async (mockServer) => {
       configEnv({ BASE_URL: mockServer.url });
       initAxiosInstance();
-      const { result } = renderHook(() => useUserController());
+      const { result } = renderHook(() => useUserController(), { wrapper });
       await result.current.login("jake@jake.jake", "jakejake");
-      expect(getDefaultStore().get(userAtom)).toEqual({
+      expect(store.get(userAtom)).toEqual({
         email: "jake@jake.jake",
         username: "jake",
         bio: "I work at statefarm",
@@ -87,7 +92,7 @@ describe("comsumer test for login", () => {
     return provider.executeTest(async (mockServer) => {
       configEnv({ BASE_URL: mockServer.url });
       initAxiosInstance();
-      const { result } = renderHook(() => useUserController());
+      const { result } = renderHook(() => useUserController(), { wrapper });
 
       const capturedError: AxiosError = await result.current
         .login("fake@jake.jake", "fakefake")
@@ -99,7 +104,7 @@ describe("comsumer test for login", () => {
         },
       });
 
-      expect(getDefaultStore().get(userAtom)).toEqual(null);
+      expect(store.get(userAtom)).toEqual(null);
       expect(getToken()).toEqual(null);
     });
   });

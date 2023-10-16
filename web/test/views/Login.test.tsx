@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import Login from "../../src/page/Login";
 import React from "react";
 import { beforeEach, describe, expect, test, vi } from "vitest";
