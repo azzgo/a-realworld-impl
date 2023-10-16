@@ -34,6 +34,7 @@ By Github Copilot to quick code a [readworld application](https://www.realworld.
 
 - [x] A Base Framework for web and server
 - [x] A Testing enviroment (include pact test between web and server) setup
+- [ ] intercept user when not login in authenticated endpoints
 
 ### Business Features
 
