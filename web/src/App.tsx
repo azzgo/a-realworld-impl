@@ -1,4 +1,3 @@
-import React from "react";
 import Home from "./page/Home.tsx";
 import {
   createBrowserRouter,
@@ -9,10 +8,10 @@ import "./index.css";
 import Login from "./page/Login.tsx";
 import Register from "./page/Register.tsx";
 import Layout from "./layout/Layout.tsx";
-import { getToken } from "./utils/token.ts";
-import { createStore, Provider } from "jotai";
-import { UserControllerContext, useUserController } from "./model/user.ts";
+import { getToken, hasToken } from "./utils/token.ts";
 import Settings from "./page/Settings.tsx";
+import { useContext, useEffect, useState } from "react";
+import { UserControllerContext } from "./model/user.ts";
 
 const simpleGuard = () => {
   if (getToken() == null) {
@@ -34,17 +33,16 @@ const routes = createBrowserRouter([
   },
 ]);
 
-const appStore = createStore()
-
 export default function App() {
-  const userController = useUserController(); 
-  return (
-    <React.StrictMode>
-      <Provider store={appStore}>
-        <UserControllerContext.Provider value={userController} >
-          <RouterProvider router={routes} />
-        </UserControllerContext.Provider>
-      </Provider>
-    </React.StrictMode>
-  );
+  const userController = useContext(UserControllerContext);
+  const [isLoaded, setIsLoaded] = useState(false);
+  useEffect(() => {
+    if (hasToken() && !isLoaded) {
+      userController?.loadCurrentUser().then(() => setIsLoaded(true));
+    } else {
+      setIsLoaded(true);
+    }
+  }, []);
+
+  return isLoaded && <RouterProvider router={routes} />;
 }

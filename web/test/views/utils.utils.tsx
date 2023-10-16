@@ -8,9 +8,9 @@ export function MockAppWrapper() {
     store = createStore(),
   }: PropsWithChildren<{ store?: JotaiStore }>) {
     return (
-      <React.StrictMode>
+      <>
         <Provider store={store}>{children}</Provider>
-      </React.StrictMode>
+      </>
     );
   };
 }
@@ -22,9 +22,9 @@ export function MockHeadlessStoreWrapper(
     children,
   }: PropsWithChildren<{ store: JotaiStore }>) {
     return (
-      <React.StrictMode>
+      <>
         <Provider store={store}>{children}</Provider>
-      </React.StrictMode>
+      </>
     );
   };
 }
