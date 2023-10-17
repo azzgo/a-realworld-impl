@@ -330,6 +330,7 @@ describe("comsumer test for loadCurrentUser", () => {
           user: {
             email: "jake@jake.jake",
             bio: "I work at statefarm",
+            token: "jwt.token.here",
             image: "http://image.url",
             username: "jake",
           },
@@ -347,6 +348,7 @@ describe("comsumer test for loadCurrentUser", () => {
         image: "http://image.url",
         username: "jake",
       });
+      expect(getToken()).toEqual("jwt.token.here");
     });
   });
 });

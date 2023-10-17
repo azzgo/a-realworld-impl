@@ -15,7 +15,6 @@ import org.mockito.Mockito.*
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.test.context.ActiveProfiles
-import org.testcontainers.shaded.org.bouncycastle.asn1.bsi.BSIObjectIdentifiers.algorithm
 import java.util.Optional
 
 

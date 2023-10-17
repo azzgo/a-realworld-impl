@@ -50,5 +50,6 @@ class UserProviderTest {
     fun userExistsAndGetUserInfo() {
         val user = createUser(bio = "I work at statefarm", email = "jake@jake.jake", image = "http://image.url", username = "jake")
         `when`(users.getById("jake_id")).thenReturn(user)
+        `when`(users.generateTokenForUser(user)).thenReturn("jwt.token.here")
     }
 }

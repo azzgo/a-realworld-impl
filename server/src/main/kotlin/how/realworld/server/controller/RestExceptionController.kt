@@ -12,6 +12,6 @@ class RestExceptionController {
     fun  handleBusinessException(ex: BusinessException): ResponseEntity<ErrorResponseDTO> {
         return ResponseEntity.status(ex.statusCode).body(ErrorResponseDTO(
                 errors = ex.errors
-        ));
+        ))
     }
 }

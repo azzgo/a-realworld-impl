@@ -18,7 +18,7 @@ export interface UserController {
   logout(): void;
 }
 
-export interface LoginUserResponse extends User {
+export interface AuthenticatedUserResponse extends User {
   token: string;
 }
 
@@ -49,7 +49,7 @@ export function useUserController(): UserController {
 export const UserControllerContext = createContext<UserController | null>(null);
 
 async function login(email: string, password: string) {
-  const res = await request().post<{ user: LoginUserResponse }>("/users/login", {
+  const res = await request().post<{ user: AuthenticatedUserResponse }>("/users/login", {
     user: { email, password },
   });
   const user = res.data.user;
@@ -62,7 +62,7 @@ async function register(
   username: string,
   password: string
 ) {
-  const res = await request().post<{ user: LoginUserResponse }>("/users", {
+  const res = await request().post<{ user: AuthenticatedUserResponse }>("/users", {
     user: { email, username, password },
   });
   const user = res.data.user;
@@ -71,6 +71,8 @@ async function register(
 }
 
 async function getCurrentUser() {
-  const res = await request().get<{ user: LoginUserResponse }>("/user");
-  return res.data.user;
+  const res = await request().get<{ user: AuthenticatedUserResponse }>("/user");
+  const user = res.data.user;
+  persistToken(user.token);
+  return omit(user, ["token"]);
 }

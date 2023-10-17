@@ -96,6 +96,7 @@
             "bio": "I work at statefarm",
             "email": "jake@jake.jake",
             "image": "http://image.url",
+            "token": "jwt.token.here",
             "username": "jake"
           }
         },
