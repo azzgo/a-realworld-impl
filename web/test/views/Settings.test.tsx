@@ -18,6 +18,7 @@ describe("Setting Page", () => {
   beforeEach(() => {
     mockUserController = {
       logout: vi.fn(),
+      update: vi.fn(),
     } as any;
     store = createStore();
     cleanup();
@@ -59,6 +60,41 @@ describe("Setting Page", () => {
       expect(
         (queryByTestId("profile-email") as HTMLInputElement).value
       ).toEqual("jake@jake.jake");
+    });
+  });
+
+  test("should update user when click update Settings", async () => {
+    const { queryByTestId } = renderSettingPage();
+
+    fireEvent.change(queryByTestId("profile-image")!, {
+      target: { value: "http://image.com" },
+    });
+    fireEvent.change(queryByTestId("profile-username")!, {
+      target: { value: "jake" },
+    });
+    fireEvent.change(queryByTestId("profile-bio")!, {
+      target: { value: "bio" },
+    });
+    fireEvent.change(queryByTestId("profile-email")!, {
+      target: { value: "jake@jake.jake" },
+    });
+    fireEvent.change(queryByTestId("profile-password")!, {
+      target: { value: "password" },
+    });
+
+    const updateBtn = queryByTestId("update-btn");
+    expect(updateBtn).not.toBeNull();
+
+    fireEvent.click(updateBtn!);
+
+    await waitFor(() => {
+      expect(mockUserController.update).toBeCalledWith({
+        image: "http://image.com",
+        username: "jake",
+        bio: "bio",
+        email: "jake@jake.jake",
+        password: "password",
+      });
     });
   });
 

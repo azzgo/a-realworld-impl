@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { UserControllerContext, userAtom } from "../model/user";
+import { UpdatedUserInfo, UserControllerContext, userAtom } from "../model/user";
 import { useNavigate } from "react-router";
 import { useAtom } from "jotai";
 import Form, { Field } from "rc-field-form";
@@ -10,10 +10,15 @@ export default function Settings() {
   const userController = useContext(UserControllerContext);
   const navigate = useNavigate();
   const [user] = useAtom(userAtom);
+  const [formRef] = Form.useForm();
 
   function logout() {
     userController?.logout();
     navigate("/");
+  }
+
+  function summit(values: UpdatedUserInfo) {
+    userController?.update(values);
   }
 
   return (
@@ -27,7 +32,7 @@ export default function Settings() {
               <li>That name is required</li>
             </ul>
 
-            <Form initialValues={user ?? {}}>
+            <Form initialValues={user ?? {}} form={formRef} onFinish={summit}>
               <fieldset>
                 <fieldset className="form-group">
                   <Field name="image">
@@ -79,7 +84,11 @@ export default function Settings() {
                     />
                   </Field>
                 </fieldset>
-                <button className="btn btn-lg btn-primary pull-xs-right">
+                <button
+                  className="btn btn-lg btn-primary pull-xs-right"
+                  data-testid="update-btn"
+                  type="submit"
+                >
                   Update Settings
                 </button>
               </fieldset>
