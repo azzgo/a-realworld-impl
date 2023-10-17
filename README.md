@@ -34,7 +34,7 @@ By Github Copilot to quick code a [readworld application](https://www.realworld.
 
 - [x] A Base Framework for web and server
 - [x] A Testing enviroment (include pact test between web and server) setup
-- [ ] intercept user when not login in authenticated endpoints
+- [x] intercept user when not login in authenticated endpoints
 
 ### Business Features
 
@@ -49,6 +49,11 @@ By Github Copilot to quick code a [readworld application](https://www.realworld.
     - [x] load user info in setting page
     - [x] update user info in settings page
 - [ ] CRUD Articles
+    - [ ] Create Article
+    - [ ] Article List Page
+    - [ ] Article Detail Page
+    - [ ] Article Edit Page
+    - [ ] Delete Article Page
 - [ ] CR-D Comments on articles (no updating required)
 - [ ] GET and display paginated lists of articles
 - [ ] Favorite articles

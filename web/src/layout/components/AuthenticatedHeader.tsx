@@ -1,26 +1,39 @@
+import { Link } from "react-router-dom";
+
 export default function AuthenticatedHeader() {
-    return (
-        <nav className="navbar navbar-light">
-  <div className="container">
-    <a className="navbar-brand" href="/">conduit</a>
-    <ul className="nav navbar-nav pull-xs-right">
-      <li className="nav-item">
-        <a className="nav-link active" href="/">Home</a>
-      </li>
-      <li className="nav-item">
-        <a className="nav-link" href="/editor"> <i className="ion-compose"></i>&nbsp;New Article </a>
-      </li>
-      <li className="nav-item">
-        <a className="nav-link" href="/settings"> <i className="ion-gear-a"></i>&nbsp;Settings </a>
-      </li>
-      <li className="nav-item">
-        <a className="nav-link" href="/profile/eric-simons">
-          <img src="" className="user-pic" />
-          Eric Simons
+  return (
+    <nav className="navbar navbar-light">
+      <div className="container">
+        <a className="navbar-brand" href="/">
+          conduit
         </a>
-      </li>
-    </ul>
-  </div>
-</nav>
-    )
+        <ul className="nav navbar-nav pull-xs-right">
+          <li className="nav-item">
+            <a className="nav-link active" href="/">
+              Home
+            </a>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" data-testid="create-article" to="/editor">
+              {" "}
+              <i className="ion-compose"></i>&nbsp;New Article{" "}
+            </Link>
+          </li>
+          <li className="nav-item">
+            <a className="nav-link" href="/settings">
+              {" "}
+              <i className="ion-gear-a"></i>&nbsp;Settings{" "}
+            </a>
+          </li>
+          <li className="nav-item">
+            <a className="nav-link" href="/profile/eric-simons">
+              <img src="" className="user-pic" />
+              Eric Simons
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  );
 }
+
