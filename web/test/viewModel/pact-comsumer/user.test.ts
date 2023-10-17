@@ -1,7 +1,7 @@
 import { createStore } from "jotai";
 import { describe, beforeEach, test, expect } from "vitest";
 import { useUserController, userAtom } from "../../../src/model/user";
-import { provider } from "./pact.utils";
+import { jwtToken, provider } from "./pact.utils";
 import { configEnv } from "../../../src/utils/env";
 import { initAxiosInstance } from "../../../src/utils/request";
 import { renderHook } from "@testing-library/react";
@@ -312,7 +312,7 @@ describe("comsumer test for loadCurrentUser", () => {
     wrapper = MockHeadlessStoreWrapper(store);
   });
   test("when loadCurrentUser succuess should update store and token", async () => {
-    persistToken("jwt.token.here");
+    persistToken(jwtToken);
     provider
       .given("user exist and get user info")
       .uponReceiving("a request to get user")
@@ -320,8 +320,7 @@ describe("comsumer test for loadCurrentUser", () => {
         method: "GET",
         path: "/user",
         headers: {
-          // TODO: will replace with real token can be authorized in server
-          Authorization: "Token jwt.token.here",
+          Authorization: `Token ${jwtToken}`,
         },
       })
       .willRespondWith({

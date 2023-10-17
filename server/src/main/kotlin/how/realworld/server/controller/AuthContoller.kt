@@ -17,13 +17,13 @@ class AuthController(
     private val passwordEncoder: PasswordEncoder
 ) {
     @PostMapping()
-    fun createUser(@RequestBody userRegisterDto: UserRegisterDto): ResponseEntity<UserAuthenticationResponseDto> {
+    fun createUser(@RequestBody userRegisterDto: UserRegisterDto): ResponseEntity<UserAuthenticationWithTokenResponseDto> {
         verityUserExist(userRegisterDto)
         val user =
             users.createUser(userRegisterDto.user.email, userRegisterDto.user.username, userRegisterDto.user.password)
 
         return ResponseEntity.status(201).body(
-            UserAuthenticationResponseDto(
+            UserAuthenticationWithTokenResponseDto(
                 user = UserAuthenticationResponseDtoUserField.fromUser(user, users.generateTokenForUser(user))
             )
         )
@@ -44,13 +44,13 @@ class AuthController(
     }
 
     @PostMapping("/login")
-    fun login(@RequestBody userLoginDto: UserLoginDto): ResponseEntity<UserAuthenticationResponseDto> {
+    fun login(@RequestBody userLoginDto: UserLoginDto): ResponseEntity<UserAuthenticationWithTokenResponseDto> {
         val user = users.getByEmail(userLoginDto.user.email)
         if (user == null || !passwordEncoder.matches(userLoginDto.user.password, user.password)) {
             throw BusinessException(403, mapOf(Pair("email or password", listOf("is invalid"))))
         }
         return ResponseEntity.status(201).body(
-            UserAuthenticationResponseDto(
+            UserAuthenticationWithTokenResponseDto(
                 user = UserAuthenticationResponseDtoUserField.fromUser(user, users.generateTokenForUser(user))
             )
         )

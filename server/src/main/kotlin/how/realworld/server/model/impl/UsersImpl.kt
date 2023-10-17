@@ -10,10 +10,12 @@ import how.realworld.server.repository.mapper.UserMapper
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
+import java.time.Instant
 
 @Service
 class UsersImpl(private val userRepository: UserRepository, private val passwordEncoder: PasswordEncoder, @Value("\${auth.jwt.secret") private val secret: String) :
-    Users {
+        Users {
+    val expirationMs: Long = 86400000
 
     override fun getById(id: String): User? {
         TODO("Not yet implemented")
@@ -28,18 +30,22 @@ class UsersImpl(private val userRepository: UserRepository, private val password
         if (user.userId == null) {
             throw IllegalArgumentException("cannot generate token for non exists user ${user.username}")
         }
+        val now = Instant.now()
+        val expirationTime = now.plusMillis(expirationMs)
         return JWT.create()
-            .withClaim("user_id", user.userId)
-            .withClaim("username", user.username)
-            .withClaim("email", user.username)
-            .sign(Algorithm.HMAC256(secret))
+                .withIssuedAt(now)
+                .withExpiresAt(expirationTime)
+                .withSubject(user.userId)
+                .withClaim("username", user.username)
+                .withClaim("email", user.username)
+                .sign(Algorithm.HMAC256(secret))
     }
 
     override fun createUser(email: String, username: String, rawPassword: String): User {
         val userMapper = UserMapper(
-            email = email,
-            username = username,
-            password = passwordEncoder.encode(rawPassword)
+                email = email,
+                username = username,
+                password = passwordEncoder.encode(rawPassword)
         )
         val savedUserMapper = userRepository.save(userMapper)
         return User.from(savedUserMapper)
@@ -54,11 +60,11 @@ class UsersImpl(private val userRepository: UserRepository, private val password
 
 private fun User.Companion.from(userMapper: UserMapper): User {
     return User(
-        userId = userMapper.id,
-        email = userMapper.email,
-        username = userMapper.username,
-        password = userMapper.password,
-        bio = userMapper.bio,
-        image = userMapper.image
+            userId = userMapper.id,
+            email = userMapper.email,
+            username = userMapper.username,
+            password = userMapper.password,
+            bio = userMapper.bio,
+            image = userMapper.image
     )
 }

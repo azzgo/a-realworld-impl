@@ -1,5 +1,8 @@
 package how.realworld.server.model.impl
 
+import com.auth0.jwt.JWT
+import com.auth0.jwt.JWTVerifier
+import com.auth0.jwt.algorithms.Algorithm
 import how.realworld.server.model.User
 import how.realworld.server.repository.UserRepository
 import how.realworld.server.repository.mapper.UserMapper
@@ -12,6 +15,8 @@ import org.mockito.Mockito.*
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.test.context.ActiveProfiles
+import org.testcontainers.shaded.org.bouncycastle.asn1.bsi.BSIObjectIdentifiers.algorithm
+
 
 @ActiveProfiles("test")
 class UsersImplTest {
@@ -57,10 +62,16 @@ class UsersImplTest {
                         image = "image"
                 )
 
-        val users = UsersImpl(userRepository, passwordEncoder, "a625cbe1-b347-4c56-a98c-f6678b9ae0a4")
+        val secret =
+                "a625cbe1-b347-4c56-a98c-f6678b9ae0a4"
+        val users = UsersImpl(userRepository, passwordEncoder, secret)
+
         val token = users.generateTokenForUser(user)
 
-        assertThat(token, equalTo("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiaWQiLCJ1c2VybmFtZSI6Impha2UiLCJlbWFpbCI6Impha2UifQ.xs_1wdAD6LpKwL67Y3OrvJf4X2ZRZl9vw0X3gHnrUOk"))
+        val verifier: JWTVerifier = JWT.require(Algorithm.HMAC256(secret))
+                .build()
+
+        verifier.verify(token)
     }
 
     @Test
@@ -77,10 +88,10 @@ class UsersImplTest {
     @Test
     fun should_createUser() {
         val userMapper = UserMapper(
-            id = "id",
-            email = "jake@jake.jake",
-            username = "jake",
-            password = "encodedJakeJake"
+                id = "id",
+                email = "jake@jake.jake",
+                username = "jake",
+                password = "encodedJakeJake"
         )
 
         `when`(userRepository.save(any())).thenReturn(userMapper)

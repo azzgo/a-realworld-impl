@@ -85,7 +85,7 @@
       ],
       "request": {
         "headers": {
-          "Authorization": "Token jwt.token.here"
+          "Authorization": "Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2OTc0NTkyMzQsImV4cCI6MTY5NzU0NTYzNCwic3ViIjoiamFrZV9pZCIsInVzZXJuYW1lIjoiamFrZSIsImVtYWlsIjoiamFrZUBqYWtlLmpha2UifQ.FDd_DGCRIp_ivOEToH6rWbGbnnTQ3hufAT-RLYC4ttM"
         },
         "method": "GET",
         "path": "/user"
