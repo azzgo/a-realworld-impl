@@ -32,6 +32,26 @@ class UserRepositoryTest {
 
     @Test
     @Transactional
+    fun should_update_user_mapper_in_db() {
+        val entity= testEntityManager.persist(stubUser("jake@jake.jake", "jake"))
+        val userMapper = userRepository.save(UserMapper(
+                id = entity.id,
+                email = "jake@jake.jake.new",
+                username = "jakeNew",
+                password = "jakejakeNew",
+                bio = "bioNew",
+                image = "http://image.url"
+        ))
+
+        assertThat(userMapper.email, equalTo("jake@jake.jake.new"))
+        assertThat(userMapper.username, equalTo("jakeNew"))
+        assertThat(userMapper.bio, equalTo("bioNew"))
+        assertThat(userMapper.image, equalTo("http://image.url"))
+        assertThat(userMapper.password, equalTo("jakejakeNew"))
+    }
+
+    @Test
+    @Transactional
     fun should_email_exist() {
         testEntityManager.persist(stubUser("jake@jake.jake", "jake"))
         val existsByEmail = userRepository.existsByEmail("jake@jake.jake")

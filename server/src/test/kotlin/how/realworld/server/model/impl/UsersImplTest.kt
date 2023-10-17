@@ -126,4 +126,54 @@ class UsersImplTest {
         assertThat(user?.username, equalTo("jake"))
         assertThat(user?.password, equalTo("encodedJakeJake"))
     }
+
+    @Test
+    fun should_update_user() {
+        val userMapper = UserMapper(
+                id = "id",
+                email = "jake@jake.jake.new",
+                username = "jakeNew",
+                password = "encodedJakeJakeNew",
+                bio = "bioNew",
+                image = "http://image.url"
+        )
+        val oldUserMapper = UserMapper(
+                id = "id",
+                email = "jake@jake.jake",
+                username = "jake",
+                password = "encodedJakeJake",
+                bio = "bio",
+                image = "http://image.url"
+        )
+
+        `when`(userRepository.save(any())).thenReturn(userMapper)
+        `when`(userRepository.findById("id")).thenReturn(Optional.of(oldUserMapper))
+        `when`(passwordEncoder.encode("jakejakeNew")).thenReturn("encodedJakeJakeNew")
+        val users = UsersImpl(userRepository, passwordEncoder, "")
+
+        val user = users.update(
+                userId = "id",
+                username = "jakeNew",
+                email = "jake@jake.jake.new",
+                password = "jakejakeNew",
+                bio = "bioNew",
+        )
+
+
+        assertThat(user.userId, equalTo("id"))
+        assertThat(user.username, equalTo("jakeNew"))
+        assertThat(user.bio, equalTo("bioNew"))
+        assertThat(user.image, equalTo("http://image.url"))
+        assertThat(user.email, equalTo("jake@jake.jake.new"))
+        assertThat(user.password, equalTo("encodedJakeJakeNew"))
+
+
+        val savedArgumentCaptor = ArgumentCaptor.forClass(UserMapper::class.java)
+        verify(userRepository).save(savedArgumentCaptor.capture())
+        assertThat(savedArgumentCaptor.value.password, equalTo("encodedJakeJakeNew"))
+        assertThat(savedArgumentCaptor.value.email, equalTo("jake@jake.jake.new"))
+        assertThat(savedArgumentCaptor.value.id, equalTo("id"))
+        assertThat(savedArgumentCaptor.value.username, equalTo("jakeNew"))
+        assertThat(savedArgumentCaptor.value.bio, equalTo("bioNew"))
+    }
 }

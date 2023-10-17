@@ -58,7 +58,25 @@ class UsersImpl(
     }
 
     override fun update(userId: String, username: String?, email: String?, password: String?, bio: String?, image: String?): User {
-        TODO("Not yet implemented")
+        val userMapper = userRepository.findById(userId)
+              .orElseThrow { IllegalArgumentException("cannot find user with id $userId") }
+        if (username!= null) {
+            userMapper.username = username
+        }
+        if (email!= null) {
+            userMapper.email = email
+        }
+        if (password!= null) {
+            userMapper.password = passwordEncoder.encode(password)
+        }
+        if (bio!= null) {
+            userMapper.bio = bio
+        }
+        if (image!= null) {
+            userMapper.image = image
+        }
+        val savedUserMapper = userRepository.save(userMapper)
+        return User.from(savedUserMapper)
     }
 
     override fun checkUserExist(email: String, username: String): UserExist {
