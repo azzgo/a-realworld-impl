@@ -1,5 +1,6 @@
 package how.realworld.server.pact.provider
 
+import au.com.dius.pact.provider.junit5.HttpTestTarget
 import au.com.dius.pact.provider.junit5.PactVerificationContext
 import au.com.dius.pact.provider.junitsupport.Provider
 import au.com.dius.pact.provider.junitsupport.State
@@ -9,11 +10,13 @@ import au.com.dius.pact.provider.junitsupport.loader.PactFolder
 import au.com.dius.pact.provider.spring.junit5.PactVerificationSpringProvider
 import createUser
 import how.realworld.server.model.Users
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.TestTemplate
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mockito.`when`
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.junit.jupiter.SpringExtension
@@ -24,10 +27,18 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 @PactFilter(
         "user exist and get user info"
 )
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 @WithMockUser(username = "jake")
 class UserProviderTest {
+    @LocalServerPort
+    private val port = 0
+
+    @BeforeEach
+    fun before(context: PactVerificationContext) {
+        context.target = HttpTestTarget("localhost", port)
+    }
+
     @MockBean
     private lateinit var users: Users
 
