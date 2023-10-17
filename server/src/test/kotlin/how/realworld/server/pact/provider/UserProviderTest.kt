@@ -17,7 +17,6 @@ import org.mockito.Mockito.`when`
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.boot.test.web.server.LocalServerPort
-import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.junit.jupiter.SpringExtension
 
@@ -29,7 +28,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 )
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-@WithMockUser(username = "jake")
 class UserProviderTest {
     @LocalServerPort
     private val port = 0

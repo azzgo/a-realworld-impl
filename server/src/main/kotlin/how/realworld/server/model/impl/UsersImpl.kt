@@ -7,18 +7,21 @@ import how.realworld.server.model.UserExist
 import how.realworld.server.model.Users
 import how.realworld.server.repository.UserRepository
 import how.realworld.server.repository.mapper.UserMapper
+import java.time.Instant
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
-import java.time.Instant
 
 @Service
-class UsersImpl(private val userRepository: UserRepository, private val passwordEncoder: PasswordEncoder, @Value("\${auth.jwt.secret") private val secret: String) :
-        Users {
+class UsersImpl(
+        private val userRepository: UserRepository,
+        private val passwordEncoder: PasswordEncoder,
+        @Value("\${auth.jwt.secret") private val secret: String
+) : Users {
     val expirationMs: Long = 86400000
 
     override fun getById(id: String): User? {
-        TODO("Not yet implemented")
+        return userRepository.findById(id).map { User.from(it) }.orElse(null)
     }
 
     override fun getByEmail(email: String): User? {
@@ -28,7 +31,9 @@ class UsersImpl(private val userRepository: UserRepository, private val password
 
     override fun generateTokenForUser(user: User): String {
         if (user.userId == null) {
-            throw IllegalArgumentException("cannot generate token for non exists user ${user.username}")
+            throw IllegalArgumentException(
+                    "cannot generate token for non exists user ${user.username}"
+            )
         }
         val now = Instant.now()
         val expirationTime = now.plusMillis(expirationMs)
@@ -42,11 +47,12 @@ class UsersImpl(private val userRepository: UserRepository, private val password
     }
 
     override fun createUser(email: String, username: String, rawPassword: String): User {
-        val userMapper = UserMapper(
-                email = email,
-                username = username,
-                password = passwordEncoder.encode(rawPassword)
-        )
+        val userMapper =
+                UserMapper(
+                        email = email,
+                        username = username,
+                        password = passwordEncoder.encode(rawPassword)
+                )
         val savedUserMapper = userRepository.save(userMapper)
         return User.from(savedUserMapper)
     }

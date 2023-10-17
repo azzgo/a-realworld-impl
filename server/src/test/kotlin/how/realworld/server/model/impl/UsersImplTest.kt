@@ -16,6 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.test.context.ActiveProfiles
 import org.testcontainers.shaded.org.bouncycastle.asn1.bsi.BSIObjectIdentifiers.algorithm
+import java.util.Optional
 
 
 @ActiveProfiles("test")
@@ -104,5 +105,26 @@ class UsersImplTest {
         val savedArgumentCaptor = ArgumentCaptor.forClass(UserMapper::class.java)
         verify(userRepository).save(savedArgumentCaptor.capture())
         assertThat(savedArgumentCaptor.value.password, equalTo("encodedJakeJake"))
+    }
+
+    @Test
+    fun should_return_user_by_id() {
+        val userMapper = UserMapper(
+                id = "id",
+                email = "jake@jake.jake",
+                username = "jake",
+                password = "encodedJakeJake"
+        )
+
+        `when`(userRepository.findById("id")).thenReturn(Optional.of(userMapper))
+
+        val users = UsersImpl(userRepository, passwordEncoder, "")
+
+        val user = users.getById("id")
+
+        assertThat(user?.userId, equalTo("id"))
+        assertThat(user?.email, equalTo("jake@jake.jake"))
+        assertThat(user?.username, equalTo("jake"))
+        assertThat(user?.password, equalTo("encodedJakeJake"))
     }
 }
