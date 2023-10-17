@@ -28,10 +28,6 @@ export default function Settings() {
           <div className="col-md-6 offset-md-3 col-xs-12">
             <h1 className="text-xs-center">Your Settings</h1>
 
-            <ul className="error-messages">
-              <li>That name is required</li>
-            </ul>
-
             <Form initialValues={user ?? {}} form={formRef} onFinish={summit}>
               <fieldset>
                 <fieldset className="form-group">
