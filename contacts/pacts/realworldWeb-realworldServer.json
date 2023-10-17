@@ -143,6 +143,46 @@
       }
     },
     {
+      "description": "a request to update user info",
+      "providerStates": [
+        {
+          "name": "user exists and update user info"
+        }
+      ],
+      "request": {
+        "body": {
+          "user": {
+            "bio": "I work at statefarm",
+            "email": "jake-john@jake.jake",
+            "image": "http://image.url",
+            "password": "jakejakejake",
+            "username": "jake John"
+          }
+        },
+        "headers": {
+          "Authorization": "Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2OTc0NTkyMzQsImV4cCI6MTY5NzU0NTYzNCwic3ViIjoiamFrZV9pZCIsInVzZXJuYW1lIjoiamFrZSIsImVtYWlsIjoiamFrZUBqYWtlLmpha2UifQ.FDd_DGCRIp_ivOEToH6rWbGbnnTQ3hufAT-RLYC4ttM",
+          "Content-Type": "application/json"
+        },
+        "method": "PUT",
+        "path": "/user"
+      },
+      "response": {
+        "body": {
+          "user": {
+            "bio": "I work at statefarm",
+            "email": "jake-john@jake.jake",
+            "image": "http://image.url",
+            "token": "jwt.token.here",
+            "username": "jake John"
+          }
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "status": 200
+      }
+    },
+    {
       "description": "a request to login",
       "providerStates": [
         {

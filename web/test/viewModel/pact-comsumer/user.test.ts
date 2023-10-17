@@ -1,6 +1,11 @@
 import { createStore } from "jotai";
 import { describe, beforeEach, test, expect } from "vitest";
-import { useUserController, userAtom } from "../../../src/model/user";
+import {
+  UpdatedUserInfo,
+  User,
+  useUserController,
+  userAtom,
+} from "../../../src/model/user";
 import { jwtToken, provider } from "./pact.utils";
 import { configEnv } from "../../../src/utils/env";
 import { initAxiosInstance } from "../../../src/utils/request";
@@ -347,6 +352,66 @@ describe("comsumer test for loadCurrentUser", () => {
         bio: "I work at statefarm",
         image: "http://image.url",
         username: "jake",
+      });
+      expect(getToken()).toEqual("jwt.token.here");
+    });
+  });
+});
+
+describe("comsumer test for update", () => {
+  let store: JotaiStore;
+  let wrapper: any;
+  beforeEach(() => {
+    localStorage.clear();
+    store = createStore();
+    wrapper = MockHeadlessStoreWrapper(store);
+  });
+  test("when updating user info", async () => {
+    persistToken(jwtToken);
+    const updatedUserInfo: UpdatedUserInfo = {
+      username: "jake John",
+      email: "jake-john@jake.jake",
+      bio: "I work at statefarm",
+      image: "http://image.url",
+      password: "jakejakejake",
+    };
+    provider
+      .given("user exists and update user info")
+      .uponReceiving("a request to update user info")
+      .withRequest({
+        method: "PUT",
+        path: "/user",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Token ${jwtToken}`,
+        },
+        body: { user: updatedUserInfo },
+      })
+      .willRespondWith({
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+        body: {
+          user: {
+            username: "jake John",
+            email: "jake-john@jake.jake",
+            token: "jwt.token.here",
+            bio: "I work at statefarm",
+            image: "http://image.url",
+          },
+        },
+      });
+
+    return provider.executeTest(async (mockServer) => {
+      configEnv({ BASE_URL: mockServer.url });
+      initAxiosInstance();
+      const { result } = renderHook(() => useUserController(), { wrapper });
+
+      await result.current.update(updatedUserInfo);
+      expect(store.get(userAtom)).toEqual({
+        username: "jake John",
+        email: "jake-john@jake.jake",
+        bio: "I work at statefarm",
+        image: "http://image.url",
       });
       expect(getToken()).toEqual("jwt.token.here");
     });

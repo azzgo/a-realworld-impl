@@ -11,10 +11,15 @@ export interface User {
   image?: string;
 }
 
+export interface UpdatedUserInfo extends Partial<User> {
+  password?: string;
+}
+
 export interface UserController {
   loadCurrentUser(): Promise<void>;
   login(email: string, password: string): Promise<void>;
   register(email: string, username: string, password: string): Promise<void>;
+  update(toUpdateUserInfo: UpdatedUserInfo): Promise<void>;
   logout(): void;
 }
 
@@ -37,6 +42,10 @@ export function useUserController(): UserController {
     },
     async loadCurrentUser() {
       const user = await getCurrentUser();
+      setUser(user);
+    },
+    async update(toUpdateUserInfo: Partial<User>) {
+      const user = await updateUserInfo(toUpdateUserInfo);
       setUser(user);
     },
     logout() {
@@ -72,6 +81,15 @@ async function register(
 
 async function getCurrentUser() {
   const res = await request().get<{ user: AuthenticatedUserResponse }>("/user");
+  const user = res.data.user;
+  persistToken(user.token);
+  return omit(user, ["token"]);
+}
+
+async function updateUserInfo(toUpdateUserInfo: UpdatedUserInfo) {
+  const res = await request().put<{ user: AuthenticatedUserResponse }>("/user", {
+    user: toUpdateUserInfo,
+  });
   const user = res.data.user;
   persistToken(user.token);
   return omit(user, ["token"]);
