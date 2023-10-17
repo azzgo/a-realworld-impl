@@ -4,11 +4,18 @@ interface Users {
     fun getById(id: String): User?
     fun getByEmail(email: String): User?
     fun generateTokenForUser(user: User): String
-    fun createUser(email: String, username: String, rawPassword: String): User
+    fun create(email: String, username: String, rawPassword: String): User
+    fun update(userId: String,
+       username: String? = null,
+       email: String? = null,
+       password: String? = null,
+       bio: String? = null,
+       image: String? = null
+    ): User
     fun checkUserExist(email: String, username: String): UserExist
 }
 
 data class UserExist(
-    val email: Boolean,
-    val username: Boolean
+        val email: Boolean,
+        val username: Boolean
 )

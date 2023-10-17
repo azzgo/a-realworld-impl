@@ -20,7 +20,7 @@ class AuthController(
     fun createUser(@RequestBody userRegisterDto: UserRegisterDto): ResponseEntity<UserAuthenticationResponseDto> {
         verityUserExist(userRegisterDto)
         val user =
-            users.createUser(userRegisterDto.user.email, userRegisterDto.user.username, userRegisterDto.user.password)
+            users.create(userRegisterDto.user.email, userRegisterDto.user.username, userRegisterDto.user.password)
 
         return ResponseEntity.status(201).body(
             UserAuthenticationResponseDto(

@@ -83,7 +83,7 @@ class UsersAuthProviderTest {
             username = "jake",
         )
         `when`(users.checkUserExist("jake@jake.jake", "jake")).thenReturn(UserExist(email = false, username = false))
-        `when`(users.createUser("jake@jake.jake", "jake", "jakejake")).thenReturn(
+        `when`(users.create("jake@jake.jake", "jake", "jakejake")).thenReturn(
             user
         )
         `when`(users.generateTokenForUser(user)).thenReturn("jwt.token.here")

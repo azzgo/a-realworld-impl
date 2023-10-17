@@ -98,7 +98,7 @@ class UsersImplTest {
         `when`(passwordEncoder.encode("jakejake")).thenReturn("encodedJakeJake")
         val users = UsersImpl(userRepository, passwordEncoder, "")
 
-        val user = users.createUser("jake@jake.jake", "jake", "jakejake")
+        val user = users.create("jake@jake.jake", "jake", "jakejake")
 
         assertThat(user.userId, equalTo("id"))
         val savedArgumentCaptor = ArgumentCaptor.forClass(UserMapper::class.java)

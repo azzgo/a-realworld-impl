@@ -46,7 +46,7 @@ class UsersImpl(
                 .sign(Algorithm.HMAC256(secret))
     }
 
-    override fun createUser(email: String, username: String, rawPassword: String): User {
+    override fun create(email: String, username: String, rawPassword: String): User {
         val userMapper =
                 UserMapper(
                         email = email,
@@ -55,6 +55,10 @@ class UsersImpl(
                 )
         val savedUserMapper = userRepository.save(userMapper)
         return User.from(savedUserMapper)
+    }
+
+    override fun update(userId: String, username: String?, email: String?, password: String?, bio: String?, image: String?): User {
+        TODO("Not yet implemented")
     }
 
     override fun checkUserExist(email: String, username: String): UserExist {
