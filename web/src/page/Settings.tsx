@@ -62,7 +62,7 @@ export default function Settings() {
                 </fieldset>
                 <fieldset className="form-group">
                   <Field name="email">
-                    <input
+                    <Input
                       className="form-control form-control-lg"
                       type="email"
                       data-testid="profile-email"
@@ -72,7 +72,7 @@ export default function Settings() {
                 </fieldset>
                 <fieldset className="form-group">
                   <Field name="password">
-                    <input
+                    <Input
                       className="form-control form-control-lg"
                       type="password"
                       data-testid="profile-password"
