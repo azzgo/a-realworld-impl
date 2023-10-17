@@ -5,3 +5,9 @@ class BusinessException (
     val errors: Map<String, List<String>>
 ): RuntimeException(
 )
+
+val USER_NOT_VALID = BusinessException(
+    errors = mapOf(
+        "user" to listOf("not valid")
+    )
+)
