@@ -44,10 +44,10 @@ By Github Copilot to quick code a [readworld application](https://www.realworld.
     - [x] user register on user not registered and user username or email exist case
     - [x] create user and save to database
     - [x] logout on user setting page
-- [ ] CRU- users (sign up & settings page - no deleting required)
+- [x] CRU- users (sign up & settings page - no deleting required)
     - [x] create new user via signup page
-    - [ ] load user info in setting page
-    - [ ] update user info in settings page
+    - [x] load user info in setting page
+    - [x] update user info in settings page
 - [ ] CRUD Articles
 - [ ] CR-D Comments on articles (no updating required)
 - [ ] GET and display paginated lists of articles
