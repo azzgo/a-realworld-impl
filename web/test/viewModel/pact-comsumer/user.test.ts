@@ -2,7 +2,6 @@ import { createStore } from "jotai";
 import { describe, beforeEach, test, expect } from "vitest";
 import {
   UpdatedUserInfo,
-  User,
   useUserController,
   userAtom,
 } from "../../../src/model/user";

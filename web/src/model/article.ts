@@ -1,4 +1,5 @@
 import { createContext } from "react";
+import request from "../utils/request";
 
 export interface Article {
   title: string;
@@ -8,15 +9,17 @@ export interface Article {
 }
 
 export interface ArticleController {
-    create(article: Article): Promise<Article>;
+  create(article: Article): Promise<Article>;
 }
 
 export function useArticleController(): ArticleController {
-    return {
-        async create(article: Article) {
-            throw new Error("Not implemented");
-        },
-    };
+  return {
+    async create(article: Article) {
+      return request().post("/articles", { article });
+    },
+  };
 }
 
-export const ArticleControllerContext = createContext<ArticleController | null>(null);
+export const ArticleControllerContext = createContext<ArticleController | null>(
+  null
+);
