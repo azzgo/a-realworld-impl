@@ -1,7 +1,7 @@
 package how.realworld.server.model
 
 interface Users {
-    fun getById(id: String): User?
+    fun getById(id: UserId): User?
     fun getByEmail(email: String): User?
     fun generateTokenForUser(user: User): String
     fun create(email: String, username: String, rawPassword: String): User

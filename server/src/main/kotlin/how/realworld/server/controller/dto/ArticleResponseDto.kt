@@ -26,7 +26,7 @@ fun ArticleResponseDtoField.Companion.from(article: Article): ArticleResponseDto
             title = article.title,
             description = article.description,
             body = article.body,
-            tagList = article.tagList,
+            tagList = article.tagList.map { it.name },
             createdAt = article.createdAt.toString(),
             updatedAt = article.updatedAt.toString(),
             favorited = article.favorited,

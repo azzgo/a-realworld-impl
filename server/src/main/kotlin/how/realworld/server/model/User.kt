@@ -1,7 +1,7 @@
 package how.realworld.server.model
 
-
-class User(var userId: String? = null,
+typealias UserId = String
+class User(var userId: UserId? = null,
            val username: String,
            val password: String,
            val email: String,

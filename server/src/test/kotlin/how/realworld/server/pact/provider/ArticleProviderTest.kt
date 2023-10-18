@@ -71,6 +71,6 @@ class ArticleProviderTest {
                 title = createdArticle.title,
                 description = createdArticle.description,
                 body = createdArticle.body,
-                tagList = createdArticle.tagList)).thenReturn(createdArticle)
+                tagList = createdArticle.tagList.map { it.name })).thenReturn(createdArticle)
     }
 }

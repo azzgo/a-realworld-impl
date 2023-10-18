@@ -22,12 +22,12 @@ fun createArticle(
         title = title,
         description = description,
         body = body,
-        tagList = tagList,
+        tagList = tagList.map { Tag(name = it) },
         favoritesCount = favoritesCount,
         favorited = favorited,
         createdAt = createdAt,
         updatedAt = updatedAt,
         author = author)
 
-fun createAuthor(username: String = "jake", bio: String? = null, image: String? = null, following: Boolean = false) =
-        Author(username = username, bio = bio, image = image, following = following)
+fun createAuthor(userId: String = "jake_id", username: String = "jake", bio: String? = null, image: String? = null, following: Boolean = false) =
+        Author(userId, username = username, bio = bio, image = image, following = following)
