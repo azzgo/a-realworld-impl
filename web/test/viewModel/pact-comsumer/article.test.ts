@@ -7,9 +7,10 @@ import { JotaiStore } from "../../../src/type";
 import { createStore } from "jotai";
 import { MockHeadlessStoreWrapper } from "../../views/utils.utils";
 import { renderHook } from "@testing-library/react";
-import { provider } from "./pact.utils";
+import { jwtToken, provider } from "./pact.utils";
 import { configEnv } from "../../../src/utils/env";
 import { initAxiosInstance } from "../../../src/utils/request";
+import { persistToken } from "../../../src/utils/token";
 
 describe("consumer for create article", () => {
   let store: JotaiStore;
@@ -22,13 +23,15 @@ describe("consumer for create article", () => {
   });
 
   test("should create article", async () => {
+    persistToken(jwtToken)
     provider
-      .given("user logined whan to post new article")
+      .given("user logged in what to post new article")
       .uponReceiving("a request to create article")
       .withRequest({
         method: "POST",
         path: "/articles",
         headers: {
+          Authorization: `Token ${jwtToken}`,
           "Content-Type": "application/json",
         },
         body: {

@@ -85,7 +85,7 @@
       ],
       "request": {
         "headers": {
-          "Authorization": "Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2OTc0NTkyMzQsImV4cCI6MTY5NzU0NTYzNCwic3ViIjoiamFrZV9pZCIsInVzZXJuYW1lIjoiamFrZSIsImVtYWlsIjoiamFrZUBqYWtlLmpha2UifQ.FDd_DGCRIp_ivOEToH6rWbGbnnTQ3hufAT-RLYC4ttM"
+          "Authorization": "Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2OTc0NTkyMzQsImV4cCI6NDEwNTAwODAwMCwic3ViIjoiamFrZV9pZCIsInVzZXJuYW1lIjoiamFrZSIsImVtYWlsIjoiamFrZUBqYWtlLmpha2UifQ.ZDKKQ0noCRU3cHs9B2EW1GllM6lj5Wr07GBoJVf2v3g"
         },
         "method": "GET",
         "path": "/user"
@@ -160,7 +160,7 @@
           }
         },
         "headers": {
-          "Authorization": "Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2OTc0NTkyMzQsImV4cCI6MTY5NzU0NTYzNCwic3ViIjoiamFrZV9pZCIsInVzZXJuYW1lIjoiamFrZSIsImVtYWlsIjoiamFrZUBqYWtlLmpha2UifQ.FDd_DGCRIp_ivOEToH6rWbGbnnTQ3hufAT-RLYC4ttM",
+          "Authorization": "Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2OTc0NTkyMzQsImV4cCI6NDEwNTAwODAwMCwic3ViIjoiamFrZV9pZCIsInVzZXJuYW1lIjoiamFrZSIsImVtYWlsIjoiamFrZUBqYWtlLmpha2UifQ.ZDKKQ0noCRU3cHs9B2EW1GllM6lj5Wr07GBoJVf2v3g",
           "Content-Type": "application/json"
         },
         "method": "PUT",
@@ -186,7 +186,7 @@
       "description": "a request to create article",
       "providerStates": [
         {
-          "name": "user logined whan to post new article"
+          "name": "user logged in what to post new article"
         }
       ],
       "request": {
@@ -203,6 +203,7 @@
           }
         },
         "headers": {
+          "Authorization": "Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2OTc0NTkyMzQsImV4cCI6NDEwNTAwODAwMCwic3ViIjoiamFrZV9pZCIsInVzZXJuYW1lIjoiamFrZSIsImVtYWlsIjoiamFrZUBqYWtlLmpha2UifQ.ZDKKQ0noCRU3cHs9B2EW1GllM6lj5Wr07GBoJVf2v3g",
           "Content-Type": "application/json"
         },
         "method": "POST",
