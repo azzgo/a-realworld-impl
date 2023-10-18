@@ -12,6 +12,7 @@ import { getToken, hasToken } from "./utils/token.ts";
 import Settings from "./page/Settings.tsx";
 import { useContext, useEffect, useState } from "react";
 import { UserControllerContext } from "./model/user.ts";
+import ArticleEditor from "./page/ArticleEditor.tsx";
 
 const simpleGuard = () => {
   if (getToken() == null) {
@@ -29,6 +30,7 @@ const routes = createBrowserRouter([
       { path: "/register", element: <Register /> },
       { path: "/", element: <Home /> },
       { path: "/settings", loader: simpleGuard, element: <Settings /> },
+      { path: "/editor", loader: simpleGuard, element: <ArticleEditor /> }
     ],
   },
 ]);
