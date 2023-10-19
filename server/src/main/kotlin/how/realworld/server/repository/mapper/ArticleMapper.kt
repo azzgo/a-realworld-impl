@@ -16,11 +16,11 @@ open class ArticleMapper(
     open var title: String,
     open var description: String,
     open var body: String,
-    @ManyToMany(targetEntity = ArticleTagMapper::class)
+    @ManyToMany(targetEntity = TagMapper::class)
     @JoinTable(
         name = "t_article_tag",
-        joinColumns = [JoinColumn(name = "article_id")],
-        inverseJoinColumns = [JoinColumn(name = "tag_id")],
+        joinColumns = [JoinColumn(name = "article_id",  referencedColumnName = "id")],
+        inverseJoinColumns = [JoinColumn(name = "tag_id", referencedColumnName = "id")],
         uniqueConstraints = [UniqueConstraint(columnNames = ["article_id", "tag_id"])]
     )
     open var tagList: List<TagMapper>,

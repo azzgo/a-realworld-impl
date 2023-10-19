@@ -14,7 +14,7 @@ typealias TagId = String
 open class TagMapper (
     @Id
     @GenericGenerator(name = "idGenerator", strategy = "uuid2")
-    @GeneratedValue
+    @GeneratedValue(generator = "idGenerator")
     open var id: TagId? = null,
     @Column(unique = true)
     open var name: String
