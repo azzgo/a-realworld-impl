@@ -49,13 +49,15 @@ By Github Copilot to quick code a [readworld application](https://www.realworld.
     - [x] load user info in setting page
     - [x] update user info in settings page
 - [ ] CRUD Articles
-    - [ ] Create Article
-    - [ ] Article List Page
-    - [ ] Article Detail Page
+    - [x] Create Article
     - [ ] Article Edit Page
+    - [ ] Article Detail Page
     - [ ] Delete Article Page
 - [ ] CR-D Comments on articles (no updating required)
 - [ ] GET and display paginated lists of articles
+    - [ ] Article List Page
 - [ ] Favorite articles
 - [ ] Follow other users
 
+- constraints on API Spec not on features list impl latter
+    - [ ] Article title must be unique, if update Article title changed, will be published a new
