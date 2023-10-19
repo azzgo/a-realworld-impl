@@ -3,6 +3,7 @@ package how.realworld.server.model.impl
 import how.realworld.server.model.User
 import how.realworld.server.model.Users
 import how.realworld.server.repository.ArticleRepository
+import how.realworld.server.repository.TagRepository
 import how.realworld.server.repository.mapper.ArticleMapper
 import how.realworld.server.repository.mapper.TagMapper
 import org.junit.jupiter.api.Test
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.Test
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.mockito.ArgumentMatchers.any
+import org.mockito.ArgumentMatchers.anyList
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito.mock
@@ -23,14 +25,19 @@ class ArticlesImplTest {
 
     @Mock
     private lateinit var users: Users
+
     @Mock
     private lateinit var articleRepository: ArticleRepository
+
+    @Mock
+    private lateinit var tagRepository: TagRepository
 
     @BeforeEach
     fun setup() {
         users = mock(Users::class.java)
         articleRepository = mock(ArticleRepository::class.java)
-        articlesImpl = ArticlesImpl(users, articleRepository)
+        tagRepository = mock(TagRepository::class.java)
+        articlesImpl = ArticlesImpl(users, articleRepository, tagRepository)
     }
 
     @Test
@@ -43,17 +50,20 @@ class ArticlesImplTest {
         `when`(users.getById("jake_id")).thenReturn(user)
 
         val articleMapper = mock(ArticleMapper::class.java)
+        val tags = listOf(TagMapper("tag_id_1", "tag1"), TagMapper("tag_id_2", "tag2"))
         `when`(articleMapper.id).thenReturn("slug_id")
         `when`(articleMapper.title).thenReturn("title")
         `when`(articleMapper.description).thenReturn("description")
         `when`(articleMapper.body).thenReturn("body")
-        `when`(articleMapper.tagList).thenReturn(listOf(TagMapper("tag_id_1", "tag1"), TagMapper("tag_id_2", "tag2")))
+        `when`(articleMapper.tagList).thenReturn(tags)
         `when`(articleMapper.createdAt).thenReturn(Instant.parse("2016-02-18T03:22:56.637Z"))
         `when`(articleMapper.updatedAt).thenReturn(Instant.parse("2016-02-18T03:22:56.637Z"))
         `when`(articleMapper.favorited).thenReturn(false)
         `when`(articleMapper.favoritesCount).thenReturn(0)
         `when`(articleMapper.authorId).thenReturn("jake_id")
 
+        // need add a Verity here later
+        `when`(tagRepository.saveAll(anyList())).thenReturn(tags)
         `when`(articleRepository.save(any())).thenReturn(articleMapper)
 
         val createdArticle = articlesImpl.create("jake_id", "title", "description", "body", listOf("tag1", "tag2"))
