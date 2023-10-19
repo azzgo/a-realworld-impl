@@ -4,7 +4,7 @@ import how.realworld.server.model.*
 import how.realworld.server.repository.ArticleRepository
 import how.realworld.server.repository.TagRepository
 import how.realworld.server.repository.mapper.ArticleMapper
-import how.realworld.server.repository.mapper.TagMapper
+import how.realworld.server.repository.saveOrUpdateAll
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 
@@ -24,7 +24,7 @@ class ArticlesImpl(
             tagList: List<String>
     ): Article {
         val user = users.getById(userId)
-        val tagMappers = tagRepository.saveAll(tagList.map { TagMapper(name = it) })
+        val tagMappers = tagRepository.saveOrUpdateAll(tagList)
         val articleMapper = articleRepository.save(
                 ArticleMapper(
                         title = title,

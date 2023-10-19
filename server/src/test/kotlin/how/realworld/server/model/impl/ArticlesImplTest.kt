@@ -6,6 +6,7 @@ import how.realworld.server.repository.ArticleRepository
 import how.realworld.server.repository.TagRepository
 import how.realworld.server.repository.mapper.ArticleMapper
 import how.realworld.server.repository.mapper.TagMapper
+import how.realworld.server.repository.saveOrUpdateAll
 import org.junit.jupiter.api.Test
 
 import org.assertj.core.api.Assertions.assertThat
@@ -63,7 +64,7 @@ class ArticlesImplTest {
         `when`(articleMapper.authorId).thenReturn("jake_id")
 
         // need add a Verity here later
-        `when`(tagRepository.saveAll(anyList())).thenReturn(tags)
+        `when`(tagRepository.saveOrUpdateAll(anyList())).thenReturn(tags)
         `when`(articleRepository.save(any())).thenReturn(articleMapper)
 
         val createdArticle = articlesImpl.create("jake_id", "title", "description", "body", listOf("tag1", "tag2"))

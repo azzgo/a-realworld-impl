@@ -1,15 +1,11 @@
 package how.realworld.server.repository.mapper
 
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.Id
-import jakarta.persistence.Table
+import jakarta.persistence.*
 import org.hibernate.annotations.GenericGenerator
 
 typealias TagId = String
 
-@Table(name = "t_tags")
+@Table(name = "t_tags", uniqueConstraints = [UniqueConstraint(columnNames = ["name"])])
 @Entity
 open class TagMapper (
     @Id
