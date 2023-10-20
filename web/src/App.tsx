@@ -43,6 +43,7 @@ export default function App() {
   useEffect(() => {
     if (hasToken() && !isLoaded) {
       userController?.loadCurrentUser().then(() => setIsLoaded(true));
+      // TODO if token is expired, redirect to login page
     } else {
       setIsLoaded(true);
     }
