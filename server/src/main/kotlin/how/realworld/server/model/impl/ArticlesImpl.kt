@@ -55,7 +55,9 @@ class ArticlesImpl(
     }
 
     override fun get(slug: ArticleId): Article? {
-        TODO("Not yet implemented")
+        val articleMapper = articleRepository.findById(slug).getOrNull() ?: return null
+        val user = users.getById(articleMapper.authorId);
+        return articleMapper.toModel(user!!)
     }
 }
 

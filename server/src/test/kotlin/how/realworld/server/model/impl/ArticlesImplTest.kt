@@ -133,7 +133,7 @@ class ArticlesImplTest {
         assertThat(oldArticleMapper.body).isEqualTo("body")
         assertThat(oldArticleMapper.tagList.map { it.name }).isEqualTo(listOf("tag1", "tag2"))
 
-       // verify return value is correct
+        // verify return value is correct
         assertThat(updateedArticle.slug).isEqualTo("slug")
         assertThat(updateedArticle.title).isEqualTo("title")
         assertThat(updateedArticle.description).isEqualTo("description")
@@ -147,5 +147,46 @@ class ArticlesImplTest {
         assertThat(updateedArticle.author.bio).isEqualTo("I work at statefarm")
         assertThat(updateedArticle.author.image).isEqualTo("http://image.url")
         assertThat(updateedArticle.author.following).isFalse()
+    }
+
+    @Test
+    fun should_get_article_by_slug() {
+        val user = mock(User::class.java)
+        `when`(user.userId).thenReturn("jake_id")
+        `when`(user.username).thenReturn("jake")
+        `when`(user.bio).thenReturn("I work at statefarm")
+        `when`(user.image).thenReturn("http://image.url")
+        `when`(users.getById("jake_id")).thenReturn(user)
+        val tags = listOf(TagMapper("tag_id_1", "tag1"), TagMapper("tag_id_2", "tag2"))
+
+        val queriedArticle = mock(ArticleMapper::class.java)
+        `when`(queriedArticle.id).thenReturn("slug")
+        `when`(queriedArticle.title).thenReturn("title")
+        `when`(queriedArticle.description).thenReturn("description")
+        `when`(queriedArticle.body).thenReturn("body")
+        `when`(queriedArticle.tagList).thenReturn(tags)
+        `when`(queriedArticle.createdAt).thenReturn(Instant.parse("2016-02-18T03:22:56.637Z"))
+        `when`(queriedArticle.updatedAt).thenReturn(Instant.parse("2016-02-18T03:22:56.637Z"))
+        `when`(queriedArticle.favorited).thenReturn(false)
+        `when`(queriedArticle.favoritesCount).thenReturn(1)
+        `when`(queriedArticle.authorId).thenReturn("jake_id")
+
+        `when`(articleRepository.findById("slug")).thenReturn(Optional.of(queriedArticle))
+
+        val article = articlesImpl.get("slug")
+
+        assertThat(article?.slug).isEqualTo("slug")
+        assertThat(article?.title).isEqualTo("title")
+        assertThat(article?.description).isEqualTo("description")
+        assertThat(article?.body).isEqualTo("body")
+        assertThat(article?.tagList?.map { it.name }).isEqualTo(listOf("tag1", "tag2"))
+        assertThat(article?.author?.username).isEqualTo("jake")
+        assertThat(article?.createdAt).isEqualTo(Instant.parse("2016-02-18T03:22:56.637Z"))
+        assertThat(article?.updatedAt).isEqualTo(Instant.parse("2016-02-18T03:22:56.637Z"))
+        assertThat(article?.favorited).isFalse()
+        assertThat(article?.favoritesCount).isEqualTo(1)
+        assertThat(article?.author?.bio).isEqualTo("I work at statefarm")
+        assertThat(article?.author?.image).isEqualTo("http://image.url")
+        assertThat(article?.author?.following).isFalse()
     }
 }
