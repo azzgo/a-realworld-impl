@@ -1,9 +1,9 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import { Input } from "../components/Input";
 import { Textarea } from "../components/Textarea";
 import Form, { Field } from "rc-field-form";
 import { ArticleControllerContext } from "../model/article";
-import {useParams} from "react-router";
+import { useParams } from "react-router";
 
 interface Props {}
 
@@ -11,7 +11,7 @@ type ArticleFormValueType = {
   title: string;
   description: string;
   body: string;
-}
+};
 
 const ArticleEditor: React.FC<Props> = () => {
   const [formRef] = Form.useForm();
@@ -19,6 +19,23 @@ const ArticleEditor: React.FC<Props> = () => {
   const articleController = useContext(ArticleControllerContext);
   const [tags, setTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState("");
+  const isEdit = useMemo(() => {
+    return !!params.slug;
+  }, [params.slug]);
+
+  useEffect(() => {
+    if (isEdit) {
+      articleController?.get(params.slug!).then((article) => {
+        formRef.setFieldsValue({
+          title: article.title,
+          description: article.description,
+          body: article.body,
+        });
+        setTags(article.tagList);
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleTagInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTagInput(event.target.value);
@@ -36,12 +53,10 @@ const ArticleEditor: React.FC<Props> = () => {
   };
 
   const handleSubmit = (values: ArticleFormValueType) => {
-    console.log(params)
-    const isEdit = !!params.slug;
     const saveOrUpdatedFormData = {
       ...values,
       tagList: tags,
-    }
+    };
     if (isEdit) {
       articleController?.update(params.slug!, saveOrUpdatedFormData);
     } else {
@@ -105,7 +120,7 @@ const ArticleEditor: React.FC<Props> = () => {
                       }
                     }}
                   />
-                  <div className="tag-list">
+                  <div className="tag-list" data-testid="tag-list">
                     {tags.map((tag) => (
                       <span className="tag-default tag-pill" key={tag}>
                         {tag}{" "}

@@ -5,11 +5,30 @@ import { JotaiStore } from "../../src/type";
 import { createStore } from "jotai";
 import ArticleEditor from "../../src/page/ArticleEditor";
 import {
+  Article,
   ArticleController,
   ArticleControllerContext,
 } from "../../src/model/article";
 import React from "react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
+
+const emptyArticle: Article = {
+  slug: "",
+  title: "",
+  description: "",
+  body: "",
+  tagList: [],
+  createdAt: "",
+  updatedAt: "",
+  favorited: false,
+  favoritesCount: 0,
+  author: {
+    username: "",
+    bio: "",
+    image: "",
+    following: false,
+  },
+};
 
 describe("ArticleEditor", () => {
   let store: JotaiStore;
@@ -19,6 +38,7 @@ describe("ArticleEditor", () => {
     articleController = {
       create: vi.fn().mockResolvedValue(undefined),
       update: vi.fn().mockResolvedValue(undefined),
+      get: vi.fn().mockResolvedValue(emptyArticle),
     } as any;
     cleanup();
   });
@@ -63,6 +83,38 @@ describe("ArticleEditor", () => {
         body: "body",
         tagList: [],
       });
+    });
+  });
+
+  test("should get article when load page", async () => {
+    const expectedArticle: Article = {
+      slug: "slug",
+      title: "title",
+      description: "description",
+      body: "body",
+      tagList: ["reactjs", "angularjs"],
+      createdAt: "",
+      updatedAt: "",
+      favorited: false,
+      favoritesCount: 0,
+      author: {
+        username: "",
+        bio: "",
+        image: "",
+        following: false,
+      },
+    };
+    (articleController.get as any).mockResolvedValue(expectedArticle);
+
+    const { getByTestId } = renderArticlePage(true);
+    await waitFor(() => {
+      expect((getByTestId("article-title") as any).value).toBe("title");
+      expect((getByTestId("article-description") as any).value).toBe(
+        "description"
+      );
+      expect((getByTestId("article-body") as any).value).toBe("body");
+      expect(getByTestId("tag-list").textContent).toContain("reactjs");
+      expect(getByTestId("tag-list").textContent).toContain("angularjs");
     });
   });
 
