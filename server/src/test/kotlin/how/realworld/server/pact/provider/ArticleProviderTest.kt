@@ -27,6 +27,7 @@ import java.time.Instant
 @PactFolder("./../contacts/pacts")
 @PactFilter(
         "user logged in what to post new article",
+        "user logged in want to edit exist article"
 )
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
@@ -72,5 +73,33 @@ class ArticleProviderTest {
                 description = createdArticle.description,
                 body = createdArticle.body,
                 tagList = createdArticle.tagList.map { it.name })).thenReturn(createdArticle)
+    }
+
+    @State("user logged in want to edit exist article", action = StateChangeAction.SETUP, comment = "用户登录编辑文章")
+    fun userLoggedInEditArticle() {
+        val updatedArticle = createArticle(
+                slug = "slug",
+                title = "How to train your dragon",
+                description = "Ever wonder how?",
+                body = "You have to believe",
+                tagList = listOf("reactjs", "angularjs", "dragons"),
+                createdAt = Instant.parse("2016-02-18T03:22:56.637Z"),
+                updatedAt = Instant.parse("2016-02-18T03:48:35.824Z"),
+                favorited = false,
+                favoritesCount = 0,
+                author = createAuthor(
+                        username = "jake",
+                        bio = "I work at statefarm",
+                        image = "http://image.url",
+                        following = false,
+                )
+        )
+
+        `when`(articles.update(slug = "slug",
+                userId = "jake_id",
+                title = updatedArticle.title,
+                description = updatedArticle.description,
+                body = updatedArticle.body,
+                tagList = updatedArticle.tagList.map { it.name })).thenReturn(updatedArticle)
     }
 }

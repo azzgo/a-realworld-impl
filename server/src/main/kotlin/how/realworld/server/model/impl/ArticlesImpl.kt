@@ -37,6 +37,10 @@ class ArticlesImpl(
 
         return articleMapper.toModel(user)
     }
+
+    override fun update(slug: ArticleId, userId: UserId, title: String, description: String, body: String, tagList: List<String>): Article {
+        TODO("Not yet implemented")
+    }
 }
 
 private fun ArticleMapper.toModel(user: User): Article {
