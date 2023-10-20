@@ -53,6 +53,10 @@ class ArticlesImpl(
 
         return updatedArticleMapper.toModel(user)
     }
+
+    override fun get(slug: ArticleId): Article? {
+        TODO("Not yet implemented")
+    }
 }
 
 private fun ArticleMapper.toModel(user: User): Article {
