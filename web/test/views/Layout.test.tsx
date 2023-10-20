@@ -19,7 +19,7 @@ describe("AuthHeader Page", () => {
         <MemoryRouter initialEntries={["/"]}>
           <Routes>
             <Route path="/" element={<Layout />}>
-              <Route path="/editor" element={<div data-testid="editor" />} />
+              <Route path="/editor/:slug?" element={<div data-testid="editor" />} />
               <Route path="/" element={<div data-testid="home">home</div>} />
             </Route>
           </Routes>
