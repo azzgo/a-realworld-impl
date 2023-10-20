@@ -13,6 +13,7 @@ import Settings from "./page/Settings.tsx";
 import { useContext, useEffect, useState } from "react";
 import { UserControllerContext } from "./model/user.ts";
 import ArticleEditor from "./page/ArticleEditor.tsx";
+import ArticleDetail from "./page/ArticleDetail.tsx";
 
 const simpleGuard = () => {
   if (getToken() == null) {
@@ -30,7 +31,8 @@ const routes = createBrowserRouter([
       { path: "/register", element: <Register /> },
       { path: "/", element: <Home /> },
       { path: "/settings", loader: simpleGuard, element: <Settings /> },
-      { path: "/editor/:slug?", loader: simpleGuard, element: <ArticleEditor /> }
+      { path: "/editor/:slug?", loader: simpleGuard, element: <ArticleEditor /> },
+      { path: "/article/:slug", element: <ArticleDetail /> },
     ],
   },
 ]);
@@ -44,6 +46,7 @@ export default function App() {
     } else {
       setIsLoaded(true);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return isLoaded && <RouterProvider router={routes} />;

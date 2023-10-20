@@ -18,8 +18,7 @@ const emptyArticle: Article = {
   description: "",
   body: "",
   tagList: [],
-  createdAt: "",
-  updatedAt: "",
+  createdAt: "", updatedAt: "",
   favorited: false,
   favoritesCount: 0,
   author: {
@@ -86,7 +85,7 @@ describe("ArticleEditor", () => {
     });
   });
 
-  test("should get article when load page", async () => {
+  test("should load article to view", async () => {
     const expectedArticle: Article = {
       slug: "slug",
       title: "title",
