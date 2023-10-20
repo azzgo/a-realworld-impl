@@ -35,6 +35,7 @@ By Github Copilot to quick code a [readworld application](https://www.realworld.
 - [x] A Base Framework for web and server
 - [x] A Testing enviroment (include pact test between web and server) setup
 - [x] intercept user when not login in authenticated endpoints
+- [ ] tech debt: if controller not defined rest mapping, Springboot will return 401 not 404 HTTP status 
 
 ### Business Features
 
