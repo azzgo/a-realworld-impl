@@ -11,3 +11,5 @@ val USER_NOT_VALID = BusinessException(
         "user" to listOf("not valid")
     )
 )
+
+val ARTICLE_NOT_EXIST = BusinessException(statusCode = 404, errors = mapOf("article" to listOf("not exist")))

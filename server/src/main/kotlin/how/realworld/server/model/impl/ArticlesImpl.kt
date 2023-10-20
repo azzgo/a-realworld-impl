@@ -1,5 +1,7 @@
 package how.realworld.server.model.impl
 
+import how.realworld.server.controller.exception.ARTICLE_NOT_EXIST
+import how.realworld.server.controller.exception.USER_NOT_VALID
 import how.realworld.server.model.*
 import how.realworld.server.repository.ArticleRepository
 import how.realworld.server.repository.TagRepository
@@ -7,6 +9,7 @@ import how.realworld.server.repository.mapper.ArticleMapper
 import how.realworld.server.repository.saveOrUpdateAll
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
+import kotlin.jvm.optionals.getOrNull
 
 @Service
 class ArticlesImpl(
@@ -23,7 +26,7 @@ class ArticlesImpl(
             body: String,
             tagList: List<String>
     ): Article {
-        val user = users.getById(userId)
+        val user = users.getById(userId) ?: throw USER_NOT_VALID
         val tagMappers = tagRepository.saveOrUpdateAll(tagList)
         val articleMapper = articleRepository.save(
                 ArticleMapper(
@@ -31,7 +34,7 @@ class ArticlesImpl(
                         description = description,
                         body = body,
                         tagList = tagMappers,
-                        authorId = user?.userId!!,
+                        authorId = user.userId!!,
                 )
         )
 
@@ -39,7 +42,16 @@ class ArticlesImpl(
     }
 
     override fun update(slug: ArticleId, userId: UserId, title: String, description: String, body: String, tagList: List<String>): Article {
-        TODO("Not yet implemented")
+        val user = users.getById(userId) ?:  throw USER_NOT_VALID
+        val articleMapper = articleRepository.findById(slug).getOrNull() ?: throw ARTICLE_NOT_EXIST
+        val tagMappers = tagRepository.saveOrUpdateAll(tagList)
+        articleMapper.title = title
+        articleMapper.description = description
+        articleMapper.body = body
+        articleMapper.tagList = tagMappers
+        val updatedArticleMapper = articleRepository.save(articleMapper)
+
+        return updatedArticleMapper.toModel(user)
     }
 }
 
