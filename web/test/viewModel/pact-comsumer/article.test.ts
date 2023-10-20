@@ -1,6 +1,6 @@
 import { describe, beforeEach, test } from "vitest";
 
-import { useArticleController } from "../../../src/model/article";
+import { Article, useArticleController } from "../../../src/model/article";
 import { JotaiStore } from "../../../src/type";
 import { createStore } from "jotai";
 import { MockHeadlessStoreWrapper } from "../../views/utils.utils";
@@ -9,6 +9,7 @@ import { jwtToken, provider } from "./pact.utils";
 import { configEnv } from "../../../src/utils/env";
 import { initAxiosInstance } from "../../../src/utils/request";
 import { persistToken } from "../../../src/utils/token";
+import { expect } from "vitest";
 
 describe("consumer for create article", () => {
   let store: JotaiStore;
@@ -136,6 +137,68 @@ describe("consumer for create article", () => {
         body: "You have to believe",
         tagList: ["reactjs", "angularjs", "dragons"],
       });
+    });
+  });
+
+  test("should get the article detail by slug id", () => {
+    provider
+      .given("get article by slug")
+      .uponReceiving("a request to get article detail")
+      .withRequest({
+        method: "GET",
+        path: "/articles/slug",
+      })
+      .willRespondWith({
+        status: 200,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: {
+          article: {
+            slug: "slug",
+            title: "How to train your dragon",
+            description: "Ever wonder how?",
+            body: "You have to believe",
+            tagList: ["reactjs", "angularjs", "dragons"],
+            createdAt: "2016-02-18T03:22:56.637Z",
+            updatedAt: "2016-02-18T03:48:35.824Z",
+            favorited: false,
+            favoritesCount: 0,
+            author: {
+              username: "jake",
+              bio: "I work at statefarm",
+              image: "http://image.url",
+              following: false,
+            },
+          },
+        },
+      });
+
+    return provider.executeTest(async (mockServer) => {
+      configEnv({ BASE_URL: mockServer.url });
+      initAxiosInstance();
+      const { result } = renderHook(() => useArticleController(), {
+        wrapper,
+      });
+      const expectedArticle: Article = {
+        slug: "slug",
+        title: "How to train your dragon",
+        description: "Ever wonder how?",
+        body: "You have to believe",
+        tagList: ["reactjs", "angularjs", "dragons"],
+        createdAt: "2016-02-18T03:22:56.637Z",
+        updatedAt: "2016-02-18T03:48:35.824Z",
+        favorited: false,
+        favoritesCount: 0,
+        author: {
+          username: "jake",
+          bio: "I work at statefarm",
+          image: "http://image.url",
+          following: false,
+        },
+      };
+      const article = await result.current.get("slug");
+      expect(article).toEqual(expectedArticle);
     });
   });
 });

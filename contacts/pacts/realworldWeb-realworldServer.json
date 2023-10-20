@@ -77,6 +77,47 @@
       }
     },
     {
+      "description": "a request to get article detail",
+      "providerStates": [
+        {
+          "name": "get article by slug"
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "path": "/articles/slug"
+      },
+      "response": {
+        "body": {
+          "article": {
+            "author": {
+              "bio": "I work at statefarm",
+              "following": false,
+              "image": "http://image.url",
+              "username": "jake"
+            },
+            "body": "You have to believe",
+            "createdAt": "2016-02-18T03:22:56.637Z",
+            "description": "Ever wonder how?",
+            "favorited": false,
+            "favoritesCount": 0,
+            "slug": "slug",
+            "tagList": [
+              "reactjs",
+              "angularjs",
+              "dragons"
+            ],
+            "title": "How to train your dragon",
+            "updatedAt": "2016-02-18T03:48:35.824Z"
+          }
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "status": 200
+      }
+    },
+    {
       "description": "a request to get user",
       "providerStates": [
         {

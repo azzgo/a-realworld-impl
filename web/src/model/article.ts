@@ -30,19 +30,27 @@ export interface Author {
   following: boolean;
 }
 
+type SingleAritleResponse = {
+  article: Article
+}
+
 export interface ArticleController {
   create(article: ArticleDto): Promise<Article>;
   update(slug: Slug, article: ArticleDto): Promise<Article>;
+  get(slug: Slug): Promise<Article>;
 }
 
 export function useArticleController(): ArticleController {
   return {
     async create(article: ArticleDto) {
-      return request().post("/articles", { article });
+      return request().post<SingleAritleResponse>("/articles", { article }).then(res => res.data.article);
     },
     async update(slug: Slug, article: ArticleDto) {
-      return request().put(`/articles/${slug}`, { article });
+      return request().put<SingleAritleResponse>(`/articles/${slug}`, { article }).then(res => res.data.article);
     },
+    async get(slug: Slug) {
+      return request().get<SingleAritleResponse>(`/articles/${slug}`).then(res => res.data.article);
+    }
   };
 }
 
