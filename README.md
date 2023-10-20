@@ -50,7 +50,7 @@ By Github Copilot to quick code a [readworld application](https://www.realworld.
     - [x] update user info in settings page
 - [ ] CRUD Articles
     - [x] Create Article
-    - [ ] Article Edit Page
+    - [x] Article Edit Page
     - [ ] Article Detail Page
     - [ ] Delete Article Page
 - [ ] CR-D Comments on articles (no updating required)
