@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, test, vi } from "vitest";
 import { MockAppWrapper } from "./utils.utils";
-import { fireEvent, render, waitFor } from "@testing-library/react";
+import { cleanup, fireEvent, render, waitFor } from "@testing-library/react";
 import { JotaiStore } from "../../src/type";
 import { createStore } from "jotai";
 import ArticleEditor from "../../src/page/ArticleEditor";
@@ -18,7 +18,9 @@ describe("ArticleEditor", () => {
     store = createStore();
     articleController = {
       create: vi.fn().mockResolvedValue(undefined),
+      update: vi.fn().mockResolvedValue(undefined),
     } as any;
+    cleanup();
   });
   test("should create article when click publish", async () => {
     const { getByTestId } = renderArticlePage();
@@ -43,6 +45,27 @@ describe("ArticleEditor", () => {
     });
   });
 
+  test("should update article when article exists", async () => {
+    const { getByTestId } = renderArticlePage(true);
+
+    fireEvent.input(getByTestId("article-title"), {
+      target: { value: "title" },
+    });
+    fireEvent.input(getByTestId("article-description"), {
+      target: { value: "description" },
+    });
+    fireEvent.input(getByTestId("article-body"), { target: { value: "body" } });
+    fireEvent.click(getByTestId("publish-button"));
+    await waitFor(() => {
+      expect(articleController.update).toBeCalledWith("slug", {
+        title: "title",
+        description: "description",
+        body: "body",
+        tagList: [],
+      });
+    });
+  });
+
   function renderArticlePage(isEdit = false) {
     const Wrapper = MockAppWrapper();
 
@@ -51,8 +74,7 @@ describe("ArticleEditor", () => {
         <ArticleControllerContext.Provider value={articleController}>
           <MemoryRouter initialEntries={[isEdit ? "/editor/slug" : "/editor"]}>
             <Routes>
-              <Route path="/editor" element={<ArticleEditor />} />
-              <Route path="/editor/:slug" element={<ArticleEditor />} />
+              <Route path="/editor/:slug?" element={<ArticleEditor />} />
             </Routes>
           </MemoryRouter>
         </ArticleControllerContext.Provider>

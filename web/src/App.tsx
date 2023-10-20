@@ -30,7 +30,7 @@ const routes = createBrowserRouter([
       { path: "/register", element: <Register /> },
       { path: "/", element: <Home /> },
       { path: "/settings", loader: simpleGuard, element: <Settings /> },
-      { path: "/editor", loader: simpleGuard, element: <ArticleEditor /> }
+      { path: "/editor/:slug?", loader: simpleGuard, element: <ArticleEditor /> }
     ],
   },
 ]);

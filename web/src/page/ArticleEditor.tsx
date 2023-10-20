@@ -3,6 +3,7 @@ import { Input } from "../components/Input";
 import { Textarea } from "../components/Textarea";
 import Form, { Field } from "rc-field-form";
 import { ArticleControllerContext } from "../model/article";
+import {useParams} from "react-router";
 
 interface Props {}
 
@@ -14,6 +15,7 @@ type ArticleFormValueType = {
 
 const ArticleEditor: React.FC<Props> = () => {
   const [formRef] = Form.useForm();
+  const params = useParams();
   const articleController = useContext(ArticleControllerContext);
   const [tags, setTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState("");
@@ -34,10 +36,17 @@ const ArticleEditor: React.FC<Props> = () => {
   };
 
   const handleSubmit = (values: ArticleFormValueType) => {
-    articleController?.create({
+    console.log(params)
+    const isEdit = !!params.slug;
+    const saveOrUpdatedFormData = {
       ...values,
       tagList: tags,
-    });
+    }
+    if (isEdit) {
+      articleController?.update(params.slug!, saveOrUpdatedFormData);
+    } else {
+      articleController?.create(saveOrUpdatedFormData);
+    }
   };
 
   return (
