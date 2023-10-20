@@ -9,6 +9,7 @@ import {
   ArticleControllerContext,
 } from "../../src/model/article";
 import React from "react";
+import { MemoryRouter, Route, Routes } from "react-router-dom";
 
 describe("ArticleEditor", () => {
   let store: JotaiStore;
@@ -20,7 +21,7 @@ describe("ArticleEditor", () => {
     } as any;
   });
   test("should create article when click publish", async () => {
-    const { getByTestId } = renderSettingPage();
+    const { getByTestId } = renderArticlePage();
 
     fireEvent.input(getByTestId("article-title"), {
       target: { value: "title" },
@@ -42,13 +43,18 @@ describe("ArticleEditor", () => {
     });
   });
 
-  function renderSettingPage() {
+  function renderArticlePage(isEdit = false) {
     const Wrapper = MockAppWrapper();
 
     return render(
       <Wrapper store={store}>
         <ArticleControllerContext.Provider value={articleController}>
-          <ArticleEditor />
+          <MemoryRouter initialEntries={[isEdit ? "/editor/slug" : "/editor"]}>
+            <Routes>
+              <Route path="/editor" element={<ArticleEditor />} />
+              <Route path="/editor/:slug" element={<ArticleEditor />} />
+            </Routes>
+          </MemoryRouter>
         </ArticleControllerContext.Provider>
       </Wrapper>
     );
