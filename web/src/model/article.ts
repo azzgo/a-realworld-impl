@@ -1,4 +1,5 @@
-import { createContext } from "react";
+import { createContext, useContext } from "react";
+import { useAsync } from 'react-async-hook';
 import request from "../utils/request";
 
 export type Slug = string;
@@ -57,3 +58,12 @@ export function useArticleController(): ArticleController {
 export const ArticleControllerContext = createContext<ArticleController | null>(
   null
 );
+
+export function useArticleById(slug?: Slug) {
+  const controller = useContext(ArticleControllerContext);
+  return useAsync(async (slug?: string) => {
+    if(!slug) return null;
+    return controller?.get(slug)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [slug]);
+}

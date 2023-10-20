@@ -8,9 +8,14 @@ import {
   ArticleControllerContext,
   useArticleController,
 } from "./model/article";
+import advancedFormat from "dayjs/plugin/advancedFormat";
+import dayjs from "dayjs";
+
+dayjs.extend(advancedFormat);
 
 const appStore = createStore();
 
+// eslint-disable-next-line react-refresh/only-export-components
 function Wrapper() {
   const userController = useUserController();
   const articleController = useArticleController();
