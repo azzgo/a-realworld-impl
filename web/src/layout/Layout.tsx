@@ -7,7 +7,7 @@ import AuthenticatedHeader from "./components/AuthenticatedHeader";
 export default function Layout() {
   return (
     <>
-      { hasToken() ? <UnauthenticatedHeader /> : <AuthenticatedHeader /> }
+      { hasToken() ? <AuthenticatedHeader /> : <UnauthenticatedHeader /> }
       <div>
         <Outlet />
       </div>

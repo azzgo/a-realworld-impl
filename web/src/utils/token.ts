@@ -3,7 +3,7 @@ export function getToken() {
 }
 
 export function hasToken() {
-  return getToken() !== null;
+  return getToken() != null;
 }
 
 export function persistToken(token: string) {
