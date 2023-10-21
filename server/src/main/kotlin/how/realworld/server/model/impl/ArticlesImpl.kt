@@ -8,6 +8,7 @@ import how.realworld.server.repository.TagRepository
 import how.realworld.server.repository.mapper.ArticleMapper
 import how.realworld.server.repository.saveOrUpdateAll
 import jakarta.transaction.Transactional
+import org.springframework.data.domain.Page
 import org.springframework.stereotype.Service
 import kotlin.jvm.optionals.getOrNull
 
@@ -56,8 +57,12 @@ class ArticlesImpl(
 
     override fun get(slug: ArticleId): Article? {
         val articleMapper = articleRepository.findById(slug).getOrNull() ?: return null
-        val user = users.getById(articleMapper.authorId);
+        val user = users.getById(articleMapper.authorId)
         return articleMapper.toModel(user!!)
+    }
+
+    override fun list(page: Int, size: Int): Page<Article> {
+        TODO("Not yet implemented")
     }
 }
 

@@ -1,13 +1,10 @@
 package how.realworld.server.controller
 
-import how.realworld.server.controller.dto.ArticleResponseDto
-import how.realworld.server.controller.dto.ArticleResponseDtoField
-import how.realworld.server.controller.dto.NewArticleDto
-import how.realworld.server.controller.dto.from
+import how.realworld.server.controller.dto.*
 import how.realworld.server.controller.exception.ARTICLE_NOT_EXIST
 import how.realworld.server.model.ArticleId
 import how.realworld.server.model.Articles
-import how.realworld.server.model.Users
+import org.springframework.data.repository.query.Param
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.GetMapping
@@ -23,6 +20,15 @@ import org.springframework.web.bind.annotation.RestController
 class ArticleController(
         val articles: Articles,
 ) {
+
+    @GetMapping
+    fun listArticles(@Param("limit") limit: Int,@Param("offset") offset: Int): ResponseEntity<PageArticlesResponseDto> {
+        val articles = articles.list(offset, limit)
+        return ResponseEntity.ok().body(PageArticlesResponseDto(
+                articles = articles.content.map { ArticleResponseDtoField.from(it) },
+                articlesCount = articles.totalElements.toInt()
+        ))
+    }
 
     @PostMapping
     fun createArticle(@RequestBody newArticleDto: NewArticleDto): ResponseEntity<ArticleResponseDto> {

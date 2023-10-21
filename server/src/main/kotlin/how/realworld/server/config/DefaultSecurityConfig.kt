@@ -27,6 +27,7 @@ class SecurityConfig(
                         authorize.requestMatchers(HttpMethod.POST, "/users/login").permitAll()
                         authorize.requestMatchers(HttpMethod.POST, "/users").permitAll()
                         authorize.requestMatchers(HttpMethod.GET, "/articles/**").permitAll()
+                        authorize.requestMatchers(HttpMethod.GET, "/articles").permitAll()
                         authorize.anyRequest().authenticated()
                     }
                 }
