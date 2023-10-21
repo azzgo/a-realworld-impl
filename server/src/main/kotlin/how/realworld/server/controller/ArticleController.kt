@@ -22,8 +22,13 @@ class ArticleController(
 ) {
 
     @GetMapping
-    fun listArticles(@Param("limit") limit: Int,@Param("offset") offset: Int): ResponseEntity<PageArticlesResponseDto> {
-        val articles = articles.list(offset, limit, "john doe")
+    fun listArticles(
+        @Param("limit") limit: Int,
+        @Param("offset") offset: Int,
+        @Param("tag") tag: String?,
+        @Param("author") author: String?,
+    ): ResponseEntity<PageArticlesResponseDto> {
+        val articles = articles.list(offset, limit, author, tag)
         return ResponseEntity.ok().body(PageArticlesResponseDto(
                 articles = articles.content.map { ArticleResponseDtoField.from(it) },
                 articlesCount = articles.totalElements.toInt()
