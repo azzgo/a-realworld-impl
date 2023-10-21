@@ -10,6 +10,7 @@ import { configEnv } from "../../../src/utils/env";
 import { initAxiosInstance } from "../../../src/utils/request";
 import { persistToken } from "../../../src/utils/token";
 import { fakeArticles } from "../../helpers";
+import { noop, omit } from "lodash";
 
 describe("consumer for create article", () => {
   let store: JotaiStore;
@@ -202,83 +203,76 @@ describe("consumer for create article", () => {
     });
   });
 
-  test("list articles pagination", async () => {
-    provider
-      .given("list articles default pagination")
-      .uponReceiving("a request to list articles")
-      .withRequest({
-        method: "GET",
-        path: "/articles",
-        query: {
-          offset: "0",
-          limit: "10",
-        },
-      })
-      .willRespondWith({
-        status: 200,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: {
-          articlesCount: 11,
-          articles: [
-            fakeArticles.articleLoremIpsum,
-            fakeArticles.fakeArticleSitAmet,
-            fakeArticles.articleAdipiscing,
-            fakeArticles.articleConsectetur,
-            fakeArticles.articleLorem1,
-            fakeArticles.articleLorem2,
-            fakeArticles.articleTheMagicOfMusic,
-            fakeArticles.articleExploringTheGreatOutdoors,
-            fakeArticles.articleTheArtOfCooking,
-            fakeArticles.articleThePowerOfTheInternet,
-          ],
-        },
-      });
-    return provider.executeTest(async (mockServer) => {
-      configEnv({ BASE_URL: mockServer.url });
-      initAxiosInstance();
-      const { result } = renderHook(() => useArticleController(), { wrapper });
-      await result.current.list({
-        pagination: { offset: 0, limit: 10 },
-      });
-    });
-  });
+  const listArticlesTestCases = [
+    {
+      given: "list articles default pagination",
+      query: { pagination: { offset: 0, limit: 10 } },
+      expectedResponse: {
+        articlesCount: 11,
+        articles: [
+          fakeArticles.articleLoremIpsum,
+          fakeArticles.fakeArticleSitAmet,
+          fakeArticles.articleAdipiscing,
+          fakeArticles.articleConsectetur,
+          fakeArticles.articleLorem1,
+          fakeArticles.articleLorem2,
+          fakeArticles.articleTheMagicOfMusic,
+          fakeArticles.articleExploringTheGreatOutdoors,
+          fakeArticles.articleTheArtOfCooking,
+          fakeArticles.articleThePowerOfTheInternet,
+        ],
+      },
+    },
+    {
+      given: "list articles by tag",
+      query: { tag: "lorem" },
+      expectedResponse: {
+        articlesCount: 3,
+        articles: [
+          fakeArticles.articleLoremIpsum,
+          fakeArticles.articleLorem1,
+          fakeArticles.articleLorem2,
+        ],
+      },
+    },
+  ];
 
-  test("list articles by tag", () => {
-    provider
-      .given("list articles by tag")
-      .uponReceiving("a request to list articles")
-      .withRequest({
-        method: "GET",
-        path: "/articles",
-        query: {
-          tag: "lorem",
-          offset: "0",
-          limit: "20",
-        },
-      })
-      .willRespondWith({
-        status: 200,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: {
-          articlesCount: 3,
-          articles: [
-            fakeArticles.articleLoremIpsum,
-            fakeArticles.articleLorem1,
-            fakeArticles.articleLorem2,
-          ],
-        },
+  test.each(listArticlesTestCases)(
+    "should $given",
+    async ({ given, query, expectedResponse }) => {
+      const requestQuery: Record<string, string> = omit(query, "pagination");
+      requestQuery.offset = String(query?.pagination?.offset ?? "0");
+      requestQuery.limit = String(query?.pagination?.limit ?? "20");
+      provider
+        .given(given)
+        .uponReceiving("a request to list articles")
+        .withRequest({
+          method: "GET",
+          path: "/articles",
+          query: requestQuery,
+        })
+        .willRespondWith({
+          status: 200,
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: {
+            articlesCount: expectedResponse.articlesCount,
+            articles: expectedResponse.articles,
+          },
+        });
+
+      return await provider.executeTest(async (mockServer) => {
+        configEnv({ BASE_URL: mockServer.url });
+        initAxiosInstance();
+        const { result } = renderHook(() => useArticleController(), {
+          wrapper,
+        });
+        await result.current.list(query).catch(noop);
       });
-    return provider.executeTest(async (mockServer) => {
-      configEnv({ BASE_URL: mockServer.url });
-      initAxiosInstance();
-      const { result } = renderHook(() => useArticleController(), { wrapper });
-      await result.current.list({ tag: "lorem" });
-    });
-  });
+    }
+  );
+
   test.todo("list articles by author");
   test.todo("list articles by favorited");
   test.todo("list feed articles");
