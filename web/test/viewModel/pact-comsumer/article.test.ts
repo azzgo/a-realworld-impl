@@ -1,4 +1,4 @@
-import { describe, beforeEach, test } from "vitest";
+import { describe, beforeEach, test, expect } from "vitest";
 
 import { Article, useArticleController } from "../../../src/model/article";
 import { JotaiStore } from "../../../src/type";
@@ -9,7 +9,7 @@ import { jwtToken, provider } from "./pact.utils";
 import { configEnv } from "../../../src/utils/env";
 import { initAxiosInstance } from "../../../src/utils/request";
 import { persistToken } from "../../../src/utils/token";
-import { expect } from "vitest";
+import { fakeArticles } from "../../helpers";
 
 describe("consumer for create article", () => {
   let store: JotaiStore;
@@ -201,4 +201,52 @@ describe("consumer for create article", () => {
       expect(article).toEqual(expectedArticle);
     });
   });
+
+  test("list articles pagination", async () => {
+    provider
+      .given("list articles default pagination")
+      .uponReceiving("a request to list articles")
+      .withRequest({
+        method: "GET",
+        path: "/articles",
+        query: {
+          offset: "0",
+          limit: "10",
+        },
+      })
+      .willRespondWith({
+        status: 200,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: {
+          articlesCount: 11,
+          articles: [
+            fakeArticles.articleLoremIpsum,
+            fakeArticles.fakeArticleSitAmet,
+            fakeArticles.articleAdipiscing,
+            fakeArticles.articleConsectetur,
+            fakeArticles.articleLorem1,
+            fakeArticles.articleLorem2,
+            fakeArticles.articleTheMagicOfMusic,
+            fakeArticles.articleExploringTheGreatOutdoors,
+            fakeArticles.articleTheArtOfCooking,
+            fakeArticles.articleThePowerOfTheInternet,
+          ],
+        },
+      });
+    return provider.executeTest(async (mockServer) => {
+      configEnv({ BASE_URL: mockServer.url });
+      initAxiosInstance();
+      const { result } = renderHook(() => useArticleController(), { wrapper });
+      await result.current.list({
+        pagination: { offset: 0, limit: 10 },
+      });
+    });
+  });
+
+  test.todo("list articles by tag");
+  test.todo("list articles by author");
+  test.todo("list articles by favorited");
+  test.todo("list feed articles");
 });

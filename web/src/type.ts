@@ -6,4 +6,9 @@ export interface ErrorBody {
   };
 }
 
+export interface Pagination {
+  limit: number;
+  offset: number;
+}
+
 export type JotaiStore = ReturnType<typeof createStore>;

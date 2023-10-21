@@ -118,6 +118,247 @@
       }
     },
     {
+      "description": "a request to list articles",
+      "providerStates": [
+        {
+          "name": "list articles default pagination"
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "path": "/articles",
+        "query": {
+          "limit": [
+            "10"
+          ],
+          "offset": [
+            "0"
+          ]
+        }
+      },
+      "response": {
+        "body": {
+          "articles": [
+            {
+              "author": {
+                "bio": "Lorem ipsum dolor sit amet.",
+                "following": false,
+                "image": "https://example.com/profile/john_doe.jpg",
+                "username": "john doe"
+              },
+              "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vestibulum diam nisi, nec auctor felis vulputate id. Phasellus euismod neque nec nibh molestie, non bibendum odio vulputate.",
+              "createdAt": "2022-01-01T12:00:00Z",
+              "description": "This is the description of lorem ipsum",
+              "favorited": false,
+              "favoritesCount": 0,
+              "slug": "lorem-ipsum",
+              "tagList": [
+                "lorem",
+                "ipsum",
+                "dolor"
+              ],
+              "title": "How to train your dragon",
+              "updatedAt": "2022-01-01T12:00:00Z"
+            },
+            {
+              "author": {
+                "bio": "Sit amet consectetur adipiscing elit.",
+                "following": true,
+                "image": "https://example.com/profile/jane_smith.jpg",
+                "username": "jane smith"
+              },
+              "body": "Sit amet consectetur adipiscing elit. Fusce blandit, lectus a finibus convallis, tellus enim aliquam ligula, vitae feugiat lectus enim vitae urna.",
+              "createdAt": "2022-01-02T12:00:00Z",
+              "description": "Sit amet consectetur adipiscing elit.",
+              "favorited": true,
+              "favoritesCount": 10,
+              "slug": "sit-amet",
+              "tagList": [
+                "sit",
+                "amet",
+                "consectetur"
+              ],
+              "title": "Sit Amet",
+              "updatedAt": "2022-01-02T12:00:00Z"
+            },
+            {
+              "author": {
+                "bio": "Adipiscing elit sed do eiusmod tempor incididunt.",
+                "following": false,
+                "image": "https://example.com/profile/alice_johnson.jpg",
+                "username": "alice johnson"
+              },
+              "body": "Adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+              "createdAt": "2022-01-03T12:00:00Z",
+              "description": "Adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+              "favorited": false,
+              "favoritesCount": 0,
+              "slug": "adipiscing-elit",
+              "tagList": [
+                "adipiscing",
+                "elit",
+                "tempor"
+              ],
+              "title": "Adipiscing Elit",
+              "updatedAt": "2022-01-03T12:00:00Z"
+            },
+            {
+              "author": {
+                "bio": "Consectetur adipiscing elit, sed do eiusmod tempor incididunt.",
+                "following": true,
+                "image": "https://example.com/profile/mark_wilson.jpg",
+                "username": "mark wilson"
+              },
+              "body": "Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+              "createdAt": "2022-01-04T12:00:00Z",
+              "description": "Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+              "favorited": true,
+              "favoritesCount": 15,
+              "slug": "consectetur-adipiscing",
+              "tagList": [
+                "consectetur",
+                "adipiscing",
+                "tempor"
+              ],
+              "title": "Consectetur Adipiscing",
+              "updatedAt": "2022-01-04T12:00:00Z"
+            },
+            {
+              "author": {
+                "bio": "Consectetur adipiscing elit, sed do eiusmod tempor incididunt.",
+                "following": true,
+                "image": "https://example.com/profile/mark_wilson.jpg",
+                "username": "mark wilson"
+              },
+              "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vestibulum diam nisi, nec auctor felis vulputate id. Phasellus euismod neque nec nibh molestie, non bibendum odio vulputate.",
+              "createdAt": "2022-01-05T12:00:00Z",
+              "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+              "favorited": false,
+              "favoritesCount": 0,
+              "slug": "lorem-1",
+              "tagList": [
+                "lorem",
+                "ipsum",
+                "dolor"
+              ],
+              "title": "Lorem Ipsum 1",
+              "updatedAt": "2022-01-05T12:00:00Z"
+            },
+            {
+              "author": {
+                "bio": "Lorem ipsum dolor sit amet.",
+                "following": false,
+                "image": "https://example.com/profile/john_doe.jpg",
+                "username": "john doe"
+              },
+              "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vestibulum diam nisi, nec auctor felis vulputate id. Phasellus euismod neque nec nibh molestie, non bibendum odio vulputate.",
+              "createdAt": "2022-01-06T12:00:00Z",
+              "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+              "favorited": true,
+              "favoritesCount": 10,
+              "slug": "lorem-2",
+              "tagList": [
+                "lorem",
+                "ipsum",
+                "dolor"
+              ],
+              "title": "Lorem Ipsum 2",
+              "updatedAt": "2022-01-06T12:00:00Z"
+            },
+            {
+              "author": {
+                "bio": "Sit amet consectetur adipiscing elit.",
+                "following": true,
+                "image": "https://example.com/profile/jane_smith.jpg",
+                "username": "jane smith"
+              },
+              "body": "Join us on a journey through the enchanting world of music, where we explore its profound impact on our lives and delve into various genres and artists.",
+              "createdAt": "2022-08-07T14:50:00Z",
+              "description": "Unleash your emotions through the power of melodies.",
+              "favorited": true,
+              "favoritesCount": 18,
+              "slug": "the-magic-of-music",
+              "tagList": [
+                "music",
+                "art",
+                "emotions"
+              ],
+              "title": "The Magic of Music",
+              "updatedAt": "2022-08-10T11:25:00Z"
+            },
+            {
+              "author": {
+                "bio": "Nature lover and adrenaline junkie.",
+                "following": true,
+                "image": "https://example.com/images/adventureseeker.jpg",
+                "username": "adventureseeker"
+              },
+              "body": "Join us as we explore the wonders of the great outdoors and share thrilling stories of adrenaline-pumping escapades.",
+              "createdAt": "2022-08-12T09:15:00Z",
+              "description": "Embark on breathtaking adventures in nature.",
+              "favorited": true,
+              "favoritesCount": 25,
+              "slug": "exploring-the-great-outdoors",
+              "tagList": [
+                "adventure",
+                "nature",
+                "travel"
+              ],
+              "title": "Exploring the Great Outdoors",
+              "updatedAt": "2022-08-14T18:20:00Z"
+            },
+            {
+              "author": {
+                "bio": "Lorem ipsum dolor sit amet.",
+                "following": false,
+                "image": "https://example.com/profile/john_doe.jpg",
+                "username": "john doe"
+              },
+              "body": "In this article, we will delve into the art of cooking and explore various techniques to create mouthwatering dishes.",
+              "createdAt": "2022-08-15T10:30:00Z",
+              "description": "Discover the secrets of culinary excellence.",
+              "favorited": false,
+              "favoritesCount": 10,
+              "slug": "the-art-of-cooking",
+              "tagList": [
+                "cooking",
+                "food",
+                "recipes"
+              ],
+              "title": "The Art of Cooking",
+              "updatedAt": "2022-08-15T15:45:00Z"
+            },
+            {
+              "author": {
+                "bio": "Adipiscing elit sed do eiusmod tempor incididunt.",
+                "following": false,
+                "image": "https://example.com/profile/alice_johnson.jpg",
+                "username": "alice johnson"
+              },
+              "body": "In this article, we explore the practice of mindfulness and its transformative effects on our mental well-being. Learn techniques to incorporate mindfulness into your daily routine.",
+              "createdAt": "2022-08-20T09:10:00Z",
+              "description": "Discover inner peace and cultivate mindfulness in your life.",
+              "favorited": false,
+              "favoritesCount": 8,
+              "slug": "the-power-of-mindfulness",
+              "tagList": [
+                "mindfulness",
+                "meditation",
+                "selfcare"
+              ],
+              "title": "The Power of Mindfulness",
+              "updatedAt": "2022-08-22T16:35:00Z"
+            }
+          ],
+          "articlesCount": 11
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "status": 200
+      }
+    },
+    {
       "description": "a request to get user",
       "providerStates": [
         {
