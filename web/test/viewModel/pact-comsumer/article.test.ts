@@ -245,7 +245,40 @@ describe("consumer for create article", () => {
     });
   });
 
-  test.todo("list articles by tag");
+  test("list articles by tag", () => {
+    provider
+      .given("list articles by tag")
+      .uponReceiving("a request to list articles")
+      .withRequest({
+        method: "GET",
+        path: "/articles",
+        query: {
+          tag: "lorem",
+          offset: "0",
+          limit: "20",
+        },
+      })
+      .willRespondWith({
+        status: 200,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: {
+          articlesCount: 3,
+          articles: [
+            fakeArticles.articleLoremIpsum,
+            fakeArticles.articleLorem1,
+            fakeArticles.articleLorem2,
+          ],
+        },
+      });
+    return provider.executeTest(async (mockServer) => {
+      configEnv({ BASE_URL: mockServer.url });
+      initAxiosInstance();
+      const { result } = renderHook(() => useArticleController(), { wrapper });
+      await result.current.list({ tag: "lorem" });
+    });
+  });
   test.todo("list articles by author");
   test.todo("list articles by favorited");
   test.todo("list feed articles");
