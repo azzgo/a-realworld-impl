@@ -18,36 +18,43 @@ import kotlin.jvm.optionals.getOrNull
 
 @Service
 class ArticlesImpl(
-        private val userRepository: UserRepository,
-        private val articleRepository: ArticleRepository,
-        private val tagRepository: TagRepository
+    private val userRepository: UserRepository,
+    private val articleRepository: ArticleRepository,
+    private val tagRepository: TagRepository
 ) : Articles {
 
     @Transactional
     override fun create(
-            userId: String,
-            title: String,
-            description: String,
-            body: String,
-            tagList: List<String>
+        userId: String,
+        title: String,
+        description: String,
+        body: String,
+        tagList: List<String>
     ): Article {
         val user = userRepository.findById(userId).getOrNull() ?: throw USER_NOT_VALID
         val tagMappers = tagRepository.saveOrUpdateAll(tagList)
         val articleMapper = articleRepository.save(
-                ArticleMapper(
-                        title = title,
-                        description = description,
-                        body = body,
-                        tagList = tagMappers,
-                        authorId = user.id!!,
-                )
+            ArticleMapper(
+                title = title,
+                description = description,
+                body = body,
+                tagList = tagMappers,
+                authorId = user.id!!,
+            )
         )
 
         return articleMapper.toModel(user.toModel())
     }
 
-    override fun update(slug: ArticleId, userId: UserId, title: String, description: String, body: String, tagList: List<String>): Article {
-        val user = userRepository.findById(userId).getOrNull() ?:  throw USER_NOT_VALID
+    override fun update(
+        slug: ArticleId,
+        userId: UserId,
+        title: String,
+        description: String,
+        body: String,
+        tagList: List<String>
+    ): Article {
+        val user = userRepository.findById(userId).getOrNull() ?: throw USER_NOT_VALID
         val articleMapper = articleRepository.findById(slug).getOrNull() ?: throw ARTICLE_NOT_EXIST
         val tagMappers = tagRepository.saveOrUpdateAll(tagList)
         articleMapper.title = title
@@ -66,7 +73,7 @@ class ArticlesImpl(
     }
 
     override fun list(offset: Int, limit: Int, author: String?, tag: String?): Page<Article> {
-        val result = articleRepository.findAll(PageRequest.of(offset, limit, Sort.by("createdAt")))
+        val result = articleRepository.findAll(PageRequest.of(offset, limit, Sort.by("createdAt").descending()))
         val userMappers = userRepository.findByIds(result.toList().map { it.authorId })
         val userIdToUserMapperMap = userMappers.associateBy { it.id }
         return result.map { it.toModel(userIdToUserMapperMap.get(it.authorId)!!.toModel()) }
@@ -75,21 +82,21 @@ class ArticlesImpl(
 
 private fun ArticleMapper.toModel(user: User): Article {
     return Article(
-            slug = id,
-            title = title,
-            description = description,
-            body = body,
-            tagList = tagList.map { Tag(it.name) },
-            createdAt = createdAt,
-            updatedAt = updatedAt,
-            favoritesCount = favoritesCount,
-            favorited = favorited,
-            author = Author(
-                    userId = user.userId!!,
-                    username = user.username,
-                    image = user.image,
-                    bio = user.bio,
-                    following = false
-            )
+        slug = id,
+        title = title,
+        description = description,
+        body = body,
+        tagList = tagList.map { Tag(it.name) },
+        createdAt = createdAt,
+        updatedAt = updatedAt,
+        favoritesCount = favoritesCount,
+        favorited = favorited,
+        author = Author(
+            userId = user.userId!!,
+            username = user.username,
+            image = user.image,
+            bio = user.bio,
+            following = false
+        )
     )
 }

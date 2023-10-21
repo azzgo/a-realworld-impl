@@ -205,7 +205,7 @@ class ArticlesImplTest {
 
     @Test
     fun should_list_article_by_pagination() {
-        `when`(articleRepository.findAll(PageRequest.of(0, 10, Sort.by("createdAt")))).thenReturn(
+        `when`(articleRepository.findAll(PageRequest.of(0, 10, Sort.by("createdAt").descending()))).thenReturn(
             PageImpl(
                 listOf(
                     articleAdipiscingElit.toMapper(),
