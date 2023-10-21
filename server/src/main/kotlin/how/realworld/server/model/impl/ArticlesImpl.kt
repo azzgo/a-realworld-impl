@@ -61,7 +61,7 @@ class ArticlesImpl(
         return articleMapper.toModel(user!!)
     }
 
-    override fun list(page: Int, size: Int, author: String?, tag: String?): Page<Article> {
+    override fun list(offset: Int, limit: Int, author: String?, tag: String?): Page<Article> {
         TODO("Not yet implemented")
     }
 }
