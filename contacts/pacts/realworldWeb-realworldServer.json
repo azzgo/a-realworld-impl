@@ -121,6 +121,103 @@
       "description": "a request to list articles",
       "providerStates": [
         {
+          "name": "list articles by author"
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "path": "/articles",
+        "query": {
+          "author": [
+            "john doe"
+          ],
+          "limit": [
+            "20"
+          ],
+          "offset": [
+            "0"
+          ]
+        }
+      },
+      "response": {
+        "body": {
+          "articles": [
+            {
+              "author": {
+                "bio": "Lorem ipsum dolor sit amet.",
+                "following": false,
+                "image": "https://example.com/profile/john_doe.jpg",
+                "username": "john doe"
+              },
+              "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vestibulum diam nisi, nec auctor felis vulputate id. Phasellus euismod neque nec nibh molestie, non bibendum odio vulputate.",
+              "createdAt": "2022-01-01T12:00:00Z",
+              "description": "This is the description of lorem ipsum",
+              "favorited": false,
+              "favoritesCount": 0,
+              "slug": "lorem-ipsum",
+              "tagList": [
+                "lorem",
+                "ipsum",
+                "dolor"
+              ],
+              "title": "How to train your dragon",
+              "updatedAt": "2022-01-01T12:00:00Z"
+            },
+            {
+              "author": {
+                "bio": "Lorem ipsum dolor sit amet.",
+                "following": false,
+                "image": "https://example.com/profile/john_doe.jpg",
+                "username": "john doe"
+              },
+              "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vestibulum diam nisi, nec auctor felis vulputate id. Phasellus euismod neque nec nibh molestie, non bibendum odio vulputate.",
+              "createdAt": "2022-01-06T12:00:00Z",
+              "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+              "favorited": true,
+              "favoritesCount": 10,
+              "slug": "lorem-2",
+              "tagList": [
+                "lorem",
+                "ipsum",
+                "dolor"
+              ],
+              "title": "Lorem Ipsum 2",
+              "updatedAt": "2022-01-06T12:00:00Z"
+            },
+            {
+              "author": {
+                "bio": "Lorem ipsum dolor sit amet.",
+                "following": false,
+                "image": "https://example.com/profile/john_doe.jpg",
+                "username": "john doe"
+              },
+              "body": "In this article, we will delve into the art of cooking and explore various techniques to create mouthwatering dishes.",
+              "createdAt": "2022-08-15T10:30:00Z",
+              "description": "Discover the secrets of culinary excellence.",
+              "favorited": false,
+              "favoritesCount": 10,
+              "slug": "the-art-of-cooking",
+              "tagList": [
+                "cooking",
+                "food",
+                "recipes"
+              ],
+              "title": "The Art of Cooking",
+              "updatedAt": "2022-08-15T15:45:00Z"
+            }
+          ],
+          "articlesCount": 3
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "status": 200
+      }
+    },
+    {
+      "description": "a request to list articles",
+      "providerStates": [
+        {
           "name": "list articles by tag"
         }
       ],

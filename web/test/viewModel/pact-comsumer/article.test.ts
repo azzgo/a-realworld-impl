@@ -235,6 +235,18 @@ describe("consumer for create article", () => {
         ],
       },
     },
+    {
+      given: "list articles by author",
+      query: { author: "john doe" },
+      expectedResponse: {
+        articlesCount: 3,
+        articles: [
+          fakeArticles.articleLoremIpsum,
+          fakeArticles.articleLorem2,
+          fakeArticles.articleTheArtOfCooking,
+        ],
+      },
+    },
   ];
 
   test.each(listArticlesTestCases)(
@@ -273,7 +285,6 @@ describe("consumer for create article", () => {
     }
   );
 
-  test.todo("list articles by author");
   test.todo("list articles by favorited");
   test.todo("list feed articles");
 });
