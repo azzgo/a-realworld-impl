@@ -1,11 +1,12 @@
 package how.realworld.server.model.impl
 
-import how.realworld.server.model.User
-import how.realworld.server.model.Users
+import how.realworld.server.model.*
 import how.realworld.server.repository.ArticleRepository
 import how.realworld.server.repository.TagRepository
+import how.realworld.server.repository.UserRepository
 import how.realworld.server.repository.mapper.ArticleMapper
 import how.realworld.server.repository.mapper.TagMapper
+import how.realworld.server.repository.mapper.UserMapper
 import how.realworld.server.repository.saveOrUpdateAll
 import org.junit.jupiter.api.Test
 
@@ -20,6 +21,9 @@ import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
 import org.mockito.MockitoAnnotations
 import org.mockito.junit.jupiter.MockitoExtension
+import org.springframework.data.domain.PageImpl
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Sort
 import java.time.Instant
 import java.util.*
 
@@ -29,7 +33,7 @@ class ArticlesImplTest {
     private lateinit var articlesImpl: ArticlesImpl
 
     @Mock
-    private lateinit var users: Users
+    private lateinit var userRepository: UserRepository
 
     @Mock
     private lateinit var articleRepository: ArticleRepository
@@ -40,17 +44,20 @@ class ArticlesImplTest {
     @BeforeEach
     fun setup() {
         MockitoAnnotations.openMocks(this)
-        articlesImpl = ArticlesImpl(users, articleRepository, tagRepository)
+        articlesImpl = ArticlesImpl(userRepository, articleRepository, tagRepository)
     }
 
     @Test
     fun should_create_new_article() {
-        val user = mock(User::class.java)
-        `when`(user.userId).thenReturn("jake_id")
-        `when`(user.username).thenReturn("jake")
-        `when`(user.bio).thenReturn("I work at statefarm")
-        `when`(user.image).thenReturn("http://image.url")
-        `when`(users.getById("jake_id")).thenReturn(user)
+        val userMapper = UserMapper(
+            id = "jake_id",
+            username = "jake",
+            email = "jake@jake.jake",
+            bio = "I work at statefarm",
+            image = "http://image.url",
+            password = "password"
+        )
+        `when`(userRepository.findById("jake_id")).thenReturn(Optional.of(userMapper))
 
         val articleMapper = mock(ArticleMapper::class.java)
         val tags = listOf(TagMapper("tag_id_1", "tag1"), TagMapper("tag_id_2", "tag2"))
@@ -87,12 +94,15 @@ class ArticlesImplTest {
 
     @Test
     fun should_update_article() {
-        val user = mock(User::class.java)
-        `when`(user.userId).thenReturn("jake_id")
-        `when`(user.username).thenReturn("jake")
-        `when`(user.bio).thenReturn("I work at statefarm")
-        `when`(user.image).thenReturn("http://image.url")
-        `when`(users.getById("jake_id")).thenReturn(user)
+        val userMapper = UserMapper(
+            id = "jake_id",
+            username = "jake",
+            email = "jake@jake.jake",
+            bio = "I work at statefarm",
+            image = "http://image.url",
+            password = "password"
+        )
+        `when`(userRepository.findById("jake_id")).thenReturn(Optional.of(userMapper))
 
         val oldArticleMapper = ArticleMapper(
             id = "slug",
@@ -151,12 +161,15 @@ class ArticlesImplTest {
 
     @Test
     fun should_get_article_by_slug() {
-        val user = mock(User::class.java)
-        `when`(user.userId).thenReturn("jake_id")
-        `when`(user.username).thenReturn("jake")
-        `when`(user.bio).thenReturn("I work at statefarm")
-        `when`(user.image).thenReturn("http://image.url")
-        `when`(users.getById("jake_id")).thenReturn(user)
+        val userMapper = UserMapper(
+            id = "jake_id",
+            username = "jake",
+            email = "jake@jake.jake",
+            bio = "I work at statefarm",
+            image = "http://image.url",
+            password = "password"
+        )
+        `when`(userRepository.findById("jake_id")).thenReturn(Optional.of(userMapper))
         val tags = listOf(TagMapper("tag_id_1", "tag1"), TagMapper("tag_id_2", "tag2"))
 
         val queriedArticle = mock(ArticleMapper::class.java)
@@ -188,5 +201,52 @@ class ArticlesImplTest {
         assertThat(article?.author?.bio).isEqualTo("I work at statefarm")
         assertThat(article?.author?.image).isEqualTo("http://image.url")
         assertThat(article?.author?.following).isFalse()
+    }
+
+    @Test
+    fun should_list_article_by_pagination() {
+        `when`(articleRepository.findAll(PageRequest.of(0, 10, Sort.by("createdAt")))).thenReturn(
+            PageImpl(
+                listOf(
+                    articleAdipiscingElit.toMapper(),
+                    articleLorem1.toMapper()
+                ),
+                PageRequest.of(0, 10),
+                2
+            )
+        )
+        `when`(
+            userRepository.findByIds(
+                listOf(
+                    articleAdipiscingElit.author.userId,
+                    articleLorem1.author.userId,
+                )
+            )
+        ).thenReturn(
+            listOf(
+                createUser(
+                    userId = articleAdipiscingElit.author.userId,
+                    username = articleAdipiscingElit.author.username,
+                    bio = articleAdipiscingElit.author.bio,
+                    image = articleAdipiscingElit.author.image,
+                ).toMapper(),
+                createUser(
+                    userId = articleLorem1.author.userId,
+                    username = articleLorem1.author.username,
+                    bio = articleLorem1.author.bio,
+                    image = articleLorem1.author.image,
+                ).toMapper()
+            )
+        )
+
+
+        val page = articlesImpl.list(offset = 0, limit = 10, author = null, tag = null)
+
+        assertThat(page.size).isEqualTo(10)
+        assertThat(page.number).isEqualTo(0)
+
+        assertThat(page.toList().size).isEqualTo(2)
+        assertThat(page.toList().first().slug).isEqualTo(articleAdipiscingElit.slug)
+        assertThat(page.toList().last().slug).isEqualTo(articleLorem1.slug)
     }
 }

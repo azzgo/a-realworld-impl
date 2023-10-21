@@ -1,5 +1,7 @@
 package how.realworld.server.model
 
+import how.realworld.server.repository.mapper.UserMapper
+
 typealias UserId = String
 class User(var userId: UserId? = null,
            val username: String,
@@ -10,3 +12,12 @@ class User(var userId: UserId? = null,
 
     companion object
 }
+
+fun User.toMapper(): UserMapper = UserMapper(
+   id = userId,
+    username = username,
+    password = password,
+    email = email,
+    bio = bio,
+    image = image,
+)
