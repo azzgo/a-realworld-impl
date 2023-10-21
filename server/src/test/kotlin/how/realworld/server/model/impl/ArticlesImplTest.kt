@@ -11,17 +11,20 @@ import org.junit.jupiter.api.Test
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.ArgumentMatchers.any
 import org.mockito.ArgumentMatchers.anyList
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
+import org.mockito.MockitoAnnotations
+import org.mockito.junit.jupiter.MockitoExtension
 import java.time.Instant
 import java.util.*
 
+@ExtendWith(MockitoExtension::class)
 class ArticlesImplTest {
-
     @InjectMocks
     private lateinit var articlesImpl: ArticlesImpl
 
@@ -36,9 +39,7 @@ class ArticlesImplTest {
 
     @BeforeEach
     fun setup() {
-        users = mock(Users::class.java)
-        articleRepository = mock(ArticleRepository::class.java)
-        tagRepository = mock(TagRepository::class.java)
+        MockitoAnnotations.openMocks(this)
         articlesImpl = ArticlesImpl(users, articleRepository, tagRepository)
     }
 
@@ -62,7 +63,6 @@ class ArticlesImplTest {
         `when`(articleMapper.updatedAt).thenReturn(Instant.parse("2016-02-18T03:22:56.637Z"))
         `when`(articleMapper.favorited).thenReturn(false)
         `when`(articleMapper.favoritesCount).thenReturn(0)
-        `when`(articleMapper.authorId).thenReturn("jake_id")
 
         // need add a Verity here later
         `when`(tagRepository.saveOrUpdateAll(anyList())).thenReturn(tags)
@@ -95,16 +95,16 @@ class ArticlesImplTest {
         `when`(users.getById("jake_id")).thenReturn(user)
 
         val oldArticleMapper = ArticleMapper(
-                id = "slug",
-                title = "old_title",
-                description = "old_description",
-                body = "old_body",
-                tagList = listOf(TagMapper("tag_id_1", "tag1"), TagMapper("tag_id_2", "tag2")),
-                createdAt = Instant.parse("2016-02-18T03:22:56.637Z"),
-                updatedAt = Instant.parse("2016-02-18T03:22:56.637Z"),
-                favorited = false,
-                favoritesCount = 0,
-                authorId = "jake_id"
+            id = "slug",
+            title = "old_title",
+            description = "old_description",
+            body = "old_body",
+            tagList = listOf(TagMapper("tag_id_1", "tag1"), TagMapper("tag_id_2", "tag2")),
+            createdAt = Instant.parse("2016-02-18T03:22:56.637Z"),
+            updatedAt = Instant.parse("2016-02-18T03:22:56.637Z"),
+            favorited = false,
+            favoritesCount = 0,
+            authorId = "jake_id"
         )
         val tags = listOf(TagMapper("tag_id_1", "tag1"), TagMapper("tag_id_2", "tag2"))
 
@@ -118,35 +118,35 @@ class ArticlesImplTest {
         `when`(newArticleMapper.updatedAt).thenReturn(Instant.parse("2016-02-18T03:22:56.637Z"))
         `when`(newArticleMapper.favorited).thenReturn(false)
         `when`(newArticleMapper.favoritesCount).thenReturn(1)
-        `when`(newArticleMapper.authorId).thenReturn("jake_id")
 
         // need add a Verity here later
         `when`(articleRepository.findById("slug")).thenReturn(Optional.of(oldArticleMapper))
         `when`(tagRepository.saveOrUpdateAll(anyList())).thenReturn(tags)
         `when`(articleRepository.save(oldArticleMapper)).thenReturn(newArticleMapper)
 
-        val updateedArticle = articlesImpl.update("slug", "jake_id", "title", "description", "body", listOf("tag1", "tag2"))
+        val updatedArticle =
+            articlesImpl.update("slug", "jake_id", "title", "description", "body", listOf("tag1", "tag2"))
 
-        // verify that oldArticleMapper title, body and description, tagList are upadted by update function parameter
+        // verify that oldArticleMapper title, body and description, tagList are updated by update function parameter
         assertThat(oldArticleMapper.title).isEqualTo("title")
         assertThat(oldArticleMapper.description).isEqualTo("description")
         assertThat(oldArticleMapper.body).isEqualTo("body")
         assertThat(oldArticleMapper.tagList.map { it.name }).isEqualTo(listOf("tag1", "tag2"))
 
         // verify return value is correct
-        assertThat(updateedArticle.slug).isEqualTo("slug")
-        assertThat(updateedArticle.title).isEqualTo("title")
-        assertThat(updateedArticle.description).isEqualTo("description")
-        assertThat(updateedArticle.body).isEqualTo("body")
-        assertThat(updateedArticle.tagList.map { it.name }).isEqualTo(listOf("tag1", "tag2"))
-        assertThat(updateedArticle.author.username).isEqualTo("jake")
-        assertThat(updateedArticle.createdAt).isEqualTo(Instant.parse("2016-02-18T03:22:56.637Z"))
-        assertThat(updateedArticle.updatedAt).isEqualTo(Instant.parse("2016-02-18T03:22:56.637Z"))
-        assertThat(updateedArticle.favorited).isFalse()
-        assertThat(updateedArticle.favoritesCount).isEqualTo(1)
-        assertThat(updateedArticle.author.bio).isEqualTo("I work at statefarm")
-        assertThat(updateedArticle.author.image).isEqualTo("http://image.url")
-        assertThat(updateedArticle.author.following).isFalse()
+        assertThat(updatedArticle.slug).isEqualTo("slug")
+        assertThat(updatedArticle.title).isEqualTo("title")
+        assertThat(updatedArticle.description).isEqualTo("description")
+        assertThat(updatedArticle.body).isEqualTo("body")
+        assertThat(updatedArticle.tagList.map { it.name }).isEqualTo(listOf("tag1", "tag2"))
+        assertThat(updatedArticle.author.username).isEqualTo("jake")
+        assertThat(updatedArticle.createdAt).isEqualTo(Instant.parse("2016-02-18T03:22:56.637Z"))
+        assertThat(updatedArticle.updatedAt).isEqualTo(Instant.parse("2016-02-18T03:22:56.637Z"))
+        assertThat(updatedArticle.favorited).isFalse()
+        assertThat(updatedArticle.favoritesCount).isEqualTo(1)
+        assertThat(updatedArticle.author.bio).isEqualTo("I work at statefarm")
+        assertThat(updatedArticle.author.image).isEqualTo("http://image.url")
+        assertThat(updatedArticle.author.following).isFalse()
     }
 
     @Test
