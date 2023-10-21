@@ -4,6 +4,8 @@ import { MemoryRouter, Route, Routes } from "react-router";
 import React from "react";
 import { fireEvent, render } from "@testing-library/react";
 import Layout from "../../src/layout/Layout";
+import { persistToken } from "../../src/utils/token";
+import { jwtToken } from "../viewModel/pact-comsumer/pact.utils";
 
 describe("AuthHeader Page", () => {
   test("can navigate to /editor to create articles", () => {
@@ -13,13 +15,17 @@ describe("AuthHeader Page", () => {
   });
 
   function renderAuthLayou() {
+    persistToken(jwtToken);
     const Wrapper = MockAppWrapper();
     return render(
       <Wrapper>
         <MemoryRouter initialEntries={["/"]}>
           <Routes>
             <Route path="/" element={<Layout />}>
-              <Route path="/editor/:slug?" element={<div data-testid="editor" />} />
+              <Route
+                path="/editor/:slug?"
+                element={<div data-testid="editor" />}
+              />
               <Route path="/" element={<div data-testid="home">home</div>} />
             </Route>
           </Routes>

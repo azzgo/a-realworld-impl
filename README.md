@@ -53,7 +53,7 @@ By Github Copilot to quick code a [readworld application](https://www.realworld.
 - [ ] CRUD Articles
     - [x] Create Article
     - [x] Article Edit Page
-    - [ ] Article Detail Page
+    - [x] Article Detail Page
     - [ ] Delete Article Page
 - [ ] CR-D Comments on articles (no updating required)
 - [ ] GET and display paginated lists of articles

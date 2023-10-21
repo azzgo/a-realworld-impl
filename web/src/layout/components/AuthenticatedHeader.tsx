@@ -9,31 +9,34 @@ export default function AuthenticatedHeader() {
         </a>
         <ul className="nav navbar-nav pull-xs-right">
           <li className="nav-item">
-            <a className="nav-link active" href="/">
+            <Link className="nav-link active" to="/">
               Home
-            </a>
+            </Link>
           </li>
           <li className="nav-item">
-            <Link className="nav-link" data-testid="create-article" to="/editor">
+            <Link
+              className="nav-link"
+              data-testid="create-article"
+              to="/editor"
+            >
               {" "}
               <i className="ion-compose"></i>&nbsp;New Article{" "}
             </Link>
           </li>
           <li className="nav-item">
-            <a className="nav-link" href="/settings">
+            <Link className="nav-link" to="/settings">
               {" "}
               <i className="ion-gear-a"></i>&nbsp;Settings{" "}
-            </a>
+            </Link>
           </li>
           <li className="nav-item">
-            <a className="nav-link" href="/profile/eric-simons">
+            <Link className="nav-link" to="/profile/eric-simons">
               <img src="" className="user-pic" />
               Eric Simons
-            </a>
+            </Link>
           </li>
         </ul>
       </div>
     </nav>
   );
 }
-
