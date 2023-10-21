@@ -208,7 +208,8 @@ val articleThePowerOfMindfulness = createArticle(
     "user logged in what to post new article",
     "user logged in want to edit exist article",
     "get article by slug",
-    "list articles default pagination"
+    "list articles default pagination",
+    "list articles by author"
 )
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
@@ -326,7 +327,7 @@ class ArticleProviderTest {
             articleThePowerOfMindfulness
         )
         val pageable = PageRequest.of(0, 10)
-        `when`(articles.list(pageable.pageNumber, pageable.pageSize)).thenReturn(
+        `when`(articles.list(pageable.pageNumber, pageable.pageSize, "john doe")).thenReturn(
             PageImpl(
                 expectedArticled,
                 pageable,
@@ -334,4 +335,27 @@ class ArticleProviderTest {
             )
         )
     }
+
+    @State("list articles by author", action = StateChangeAction.SETUP, comment = "获取作者的文章列表")
+    fun listArticlesByAuthor() {
+        val expectedArticled = listOf(
+            articleLoremIpsum,
+            articleLorem2,
+            articleArtOfCooking
+        )
+        val pageable = PageRequest.of(0, 20)
+        `when`(
+            articles.list(
+                page = pageable.pageNumber, size = pageable.pageSize,
+                author = "john doe"
+            )
+        ).thenReturn(
+            PageImpl(
+                expectedArticled,
+                pageable,
+                3
+            )
+        )
+    }
+
 }
