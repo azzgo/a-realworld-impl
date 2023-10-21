@@ -1,7 +1,6 @@
 package how.realworld.server.repository.mapper
 
 import jakarta.persistence.*
-import org.hibernate.annotations.GenericGenerator
 
 @Table(name = "t_article_tag", uniqueConstraints = [UniqueConstraint(columnNames = ["article_id", "tag_id"])])
 open class ArticleTagMapper (
