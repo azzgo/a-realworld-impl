@@ -12,9 +12,9 @@ import how.realworld.server.model.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.TestTemplate
 import org.junit.jupiter.api.extension.ExtendWith
-import org.mockito.Mockito.`when`
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.mock.mockito.MockBean
+import com.ninjasquad.springmockk.MockkBean
+import io.mockk.every
 import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.PageRequest
@@ -44,7 +44,7 @@ class ArticleProviderTest {
         context.target = HttpTestTarget("localhost", port)
     }
 
-    @MockBean
+    @MockkBean
     private lateinit var articles: Articles
 
     @TestTemplate
@@ -72,13 +72,13 @@ class ArticleProviderTest {
                 following = false,
             )
         )
-        `when`(
+        every {
             articles.create(userId = "jake_id",
                 title = createdArticle.title,
                 description = createdArticle.description,
                 body = createdArticle.body,
                 tagList = createdArticle.tagList.map { it.name })
-        ).thenReturn(createdArticle)
+        } returns createdArticle
     }
 
     @State("user logged in want to edit exist article", action = StateChangeAction.SETUP, comment = "用户登录编辑文章")
@@ -101,14 +101,14 @@ class ArticleProviderTest {
             )
         )
 
-        `when`(
+        every {
             articles.update(slug = "slug",
                 userId = "jake_id",
                 title = updatedArticle.title,
                 description = updatedArticle.description,
                 body = updatedArticle.body,
                 tagList = updatedArticle.tagList.map { it.name })
-        ).thenReturn(updatedArticle)
+        } returns updatedArticle
     }
 
     @State("get article by slug", action = StateChangeAction.SETUP, comment = "获取文章")
@@ -131,7 +131,7 @@ class ArticleProviderTest {
                 following = false,
             )
         )
-        `when`(articles.get(slug)).thenReturn(article)
+        every { articles.get(slug) } returns article
     }
 
     @State("list articles default pagination", action = StateChangeAction.SETUP, comment = "获取文章列表")
@@ -149,35 +149,22 @@ class ArticleProviderTest {
             articleThePowerOfMindfulness
         )
         val pageable = PageRequest.of(0, 10)
-        `when`(articles.list(pageable.pageNumber, pageable.pageSize, author = null, tag = null)).thenReturn(
-            PageImpl(
-                expectedArticled,
-                pageable,
-                11
-            )
-        )
+        every { articles.list(pageable.pageNumber, pageable.pageSize, author = null, tag = null) } returns (PageImpl(
+            expectedArticled, pageable, 11
+        ))
     }
 
     @State("list articles by author", action = StateChangeAction.SETUP, comment = "获取作者的文章列表")
     fun listArticlesByAuthor() {
         val expectedArticled = listOf(
-            articleLoremIpsum,
-            articleLorem2,
-            articleArtOfCooking
+            articleLoremIpsum, articleLorem2, articleArtOfCooking
         )
         val pageable = PageRequest.of(0, 20)
-        `when`(
+        every {
             articles.list(
-                offset = pageable.pageNumber, limit = pageable.pageSize,
-                author = "john doe", tag = null
+                offset = pageable.pageNumber, limit = pageable.pageSize, author = "john doe", tag = null
             )
-        ).thenReturn(
-            PageImpl(
-                expectedArticled,
-                pageable,
-                3
-            )
-        )
+        } returns PageImpl(expectedArticled, pageable, 3)
     }
 
     @State("list articles by tag", action = StateChangeAction.SETUP, comment = "获取标签的文章列表")
@@ -188,17 +175,10 @@ class ArticleProviderTest {
             articleLorem2,
         )
         val pageable = PageRequest.of(0, 20)
-        `when`(
+        every {
             articles.list(
-                offset = pageable.pageNumber, limit = pageable.pageSize,
-                tag = "lorem", author = null
+                offset = pageable.pageNumber, limit = pageable.pageSize, tag = "lorem", author = null
             )
-        ).thenReturn(
-            PageImpl(
-                expectedArticled,
-                pageable,
-                3
-            )
-        )
+        } returns PageImpl(expectedArticled, pageable, 3)
     }
 }

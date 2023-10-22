@@ -6,13 +6,14 @@ import com.auth0.jwt.algorithms.Algorithm
 import how.realworld.server.model.User
 import how.realworld.server.repository.UserRepository
 import how.realworld.server.repository.mapper.UserMapper
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.verify
+import io.mockk.slot
 import org.hamcrest.CoreMatchers.*
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.mockito.ArgumentCaptor
-import org.mockito.Mockito.*
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.test.context.ActiveProfiles
 import java.util.Optional
@@ -25,19 +26,20 @@ class UsersImplTest {
 
     @BeforeEach
     fun setup() {
-        userRepository = mock(UserRepository::class.java)
-        passwordEncoder = mock(BCryptPasswordEncoder::class.java)
+        userRepository = mockk()
+        passwordEncoder = mockk()
     }
 
     @Test
     fun should_get_user_by_email() {
-        val userMapper = mock(UserMapper::class.java)
-        `when`(userRepository.findByEmail("jake@jake.jake")).thenReturn(userMapper)
-        `when`(userMapper.email).thenReturn("jake@jake.jake")
-        `when`(userMapper.password).thenReturn("jakejake")
-        `when`(userMapper.username).thenReturn("jake")
-        `when`(userMapper.bio).thenReturn("bio")
-        `when`(userMapper.image).thenReturn("image")
+        val userMapper = mockk<UserMapper>()
+        every { userMapper.id } returns "jake_id"
+        every { userRepository.findByEmail("jake@jake.jake") } returns (userMapper)
+        every { userMapper.email } returns ("jake@jake.jake")
+        every { userMapper.password } returns "jakejake"
+        every { userMapper.username } returns "jake"
+        every { userMapper.bio } returns "bio"
+        every { userMapper.image } returns "image"
 
         val users = UsersImpl(userRepository, passwordEncoder, "")
 
@@ -53,31 +55,31 @@ class UsersImplTest {
     @Test
     fun should_get_token_from_user() {
         val user =
-                User(
-                        userId = "id",
-                        email = "jake@jake.jake",
-                        password = "jakejake",
-                        username = "jake",
-                        bio = "bio",
-                        image = "image"
-                )
+            User(
+                userId = "id",
+                email = "jake@jake.jake",
+                password = "jakejake",
+                username = "jake",
+                bio = "bio",
+                image = "image"
+            )
 
         val secret =
-                "a625cbe1-b347-4c56-a98c-f6678b9ae0a4"
+            "a625cbe1-b347-4c56-a98c-f6678b9ae0a4"
         val users = UsersImpl(userRepository, passwordEncoder, secret)
 
         val token = users.generateTokenForUser(user)
 
         val verifier: JWTVerifier = JWT.require(Algorithm.HMAC256(secret))
-                .build()
+            .build()
 
         verifier.verify(token)
     }
 
     @Test
     fun should_return_no_user_exists_status() {
-        `when`(userRepository.existsByEmail("jake.jake.jake")).thenReturn(false)
-        `when`(userRepository.existsByUsername("jake")).thenReturn(false)
+        every { userRepository.existsByEmail("jake@jake.jake") } returns false
+        every { userRepository.existsByUsername("jake") } returns false
         val users = UsersImpl(userRepository, passwordEncoder, "")
         val userExist = users.checkUserExist("jake@jake.jake", "jake")
 
@@ -88,34 +90,34 @@ class UsersImplTest {
     @Test
     fun should_createUser() {
         val userMapper = UserMapper(
-                id = "id",
-                email = "jake@jake.jake",
-                username = "jake",
-                password = "encodedJakeJake"
+            id = "id",
+            email = "jake@jake.jake",
+            username = "jake",
+            password = "encodedJakeJake"
         )
 
-        `when`(userRepository.save(any())).thenReturn(userMapper)
-        `when`(passwordEncoder.encode("jakejake")).thenReturn("encodedJakeJake")
+        every { userRepository.save(any()) } returns userMapper
+        every { passwordEncoder.encode("jakejake") } returns "encodedJakeJake"
         val users = UsersImpl(userRepository, passwordEncoder, "")
 
         val user = users.create("jake@jake.jake", "jake", "jakejake")
 
         assertThat(user.userId, equalTo("id"))
-        val savedArgumentCaptor = ArgumentCaptor.forClass(UserMapper::class.java)
-        verify(userRepository).save(savedArgumentCaptor.capture())
-        assertThat(savedArgumentCaptor.value.password, equalTo("encodedJakeJake"))
+        val savedArgumentCaptor = slot<UserMapper>()
+        verify { userRepository.save(capture(savedArgumentCaptor)) }
+        assertThat(savedArgumentCaptor.captured.password, equalTo("encodedJakeJake"))
     }
 
     @Test
     fun should_return_user_by_id() {
         val userMapper = UserMapper(
-                id = "id",
-                email = "jake@jake.jake",
-                username = "jake",
-                password = "encodedJakeJake"
+            id = "id",
+            email = "jake@jake.jake",
+            username = "jake",
+            password = "encodedJakeJake"
         )
 
-        `when`(userRepository.findById("id")).thenReturn(Optional.of(userMapper))
+        every { userRepository.findById("id") } returns Optional.of(userMapper)
 
         val users = UsersImpl(userRepository, passwordEncoder, "")
 
@@ -130,33 +132,33 @@ class UsersImplTest {
     @Test
     fun should_update_user() {
         val userMapper = UserMapper(
-                id = "id",
-                email = "jake@jake.jake.new",
-                username = "jakeNew",
-                password = "encodedJakeJakeNew",
-                bio = "bioNew",
-                image = "http://image.url"
+            id = "id",
+            email = "jake@jake.jake.new",
+            username = "jakeNew",
+            password = "encodedJakeJakeNew",
+            bio = "bioNew",
+            image = "http://image.url"
         )
         val oldUserMapper = UserMapper(
-                id = "id",
-                email = "jake@jake.jake",
-                username = "jake",
-                password = "encodedJakeJake",
-                bio = "bio",
-                image = "http://image.url"
+            id = "id",
+            email = "jake@jake.jake",
+            username = "jake",
+            password = "encodedJakeJake",
+            bio = "bio",
+            image = "http://image.url"
         )
 
-        `when`(userRepository.save(any())).thenReturn(userMapper)
-        `when`(userRepository.findById("id")).thenReturn(Optional.of(oldUserMapper))
-        `when`(passwordEncoder.encode("jakejakeNew")).thenReturn("encodedJakeJakeNew")
+        every { userRepository.save(any()) } returns userMapper
+        every { userRepository.findById("id") } returns Optional.of(oldUserMapper)
+        every { passwordEncoder.encode("jakejakeNew") } returns "encodedJakeJakeNew"
         val users = UsersImpl(userRepository, passwordEncoder, "")
 
         val user = users.update(
-                userId = "id",
-                username = "jakeNew",
-                email = "jake@jake.jake.new",
-                password = "jakejakeNew",
-                bio = "bioNew",
+            userId = "id",
+            username = "jakeNew",
+            email = "jake@jake.jake.new",
+            password = "jakejakeNew",
+            bio = "bioNew",
         )
 
 
@@ -168,12 +170,12 @@ class UsersImplTest {
         assertThat(user.password, equalTo("encodedJakeJakeNew"))
 
 
-        val savedArgumentCaptor = ArgumentCaptor.forClass(UserMapper::class.java)
-        verify(userRepository).save(savedArgumentCaptor.capture())
-        assertThat(savedArgumentCaptor.value.password, equalTo("encodedJakeJakeNew"))
-        assertThat(savedArgumentCaptor.value.email, equalTo("jake@jake.jake.new"))
-        assertThat(savedArgumentCaptor.value.id, equalTo("id"))
-        assertThat(savedArgumentCaptor.value.username, equalTo("jakeNew"))
-        assertThat(savedArgumentCaptor.value.bio, equalTo("bioNew"))
+        val savedArgumentCaptor = slot<UserMapper>()
+        verify { userRepository.save(capture(savedArgumentCaptor)) }
+        assertThat(savedArgumentCaptor.captured.password, equalTo("encodedJakeJakeNew"))
+        assertThat(savedArgumentCaptor.captured.email, equalTo("jake@jake.jake.new"))
+        assertThat(savedArgumentCaptor.captured.id, equalTo("id"))
+        assertThat(savedArgumentCaptor.captured.username, equalTo("jakeNew"))
+        assertThat(savedArgumentCaptor.captured.bio, equalTo("bioNew"))
     }
 }

@@ -8,15 +8,16 @@ import au.com.dius.pact.provider.junitsupport.StateChangeAction
 import au.com.dius.pact.provider.junitsupport.loader.PactFilter
 import au.com.dius.pact.provider.junitsupport.loader.PactFolder
 import au.com.dius.pact.provider.spring.junit5.PactVerificationSpringProvider
+import com.ninjasquad.springmockk.MockkBean
 import how.realworld.server.model.User
 import how.realworld.server.model.UserExist
 import how.realworld.server.model.Users
+import io.mockk.every
+import io.mockk.mockk
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.TestTemplate
 import org.junit.jupiter.api.extension.ExtendWith
-import org.mockito.Mockito.*
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.test.context.junit.jupiter.SpringExtension
@@ -35,10 +36,10 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 )
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class UsersAuthProviderTest {
-    @MockBean
+    @MockkBean
     private lateinit var users: Users
 
-    @MockBean
+    @MockkBean
     private lateinit var passwordEncoder: PasswordEncoder
 
     @LocalServerPort
@@ -57,22 +58,23 @@ class UsersAuthProviderTest {
 
     @State("user exists", action = StateChangeAction.SETUP, comment = "用户存在")
     fun userExists() {
-        val user = mock(User::class.java)
-        `when`(users.getByEmail("jake@jake.jake")).thenReturn(user)
-        `when`(passwordEncoder.matches(eq("jakejake"), any())).thenReturn(true)
-        `when`(user.email).thenReturn("jake@jake.jake")
-        `when`(user.password).thenReturn("")
-        `when`(user.username).thenReturn("jake")
-        `when`(user.bio).thenReturn("I work at statefarm")
-        `when`(user.image).thenReturn("http://image.url")
-        `when`(users.generateTokenForUser(user)).thenReturn("jwt.token.here")
+        val user = mockk<User>()
+        every { users.getByEmail("jake@jake.jake") } returns user
+        every { passwordEncoder.matches(eq("jakejake"), any()) } returns true
+        every { user.email } returns "jake@jake.jake"
+        every { user.password } returns ""
+        every { user.username } returns "jake"
+        every { user.bio } returns "I work at statefarm"
+        every { user.image } returns "http://image.url"
+        every { users.generateTokenForUser(user) } returns "jwt.token.here"
     }
 
     @State("user not or password invalid", comment = "用户不存在，或密码错误")
     fun userDoesNotExistOrPasswordInvalid() {
-        val user = mock(User::class.java)
-        `when`(users.getByEmail("fake@jake.jake")).thenReturn(user)
-        `when`(passwordEncoder.matches(eq("fakefake"), any())).thenReturn(false)
+        val user = mockk<User>()
+        every { users.getByEmail("fake@jake.jake") } returns user
+        every { user.password } returns "fakefake"
+        every { passwordEncoder.matches(eq("fakefake"), any()) } returns false
     }
 
     @State("user not registered", comment = "用户未注册")
@@ -82,35 +84,23 @@ class UsersAuthProviderTest {
             password = "",
             username = "jake",
         )
-        `when`(users.checkUserExist("jake@jake.jake", "jake")).thenReturn(UserExist(email = false, username = false))
-        `when`(users.create("jake@jake.jake", "jake", "jakejake")).thenReturn(
-            user
-        )
-        `when`(users.generateTokenForUser(user)).thenReturn("jwt.token.here")
+        every { users.checkUserExist("jake@jake.jake", "jake") } returns UserExist(email = false, username = false)
+        every { users.create("jake@jake.jake", "jake", "jakejake") } returns user
+        every { users.generateTokenForUser(user) } returns "jwt.token.here"
     }
 
     @State("email already exist when registering", comment = "注册时邮箱已存在")
     fun emailAlreadyExistWhenRegistering() {
-        `when`(users.checkUserExist("jake@jake.taken", "jake")).thenReturn(UserExist(email = true, username = false))
+        every { users.checkUserExist("jake@jake.taken", "jake") } returns UserExist(email = true, username = false)
     }
 
     @State("username already exist when registering", comment = "注册时用户名已存在")
     fun usernameAlreadyExistWhenRegistering() {
-        `when`(users.checkUserExist("jake@jake.jake", "jake_exist")).thenReturn(
-            UserExist(
-                email = false,
-                username = true
-            )
-        )
+        every { users.checkUserExist("jake@jake.jake", "jake_exist") } returns UserExist(email = false, username = true)
     }
 
     @State("both email and username already exist when registering", comment = "注册时邮箱和用户名都已存在")
     fun bothEmailAndUsernameAlreadyExistWhenRegistering() {
-        `when`(users.checkUserExist("jake@jake.taken", "jake_exist")).thenReturn(
-            UserExist(
-                email = true,
-                username = true
-            )
-        )
+        every { users.checkUserExist("jake@jake.taken", "jake_exist") } returns UserExist(email = true, username = true)
     }
 }

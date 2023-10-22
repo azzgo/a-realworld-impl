@@ -3,12 +3,9 @@ package how.realworld.server.model.impl
 import how.realworld.server.controller.exception.ARTICLE_NOT_EXIST
 import how.realworld.server.controller.exception.USER_NOT_VALID
 import how.realworld.server.model.*
-import how.realworld.server.repository.ArticleRepository
-import how.realworld.server.repository.TagRepository
-import how.realworld.server.repository.UserRepository
+import how.realworld.server.repository.*
 import how.realworld.server.repository.mapper.ArticleMapper
 import how.realworld.server.repository.mapper.toModel
-import how.realworld.server.repository.saveOrUpdateAll
 import jakarta.transaction.Transactional
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
@@ -73,10 +70,19 @@ class ArticlesImpl(
     }
 
     override fun list(offset: Int, limit: Int, author: String?, tag: String?): Page<Article> {
-        val result = articleRepository.findAll(PageRequest.of(offset, limit, Sort.by("createdAt").descending()))
+        var authorId: String? = null
+        if (author != null) {
+            val foundUser = userRepository.findByUsername(author) ?: return Page.empty()
+            authorId = foundUser.id
+        }
+        val result = articleRepository.queryList(
+            tagName = tag,
+            authorId = authorId,
+            pageable = PageRequest.of(offset, limit, Sort.by("createdAt").descending())
+        )
         val userMappers = userRepository.findByIds(result.toList().map { it.authorId })
         val userIdToUserMapperMap = userMappers.associateBy { it.id }
-        return result.map { it.toModel(userIdToUserMapperMap.get(it.authorId)!!.toModel()) }
+        return result.map { it.toModel(userIdToUserMapperMap[it.authorId]!!.toModel()) }
     }
 }
 

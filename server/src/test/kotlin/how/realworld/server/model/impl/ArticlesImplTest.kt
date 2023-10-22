@@ -1,49 +1,36 @@
 package how.realworld.server.model.impl
 
 import how.realworld.server.model.*
-import how.realworld.server.repository.ArticleRepository
-import how.realworld.server.repository.TagRepository
-import how.realworld.server.repository.UserRepository
+import how.realworld.server.repository.*
 import how.realworld.server.repository.mapper.ArticleMapper
 import how.realworld.server.repository.mapper.TagMapper
 import how.realworld.server.repository.mapper.UserMapper
-import how.realworld.server.repository.saveOrUpdateAll
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.mockkStatic
 import org.junit.jupiter.api.Test
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.extension.ExtendWith
-import org.mockito.ArgumentMatchers.any
-import org.mockito.ArgumentMatchers.anyList
-import org.mockito.InjectMocks
-import org.mockito.Mock
-import org.mockito.Mockito.mock
-import org.mockito.Mockito.`when`
-import org.mockito.MockitoAnnotations
-import org.mockito.junit.jupiter.MockitoExtension
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import java.time.Instant
 import java.util.*
 
-@ExtendWith(MockitoExtension::class)
 class ArticlesImplTest {
-    @InjectMocks
     private lateinit var articlesImpl: ArticlesImpl
-
-    @Mock
     private lateinit var userRepository: UserRepository
-
-    @Mock
     private lateinit var articleRepository: ArticleRepository
-
-    @Mock
     private lateinit var tagRepository: TagRepository
 
     @BeforeEach
     fun setup() {
-        MockitoAnnotations.openMocks(this)
+        userRepository = mockk()
+        articleRepository = mockk()
+        tagRepository = mockk()
         articlesImpl = ArticlesImpl(userRepository, articleRepository, tagRepository)
     }
 
@@ -57,23 +44,23 @@ class ArticlesImplTest {
             image = "http://image.url",
             password = "password"
         )
-        `when`(userRepository.findById("jake_id")).thenReturn(Optional.of(userMapper))
+        every { userRepository.findById("jake_id") } returns Optional.of(userMapper)
 
-        val articleMapper = mock(ArticleMapper::class.java)
+        val articleMapper = mockk<ArticleMapper>()
         val tags = listOf(TagMapper("tag_id_1", "tag1"), TagMapper("tag_id_2", "tag2"))
-        `when`(articleMapper.id).thenReturn("slug_id")
-        `when`(articleMapper.title).thenReturn("title")
-        `when`(articleMapper.description).thenReturn("description")
-        `when`(articleMapper.body).thenReturn("body")
-        `when`(articleMapper.tagList).thenReturn(tags)
-        `when`(articleMapper.createdAt).thenReturn(Instant.parse("2016-02-18T03:22:56.637Z"))
-        `when`(articleMapper.updatedAt).thenReturn(Instant.parse("2016-02-18T03:22:56.637Z"))
-        `when`(articleMapper.favorited).thenReturn(false)
-        `when`(articleMapper.favoritesCount).thenReturn(0)
+        every { articleMapper.id } returns ("slug_id")
+        every { articleMapper.title } returns ("title")
+        every { articleMapper.description } returns ("description")
+        every { articleMapper.body } returns ("body")
+        every { articleMapper.tagList } returns (tags)
+        every { articleMapper.createdAt } returns (Instant.parse("2016-02-18T03:22:56.637Z"))
+        every { articleMapper.updatedAt } returns (Instant.parse("2016-02-18T03:22:56.637Z"))
+        every { articleMapper.favorited } returns (false)
+        every { articleMapper.favoritesCount } returns (0)
 
         // need add a Verity here later
-        `when`(tagRepository.saveOrUpdateAll(anyList())).thenReturn(tags)
-        `when`(articleRepository.save(any())).thenReturn(articleMapper)
+        every { tagRepository.saveOrUpdateAll(any()) } returns (tags)
+        every { articleRepository.save(any()) } returns (articleMapper)
 
         val createdArticle = articlesImpl.create("jake_id", "title", "description", "body", listOf("tag1", "tag2"))
 
@@ -102,7 +89,7 @@ class ArticlesImplTest {
             image = "http://image.url",
             password = "password"
         )
-        `when`(userRepository.findById("jake_id")).thenReturn(Optional.of(userMapper))
+        every { userRepository.findById("jake_id") } returns (Optional.of(userMapper))
 
         val oldArticleMapper = ArticleMapper(
             id = "slug",
@@ -118,21 +105,21 @@ class ArticlesImplTest {
         )
         val tags = listOf(TagMapper("tag_id_1", "tag1"), TagMapper("tag_id_2", "tag2"))
 
-        val newArticleMapper = mock(ArticleMapper::class.java)
-        `when`(newArticleMapper.id).thenReturn("slug")
-        `when`(newArticleMapper.title).thenReturn("title")
-        `when`(newArticleMapper.description).thenReturn("description")
-        `when`(newArticleMapper.body).thenReturn("body")
-        `when`(newArticleMapper.tagList).thenReturn(tags)
-        `when`(newArticleMapper.createdAt).thenReturn(Instant.parse("2016-02-18T03:22:56.637Z"))
-        `when`(newArticleMapper.updatedAt).thenReturn(Instant.parse("2016-02-18T03:22:56.637Z"))
-        `when`(newArticleMapper.favorited).thenReturn(false)
-        `when`(newArticleMapper.favoritesCount).thenReturn(1)
+        val newArticleMapper = mockk<ArticleMapper>()
+        every { newArticleMapper.id } returns ("slug")
+        every { newArticleMapper.title } returns ("title")
+        every { newArticleMapper.description } returns ("description")
+        every { newArticleMapper.body } returns ("body")
+        every { newArticleMapper.tagList } returns (tags)
+        every { newArticleMapper.createdAt } returns (Instant.parse("2016-02-18T03:22:56.637Z"))
+        every { newArticleMapper.updatedAt } returns (Instant.parse("2016-02-18T03:22:56.637Z"))
+        every { newArticleMapper.favorited } returns (false)
+        every { newArticleMapper.favoritesCount } returns (1)
 
         // need add a Verity here later
-        `when`(articleRepository.findById("slug")).thenReturn(Optional.of(oldArticleMapper))
-        `when`(tagRepository.saveOrUpdateAll(anyList())).thenReturn(tags)
-        `when`(articleRepository.save(oldArticleMapper)).thenReturn(newArticleMapper)
+        every { articleRepository.findById("slug") } returns (Optional.of(oldArticleMapper))
+        every { tagRepository.saveOrUpdateAll(any()) } returns (tags)
+        every { articleRepository.save(oldArticleMapper) } returns (newArticleMapper)
 
         val updatedArticle =
             articlesImpl.update("slug", "jake_id", "title", "description", "body", listOf("tag1", "tag2"))
@@ -169,22 +156,22 @@ class ArticlesImplTest {
             image = "http://image.url",
             password = "password"
         )
-        `when`(userRepository.findById("jake_id")).thenReturn(Optional.of(userMapper))
+        every { userRepository.findById("jake_id") } returns (Optional.of(userMapper))
         val tags = listOf(TagMapper("tag_id_1", "tag1"), TagMapper("tag_id_2", "tag2"))
 
-        val queriedArticle = mock(ArticleMapper::class.java)
-        `when`(queriedArticle.id).thenReturn("slug")
-        `when`(queriedArticle.title).thenReturn("title")
-        `when`(queriedArticle.description).thenReturn("description")
-        `when`(queriedArticle.body).thenReturn("body")
-        `when`(queriedArticle.tagList).thenReturn(tags)
-        `when`(queriedArticle.createdAt).thenReturn(Instant.parse("2016-02-18T03:22:56.637Z"))
-        `when`(queriedArticle.updatedAt).thenReturn(Instant.parse("2016-02-18T03:22:56.637Z"))
-        `when`(queriedArticle.favorited).thenReturn(false)
-        `when`(queriedArticle.favoritesCount).thenReturn(1)
-        `when`(queriedArticle.authorId).thenReturn("jake_id")
+        val queriedArticle = mockk<ArticleMapper>()
+        every { queriedArticle.id } returns ("slug")
+        every { queriedArticle.title } returns ("title")
+        every { queriedArticle.description } returns ("description")
+        every { queriedArticle.body } returns ("body")
+        every { queriedArticle.tagList } returns (tags)
+        every { queriedArticle.createdAt } returns (Instant.parse("2016-02-18T03:22:56.637Z"))
+        every { queriedArticle.updatedAt } returns (Instant.parse("2016-02-18T03:22:56.637Z"))
+        every { queriedArticle.favorited } returns (false)
+        every { queriedArticle.favoritesCount } returns (1)
+        every { queriedArticle.authorId } returns ("jake_id")
 
-        `when`(articleRepository.findById("slug")).thenReturn(Optional.of(queriedArticle))
+        every { articleRepository.findById("slug") } returns (Optional.of(queriedArticle))
 
         val article = articlesImpl.get("slug")
 
@@ -203,44 +190,57 @@ class ArticlesImplTest {
         assertThat(article?.author?.following).isFalse()
     }
 
-    @Test
-    fun should_list_article_by_pagination() {
-        `when`(articleRepository.findAll(PageRequest.of(0, 10, Sort.by("createdAt").descending()))).thenReturn(
-            PageImpl(
-                listOf(
-                    articleAdipiscingElit.toMapper(),
-                    articleLorem1.toMapper()
-                ),
-                PageRequest.of(0, 10),
-                2
+    @ParameterizedTest
+    @CsvSource("author,jake_id,", ",,tagName", ",,")
+    fun should_list_article_by_pagination(authorName: String?, authorId: String?, tagName: String?) {
+        mockkStatic("how.realworld.server.repository.ArticleRepositoryKt")
+        every {
+            articleRepository.queryList(
+                tagName = tagName,
+                authorId = authorId,
+                pageable = PageRequest.of(0, 3, Sort.by("createdAt").descending())
             )
+        } returns PageImpl(
+            listOf(
+                articleAdipiscingElit.toMapper(),
+                articleLorem1.toMapper()
+            ),
+            PageRequest.of(0, 10),
+            2
         )
-        `when`(
+        every {
             userRepository.findByIds(
                 listOf(
                     articleAdipiscingElit.author.userId,
                     articleLorem1.author.userId,
                 )
             )
-        ).thenReturn(
-            listOf(
-                createUser(
-                    userId = articleAdipiscingElit.author.userId,
-                    username = articleAdipiscingElit.author.username,
-                    bio = articleAdipiscingElit.author.bio,
-                    image = articleAdipiscingElit.author.image,
-                ).toMapper(),
-                createUser(
-                    userId = articleLorem1.author.userId,
-                    username = articleLorem1.author.username,
-                    bio = articleLorem1.author.bio,
-                    image = articleLorem1.author.image,
-                ).toMapper()
-            )
-        )
+        } returns (
+                listOf(
+                    createUser(
+                        userId = articleAdipiscingElit.author.userId,
+                        username = articleAdipiscingElit.author.username,
+                        bio = articleAdipiscingElit.author.bio,
+                        image = articleAdipiscingElit.author.image,
+                    ).toMapper(),
+                    createUser(
+                        userId = articleLorem1.author.userId,
+                        username = articleLorem1.author.username,
+                        bio = articleLorem1.author.bio,
+                        image = articleLorem1.author.image,
+                    ).toMapper()
+                )
+                )
+
+        if (authorName != null && authorId != null) {
+            every { userRepository.findByUsername(authorName) } returns createUser(
+                userId = authorId,
+                username = authorName,
+            ).toMapper()
+        }
 
 
-        val page = articlesImpl.list(offset = 0, limit = 10, author = null, tag = null)
+        val page = articlesImpl.list(offset = 0, limit = 3, author = authorName, tag = tagName)
 
         assertThat(page.size).isEqualTo(10)
         assertThat(page.number).isEqualTo(0)
