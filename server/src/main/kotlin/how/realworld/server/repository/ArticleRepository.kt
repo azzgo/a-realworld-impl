@@ -12,4 +12,6 @@ import org.springframework.stereotype.Repository
 interface ArticleRepository: JpaRepository<ArticleMapper, ArticleId> {
     @Query("SELECT a FROM ArticleMapper a JOIN a.tagList t WHERE t.name = :tagName")
     fun findByTag(tagName: String, pageable: Pageable): Page<ArticleMapper>
+
+    fun findByAuthorId(authorId: String, pageable: Pageable): Page<ArticleMapper>
 }
