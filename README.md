@@ -8,25 +8,25 @@ By Github Copilot to quick code a [readworld application](https://www.realworld.
 
 ### Frontend
 
-技术栈：React, React Hook, Pact.js, jotai
+Technology stack: React, React Hook, Pact.js, jotai.
 
-- View 层: 主要是页面和封装的 React Component
-    - 渲染：通过 jotai 准备 ViewModel，通过 React Component 渲染 View 验证页面交互行为正确
-    - 调用: 通过 jotai 准备 ViewModel，通过 React Component 验证 View 的行为触发后, ViewModel 层的方法被正确调用
-- ViewModel 层: 使用 jotai 状态库封装的数据结构以及相配套的操作 Controller
-    - 层内行为：通过 render hook，触发 controller 的行为后，验证 jotai 的 ViewModel 数据有被正确影响到
-    - 应用边界：通过 Pact.js Stub WebServer， 验证触发 Controller 行为后，Jotai 内的 ViewModel 有正确影响到 
+- View layer: mainly consists of pages and encapsulated React components.
+    - Rendering: ViewModel is prepared using jotai, and View is rendered to verify that the page interaction behavior is correct.
+    - Invocation: ViewModel is prepared using jotai, and React components are used to verify that ViewModel layer methods are properly invoked after View behavior triggers.
+- ViewModel layer: data structures are encapsulated using jotai state library and accompanied by operation controllers.
+    - Intra-layer behavior: Using the render hook, after triggering controller behavior, verify whether the jotai ViewModel data has been accurately affected.
+    - Application boundaries: Using Pact.js Stub WebServer, verify whether ViewModel within Jotai has been accurately affected after triggering Controller behavior.
 
 ### Backend
 
-技术栈: Springboot mvc with kotlin, Pact Provider for jvm, hibernate
+Technology Stack: Springboot MVC with Kotlin, Springboot data jpa for database, Pact Provider for JVM, Mockk as the mock libray
 
-- Controller 层：定义 Rest API 相关的 Controller 以及相关的 DTO
-    - Stub Model 和其他服务，Stub WebServer, 通过 Pact 测试验证 Controller 有正确定义 API 和参数校验
-- Model 层：定义核心领域对象以及相关核心业务逻辑
-    - Stub Repository 服务，验证 Model 层的方法调用行为正确
-- Repository 层：定义数据库表对应 Mapper 对象以及相应的 Repository 服务
-    - Fake database，验证 Repository 调用行为正确
+- Controller Layer: Define Controllers related to Rest APIs and their respective DTOs
+    - Stub Model and other services, Stub WebServer, validate Controllers for correct API definition and parameter validation
+- Model Layer: Define core domain objects and relevant core business logic
+    - Stub Repository services, validate the correctness of method calls in the Model layer
+- Repository Layer: Define Mapper objects corresponding to database tables and the respective Repository services
+    - Fake database, validate Repository call behavior correctness
 
 ## TODO Feature List
 
