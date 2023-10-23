@@ -1,6 +1,9 @@
 import axios, { AxiosInstance } from "axios";
 import { getEnvByKey } from "./env";
-import { getToken } from "./token";
+import { clearToken, getToken } from "./token";
+import { redirect } from "react-router";
+import {JotaiStore} from "../type";
+import {userAtom} from "../model/user";
 
 let request: AxiosInstance | null = null;
 
@@ -8,7 +11,7 @@ export const ErrorCodeKey = {
   emailOrPasssword: "email or passsword",
 };
 
-export function initAxiosInstance() {
+export function initAxiosInstance(store: JotaiStore | null = null) {
   request = axios.create({
     baseURL: getEnvByKey("BASE_URL"),
     headers: {
@@ -39,7 +42,11 @@ export function initAxiosInstance() {
       return response;
     },
     (error: any) => {
-      // Do something with response error
+      if (error.response && error.response.status === 401) {
+        clearToken();
+        store?.set(userAtom, null);
+        redirect("/login");
+      }
       return Promise.reject(error);
     }
   );

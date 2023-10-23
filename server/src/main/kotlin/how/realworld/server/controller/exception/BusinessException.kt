@@ -7,6 +7,7 @@ class BusinessException (
 )
 
 val USER_NOT_VALID = BusinessException(
+    statusCode = 401,
     errors = mapOf(
         "user" to listOf("not valid")
     )

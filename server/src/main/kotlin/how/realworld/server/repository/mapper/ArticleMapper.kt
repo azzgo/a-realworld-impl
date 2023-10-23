@@ -16,7 +16,7 @@ open class ArticleMapper(
     open var title: String,
     open var description: String,
     open var body: String,
-    @ManyToMany(targetEntity = TagMapper::class)
+    @ManyToMany(targetEntity = TagMapper::class, fetch = FetchType.EAGER)
     @JoinTable(
         name = "t_article_tag",
         joinColumns = [JoinColumn(name = "article_id",  referencedColumnName = "id")],

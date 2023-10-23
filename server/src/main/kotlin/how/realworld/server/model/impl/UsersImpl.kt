@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service
 class UsersImpl(
         private val userRepository: UserRepository,
         private val passwordEncoder: PasswordEncoder,
-        @Value("\${auth.jwt.secret") private val secret: String
+        @Value("\${auth.jwt.secret}") private val secret: String
 ) : Users {
     val expirationMs: Long = 86400000
 

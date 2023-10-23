@@ -10,10 +10,11 @@ import {
 } from "./model/article";
 import advancedFormat from "dayjs/plugin/advancedFormat";
 import dayjs from "dayjs";
+import {configEnv} from "./utils/env";
+import {initAxiosInstance} from "./utils/request";
 
 dayjs.extend(advancedFormat);
 
-const appStore = createStore();
 
 // eslint-disable-next-line react-refresh/only-export-components
 function Wrapper() {
@@ -31,5 +32,12 @@ function Wrapper() {
     </React.StrictMode>
   );
 }
+
+configEnv({
+  BASE_URL: "/api"
+})
+
+const appStore = createStore();
+initAxiosInstance(appStore);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(<Wrapper />);
