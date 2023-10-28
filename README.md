@@ -36,7 +36,7 @@ Technology Stack: Springboot MVC with Kotlin, Springboot data jpa for database, 
 - [x] A Testing enviroment (include pact test between web and server) setup
 - [x] intercept user when not login in authenticated endpoints
 - [ ] tech debt: if controller not defined rest mapping, Springboot will return 401 not 404 HTTP status 
-- [ ] handle the token invalid case redirect to login page
+- [x] handle the token invalid case redirect to login page
 
 ### Business Features
 
