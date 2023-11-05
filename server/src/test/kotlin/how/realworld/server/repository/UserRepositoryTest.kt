@@ -2,20 +2,14 @@ package how.realworld.server.repository
 
 import how.realworld.server.repository.mapper.UserMapper
 import jakarta.transaction.Transactional
-import org.hamcrest.CoreMatchers.notNullValue
 import org.hamcrest.CoreMatchers.equalTo
+import org.hamcrest.CoreMatchers.notNullValue
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureTestEntityManager
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.test.context.ActiveProfiles
 
-@SpringBootTest
-@AutoConfigureTestEntityManager
-@ActiveProfiles("test")
-class UserRepositoryTest {
+class UserRepositoryTest: BaseRepositoryTest() {
     @Autowired
     private lateinit var userRepository: UserRepository
 

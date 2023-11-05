@@ -1,6 +1,3 @@
 auth:
   jwt:
     secret: 123456
-spring:
-  dataSource:
-    url: jdbc:h2:mem:realworld

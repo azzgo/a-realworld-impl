@@ -28,8 +28,8 @@ fun Article.toMapper(): ArticleMapper {
         tagList = tagList.map { TagMapper(name = it.name) },
         createdAt = createdAt,
         updatedAt = updatedAt,
-        favoritesCount = favoritesCount,
-        favorited = favorited,
+        // favoritesCount = favoritesCount,
+        // favorited = favorited,
         authorId = author.userId,
     )
 }

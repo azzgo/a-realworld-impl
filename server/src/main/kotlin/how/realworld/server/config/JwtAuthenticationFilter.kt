@@ -41,7 +41,7 @@ class JwtAuthenticationFilter(
 
             jwtVerifier.runCatching {
                 val decodedJWT = verify(token)
-                val authentication = UsernamePasswordAuthenticationToken(decodedJWT, null, null)
+                val authentication = UsernamePasswordAuthenticationToken(decodedJWT.subject, null, null)
                 SecurityContextHolder.getContext().authentication = authentication
             }.getOrElse {
                 if (it is JWTVerificationException) {

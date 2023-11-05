@@ -95,8 +95,8 @@ private fun ArticleMapper.toModel(user: User): Article {
         tagList = tagList.map { Tag(it.name) },
         createdAt = createdAt,
         updatedAt = updatedAt,
-        favoritesCount = favoritesCount,
-        favorited = favorited,
+        favoritesCount = 0,
+        favorited = false,
         author = Author(
             userId = user.userId!!,
             username = user.username,

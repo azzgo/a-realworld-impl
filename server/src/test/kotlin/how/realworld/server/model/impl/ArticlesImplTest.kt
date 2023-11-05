@@ -55,8 +55,8 @@ class ArticlesImplTest {
         every { articleMapper.tagList } returns (tags)
         every { articleMapper.createdAt } returns (Instant.parse("2016-02-18T03:22:56.637Z"))
         every { articleMapper.updatedAt } returns (Instant.parse("2016-02-18T03:22:56.637Z"))
-        every { articleMapper.favorited } returns (false)
-        every { articleMapper.favoritesCount } returns (0)
+        //        every { articleMapper.favorited } returns (false)
+        //        every { articleMapper.favoritesCount } returns (0)
 
         // need add a Verity here later
         every { tagRepository.saveOrUpdateAll(any()) } returns (tags)
@@ -72,8 +72,8 @@ class ArticlesImplTest {
         assertThat(createdArticle.author.username).isEqualTo("jake")
         assertThat(createdArticle.createdAt).isEqualTo(Instant.parse("2016-02-18T03:22:56.637Z"))
         assertThat(createdArticle.updatedAt).isEqualTo(Instant.parse("2016-02-18T03:22:56.637Z"))
-        assertThat(createdArticle.favorited).isFalse()
-        assertThat(createdArticle.favoritesCount).isEqualTo(0)
+//        assertThat(createdArticle.favorited).isFalse()
+//        assertThat(createdArticle.favoritesCount).isEqualTo(0)
         assertThat(createdArticle.author.bio).isEqualTo("I work at statefarm")
         assertThat(createdArticle.author.image).isEqualTo("http://image.url")
         assertThat(createdArticle.author.following).isFalse()
@@ -99,8 +99,8 @@ class ArticlesImplTest {
             tagList = listOf(TagMapper("tag_id_1", "tag1"), TagMapper("tag_id_2", "tag2")),
             createdAt = Instant.parse("2016-02-18T03:22:56.637Z"),
             updatedAt = Instant.parse("2016-02-18T03:22:56.637Z"),
-            favorited = false,
-            favoritesCount = 0,
+//            favorited = false,
+//            favoritesCount = 0,
             authorId = "jake_id"
         )
         val tags = listOf(TagMapper("tag_id_1", "tag1"), TagMapper("tag_id_2", "tag2"))
@@ -113,8 +113,8 @@ class ArticlesImplTest {
         every { newArticleMapper.tagList } returns (tags)
         every { newArticleMapper.createdAt } returns (Instant.parse("2016-02-18T03:22:56.637Z"))
         every { newArticleMapper.updatedAt } returns (Instant.parse("2016-02-18T03:22:56.637Z"))
-        every { newArticleMapper.favorited } returns (false)
-        every { newArticleMapper.favoritesCount } returns (1)
+//        every { newArticleMapper.favorited } returns (false)
+//        every { newArticleMapper.favoritesCount } returns (1)
 
         // need add a Verity here later
         every { articleRepository.findById("slug") } returns (Optional.of(oldArticleMapper))
@@ -139,8 +139,8 @@ class ArticlesImplTest {
         assertThat(updatedArticle.author.username).isEqualTo("jake")
         assertThat(updatedArticle.createdAt).isEqualTo(Instant.parse("2016-02-18T03:22:56.637Z"))
         assertThat(updatedArticle.updatedAt).isEqualTo(Instant.parse("2016-02-18T03:22:56.637Z"))
-        assertThat(updatedArticle.favorited).isFalse()
-        assertThat(updatedArticle.favoritesCount).isEqualTo(1)
+//        assertThat(updatedArticle.favorited).isFalse()
+//        assertThat(updatedArticle.favoritesCount).isEqualTo(1)
         assertThat(updatedArticle.author.bio).isEqualTo("I work at statefarm")
         assertThat(updatedArticle.author.image).isEqualTo("http://image.url")
         assertThat(updatedArticle.author.following).isFalse()
@@ -167,8 +167,8 @@ class ArticlesImplTest {
         every { queriedArticle.tagList } returns (tags)
         every { queriedArticle.createdAt } returns (Instant.parse("2016-02-18T03:22:56.637Z"))
         every { queriedArticle.updatedAt } returns (Instant.parse("2016-02-18T03:22:56.637Z"))
-        every { queriedArticle.favorited } returns (false)
-        every { queriedArticle.favoritesCount } returns (1)
+//        every { queriedArticle.favorited } returns (false)
+//        every { queriedArticle.favoritesCount } returns (1)
         every { queriedArticle.authorId } returns ("jake_id")
 
         every { articleRepository.findById("slug") } returns (Optional.of(queriedArticle))
@@ -183,8 +183,8 @@ class ArticlesImplTest {
         assertThat(article?.author?.username).isEqualTo("jake")
         assertThat(article?.createdAt).isEqualTo(Instant.parse("2016-02-18T03:22:56.637Z"))
         assertThat(article?.updatedAt).isEqualTo(Instant.parse("2016-02-18T03:22:56.637Z"))
-        assertThat(article?.favorited).isFalse()
-        assertThat(article?.favoritesCount).isEqualTo(1)
+//        assertThat(article?.favorited).isFalse()
+//        assertThat(article?.favoritesCount).isEqualTo(1)
         assertThat(article?.author?.bio).isEqualTo("I work at statefarm")
         assertThat(article?.author?.image).isEqualTo("http://image.url")
         assertThat(article?.author?.following).isFalse()

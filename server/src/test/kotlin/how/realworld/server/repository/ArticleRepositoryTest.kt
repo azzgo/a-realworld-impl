@@ -14,12 +14,10 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.test.context.ActiveProfiles
+import org.springframework.test.context.ContextConfiguration
 import java.time.Instant
 
-@SpringBootTest
-@AutoConfigureTestEntityManager
-@ActiveProfiles("test")
-class ArticleRepositoryTest {
+class ArticleRepositoryTest: BaseRepositoryTest() {
     @Autowired
     private lateinit var articleRepository: ArticleRepository
 

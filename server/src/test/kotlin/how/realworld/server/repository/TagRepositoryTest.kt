@@ -11,10 +11,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
 
-@SpringBootTest
-@AutoConfigureTestEntityManager
-@ActiveProfiles("test")
-class TagRepositoryTest {
+class TagRepositoryTest: BaseRepositoryTest() {
 
     @Autowired
     private lateinit var tagRepository: TagRepository

@@ -26,7 +26,7 @@ open class ArticleMapper(
     open var tagList: List<TagMapper>,
     open var createdAt: Instant = Instant.now(),
     open var updatedAt: Instant = Instant.now(),
-    open var favoritesCount: Int = 0,
-    open var favorited: Boolean = false,
+    //    open var favoritesCount: Int = 0,
+    //    open var favorited: Boolean = false,
     open var authorId: UserId,
 )

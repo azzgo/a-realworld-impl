@@ -5,16 +5,19 @@ jwt:
   expiration: 86400000
 spring:
   dataSource:
-    driver: org.h2.Driver
-    url: jdbc:h2:mem:realworld
+    driver: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/conduit
     username: sa
-    password:
-    platform: h2
-    ddl-auto: create-drop
-    show-sql: true
+    password: password
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
-    open-in-view: false
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  flyway:
+    enable: true
+
+logging:
+  level:
+    org.flyway: debug
+
 auth:
   jwt:
     secret: secret

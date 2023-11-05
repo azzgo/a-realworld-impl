@@ -1,0 +1,13 @@
+#!/bin/bash
+
+function local() {
+  usql pg://sa:password@localhost/conduit $@
+}
+function local-test() {
+  usql pg://sa:password@localhost/conduit_test $@
+}
+
+
+caller=$1
+shift 1
+$caller $@
