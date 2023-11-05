@@ -12,6 +12,7 @@ import com.ninjasquad.springmockk.MockkBean
 import how.realworld.server.model.User
 import how.realworld.server.model.UserExist
 import how.realworld.server.model.Users
+import how.realworld.server.repository.BaseRepositoryTest
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.BeforeEach
@@ -35,7 +36,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
     "both email and username already exist when registering"
 )
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class UsersAuthProviderTest {
+class UsersAuthProviderTest: BaseRepositoryTest() {
     @MockkBean
     private lateinit var users: Users
 
@@ -66,7 +67,7 @@ class UsersAuthProviderTest {
         every { user.username } returns "jake"
         every { user.bio } returns "I work at statefarm"
         every { user.image } returns "http://image.url"
-        every { users.generateTokenForUser(user) } returns "jwt.token.here"
+        every { users.generateTokenForUser(user) } returns jwtTestToken
     }
 
     @State("user not or password invalid", comment = "用户不存在，或密码错误")
@@ -86,7 +87,7 @@ class UsersAuthProviderTest {
         )
         every { users.checkUserExist("jake@jake.jake", "jake") } returns UserExist(email = false, username = false)
         every { users.create("jake@jake.jake", "jake", "jakejake") } returns user
-        every { users.generateTokenForUser(user) } returns "jwt.token.here"
+        every { users.generateTokenForUser(user) } returns jwtTestToken
     }
 
     @State("email already exist when registering", comment = "注册时邮箱已存在")

@@ -14,6 +14,7 @@ import org.junit.jupiter.api.TestTemplate
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.boot.test.context.SpringBootTest
 import com.ninjasquad.springmockk.MockkBean
+import how.realworld.server.repository.BaseRepositoryTest
 import io.mockk.every
 import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.data.domain.PageImpl
@@ -34,8 +35,7 @@ import java.time.Instant
     "list articles by tag"
 )
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles("test")
-class ArticleProviderTest {
+class ArticleProviderTest: BaseRepositoryTest() {
     @LocalServerPort
     private val port = 0
 

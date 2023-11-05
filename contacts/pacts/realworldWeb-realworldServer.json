@@ -572,7 +572,7 @@
             "bio": "I work at statefarm",
             "email": "jake@jake.jake",
             "image": "http://image.url",
-            "token": "jwt.token.here",
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2OTc0NTkyMzQsImV4cCI6NDEwNTAwODAwMCwic3ViIjoiamFrZV9pZCIsInVzZXJuYW1lIjoiamFrZSIsImVtYWlsIjoiamFrZUBqYWtlLmpha2UifQ.ZDKKQ0noCRU3cHs9B2EW1GllM6lj5Wr07GBoJVf2v3g",
             "username": "jake"
           }
         },
@@ -608,7 +608,7 @@
             "bio": "I work at statefarm",
             "email": "jake@jake.jake",
             "image": "http://image.url",
-            "token": "jwt.token.here",
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2OTc0NTkyMzQsImV4cCI6NDEwNTAwODAwMCwic3ViIjoiamFrZV9pZCIsInVzZXJuYW1lIjoiamFrZSIsImVtYWlsIjoiamFrZUBqYWtlLmpha2UifQ.ZDKKQ0noCRU3cHs9B2EW1GllM6lj5Wr07GBoJVf2v3g",
             "username": "jake"
           }
         },
@@ -648,7 +648,7 @@
             "bio": "I work at statefarm",
             "email": "jake-john@jake.jake",
             "image": "http://image.url",
-            "token": "jwt.token.here",
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2OTc0NTkyMzQsImV4cCI6NDEwNTAwODAwMCwic3ViIjoiamFrZV9pZCIsInVzZXJuYW1lIjoiamFrZSIsImVtYWlsIjoiamFrZUBqYWtlLmpha2UifQ.ZDKKQ0noCRU3cHs9B2EW1GllM6lj5Wr07GBoJVf2v3g",
             "username": "jake John"
           }
         },
@@ -831,7 +831,7 @@
         "body": {
           "user": {
             "email": "jake@jake.jake",
-            "token": "jwt.token.here",
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2OTc0NTkyMzQsImV4cCI6NDEwNTAwODAwMCwic3ViIjoiamFrZV9pZCIsInVzZXJuYW1lIjoiamFrZSIsImVtYWlsIjoiamFrZUBqYWtlLmpha2UifQ.ZDKKQ0noCRU3cHs9B2EW1GllM6lj5Wr07GBoJVf2v3g",
             "username": "jake"
           }
         },

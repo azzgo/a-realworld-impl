@@ -10,18 +10,35 @@ import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
 
 
+class SharedContainer: PostgreSQLContainer<SharedContainer>("postgres:16.0") {
+    override fun start() {
+        super.start()
+        System.setProperty("DB_URL", instance.getJdbcUrl());
+        System.setProperty("DB_USERNAME", instance.getUsername());
+        System.setProperty("DB_PASSWORD", instance.getPassword());
+    }
+
+    override fun stop() {
+        // do nothing
+    }
+
+    companion object {
+        private val instance: SharedContainer = SharedContainer();
+        fun getInstance(): SharedContainer {
+            return instance
+        }
+    }
+}
+
 @SpringBootTest
 @AutoConfigureTestEntityManager
 @ActiveProfiles("test")
 @Testcontainers
 open class BaseRepositoryTest {
-
     companion object {
+        @JvmStatic
         @Container
-        var postgreSQLContainer: PostgreSQLContainer<*> = PostgreSQLContainer("postgres:16.0")
-            .withDatabaseName("conduit_test")
-            .withUsername("sa")
-            .withPassword("password")
+        var postgreSQLContainer: PostgreSQLContainer<*> = SharedContainer.getInstance()
 
         @JvmStatic
         @DynamicPropertySource

@@ -7,6 +7,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "test": "vitest --run --silent",
+    "mock-server": "node ./scripts/mock-server.mjs",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
@@ -36,6 +37,7 @@
     "eslint-plugin-react-refresh": "^0.4.3",
     "happy-dom": "^12.9.1",
     "jotai": "^2.4.3",
+    "pactum": "^3.5.1",
     "typescript": "^5.0.2",
     "vite": "^4.4.5",
     "vitest": "^0.34.6"

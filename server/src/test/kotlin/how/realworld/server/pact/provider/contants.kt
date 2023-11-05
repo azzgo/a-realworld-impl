@@ -1,0 +1,4 @@
+package how.realworld.server.pact.provider
+
+const val jwtTestToken =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2OTc0NTkyMzQsImV4cCI6NDEwNTAwODAwMCwic3ViIjoiamFrZV9pZCIsInVzZXJuYW1lIjoiamFrZSIsImVtYWlsIjoiamFrZUBqYWtlLmpha2UifQ.ZDKKQ0noCRU3cHs9B2EW1GllM6lj5Wr07GBoJVf2v3g"

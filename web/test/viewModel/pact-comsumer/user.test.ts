@@ -47,7 +47,7 @@ describe("consumer test for register", () => {
         body: {
           user: {
             email: "jake@jake.jake",
-            token: "jwt.token.here",
+            token: jwtToken,
             username: "jake",
           },
         },
@@ -63,7 +63,7 @@ describe("consumer test for register", () => {
         email: "jake@jake.jake",
         username: "jake",
       });
-      expect(getToken()).toEqual("jwt.token.here");
+      expect(getToken()).toEqual(jwtToken);
     });
   });
 
@@ -238,7 +238,7 @@ describe("comsumer test for login", () => {
         body: {
           user: {
             email: "jake@jake.jake",
-            token: "jwt.token.here",
+            token: jwtToken,
             username: "jake",
             bio: "I work at statefarm",
             image: "http://image.url",
@@ -257,7 +257,7 @@ describe("comsumer test for login", () => {
         bio: "I work at statefarm",
         image: "http://image.url",
       });
-      expect(getToken()).toEqual("jwt.token.here");
+      expect(getToken()).toEqual(jwtToken);
     });
   });
 
@@ -334,7 +334,7 @@ describe("comsumer test for loadCurrentUser", () => {
           user: {
             email: "jake@jake.jake",
             bio: "I work at statefarm",
-            token: "jwt.token.here",
+            token: jwtToken,
             image: "http://image.url",
             username: "jake",
           },
@@ -352,7 +352,7 @@ describe("comsumer test for loadCurrentUser", () => {
         image: "http://image.url",
         username: "jake",
       });
-      expect(getToken()).toEqual("jwt.token.here");
+      expect(getToken()).toEqual(jwtToken);
     });
   });
 });
@@ -393,7 +393,7 @@ describe("comsumer test for update", () => {
           user: {
             username: "jake John",
             email: "jake-john@jake.jake",
-            token: "jwt.token.here",
+            token: jwtToken,
             bio: "I work at statefarm",
             image: "http://image.url",
           },
@@ -412,7 +412,7 @@ describe("comsumer test for update", () => {
         bio: "I work at statefarm",
         image: "http://image.url",
       });
-      expect(getToken()).toEqual("jwt.token.here");
+      expect(getToken()).toEqual(jwtToken);
     });
   });
 });
