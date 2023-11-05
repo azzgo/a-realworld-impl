@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { UpdatedUserInfo, UserControllerContext, userAtom } from "../model/user";
 import { useNavigate } from "react-router";
-import { useAtom } from "jotai";
+import { useAtomValue } from "jotai";
 import Form, { Field } from "rc-field-form";
 import { Input } from "../components/Input";
 import { Textarea } from "../components/Textarea";
@@ -9,7 +9,7 @@ import { Textarea } from "../components/Textarea";
 export default function Settings() {
   const userController = useContext(UserControllerContext);
   const navigate = useNavigate();
-  const [user] = useAtom(userAtom);
+  const user = useAtomValue(userAtom);
   const [formRef] = Form.useForm();
 
   function logout() {

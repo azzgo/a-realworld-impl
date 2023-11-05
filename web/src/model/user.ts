@@ -1,5 +1,5 @@
 import request from "../utils/request";
-import { atom, useAtom } from "jotai";
+import { atom, useAtomValue, useSetAtom, useStore } from "jotai";
 import { clearToken, persistToken } from "../utils/token";
 import { omit } from "lodash";
 import { createContext } from "react";
@@ -29,28 +29,33 @@ export interface AuthenticatedUserResponse extends User {
 
 export const userAtom = atom<User | null>(null);
 
+export function useIsLogin(): boolean {
+  const user = useAtomValue(userAtom);
+  return user != null;
+}
+
 export function useUserController(): UserController {
-  const [, setUser] = useAtom(userAtom);
+  const updateUser = useSetAtom(userAtom);
   return {
     async login(email: string, password: string) {
       const user = await login(email, password);
-      setUser(user);
+      updateUser(user);
     },
     async register(email: string, username: string, password: string) {
       const user = await register(email, username, password);
-      setUser(user);
+      updateUser(user);
     },
     async loadCurrentUser() {
       const user = await getCurrentUser();
-      setUser(user);
+      updateUser(user);
     },
     async update(toUpdateUserInfo: Partial<User>) {
       const user = await updateUserInfo(toUpdateUserInfo);
-      setUser(user);
+      updateUser(user);
     },
     logout() {
       clearToken();
-      setUser(null);
+      // updateUser(null);
     },
   };
 }

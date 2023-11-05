@@ -11,9 +11,17 @@ import Layout from "./layout/Layout.tsx";
 import { getToken, hasToken } from "./utils/token.ts";
 import Settings from "./page/Settings.tsx";
 import { useContext, useEffect, useState } from "react";
-import { UserControllerContext } from "./model/user.ts";
+import {
+  useIsLogin,
+  UserControllerContext,
+  useUserController,
+} from "./model/user.ts";
 import ArticleEditor from "./page/ArticleEditor.tsx";
 import ArticleDetail from "./page/ArticleDetail.tsx";
+import {
+  ArticleControllerContext,
+  useArticleController,
+} from "./model/article.ts";
 
 const simpleGuard = () => {
   if (getToken() == null) {
@@ -31,24 +39,35 @@ const routes = createBrowserRouter([
       { path: "/register", element: <Register /> },
       { path: "/", element: <Home /> },
       { path: "/settings", loader: simpleGuard, element: <Settings /> },
-      { path: "/editor/:slug?", loader: simpleGuard, element: <ArticleEditor /> },
+      {
+        path: "/editor/:slug?",
+        loader: simpleGuard,
+        element: <ArticleEditor />,
+      },
       { path: "/article/:slug", element: <ArticleDetail /> },
     ],
   },
 ]);
 
 export default function App() {
-  const userController = useContext(UserControllerContext);
+  const userController = useUserController();
+  const articleController = useArticleController();
   const [isLoaded, setIsLoaded] = useState(false);
+  const isLogin = useIsLogin();
   useEffect(() => {
-    if (hasToken() && !isLoaded) {
+    if (!isLogin && hasToken() && !isLoaded) {
       userController?.loadCurrentUser().then(() => setIsLoaded(true));
-      // TODO if token is expired, redirect to login page
     } else {
       setIsLoaded(true);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return isLoaded && <RouterProvider router={routes} />;
+  return (
+    <UserControllerContext.Provider value={userController}>
+      <ArticleControllerContext.Provider value={articleController}>
+        {isLoaded && <RouterProvider router={routes} />}
+      </ArticleControllerContext.Provider>
+    </UserControllerContext.Provider>
+  );
 }

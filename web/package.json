@@ -12,9 +12,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emotion/react": "^11.11.1",
     "@types/lodash": "^4.14.199",
     "axios": "^1.5.1",
     "dayjs": "^1.11.10",
+    "jotai-devtools": "^0.7.0",
     "lodash": "^4.17.21",
     "rc-field-form": "^1.39.0",
     "react": "^18.2.0",
