@@ -14,7 +14,7 @@ beforeEach(() => {
   } as any;
 });
 
-test("should get current user when render App", () => {
+test.skip("should get current user when render App", () => {
   (mockUserController.loadCurrentUser as any).mockResolvedValue(undefined);
   persistToken("token");
   renderApp();

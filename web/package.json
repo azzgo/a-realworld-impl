@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "test": "vitest --run --silent",
-    "mock-server": "node ./scripts/mock-server.mjs",
+    "mock": "node ./scripts/mock-server.mjs",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
@@ -29,6 +29,7 @@
     "@pact-foundation/pact": "^12.1.0",
     "@testing-library/react": "^14.0.0",
     "@types/node": "^20.8.4",
+    "@types/qs": "^6.9.10",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
@@ -40,6 +41,7 @@
     "happy-dom": "^12.9.1",
     "jotai": "^2.4.3",
     "pactum": "^3.5.1",
+    "qs": "^6.11.2",
     "typescript": "^5.0.2",
     "vite": "^4.4.5",
     "vitest": "^0.34.6"

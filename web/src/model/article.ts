@@ -1,4 +1,4 @@
-import { createContext, useContext } from "react";
+import { createContext, useContext, useEffect } from "react";
 import { useAsync } from "react-async-hook";
 import request from "../utils/request";
 import { Pagination } from "../type";
@@ -102,21 +102,22 @@ export function useArticleById(slug?: Slug) {
   );
 }
 
-export function useArticlesPageQuery(
-  tag?: string,
-  author?: string,
-  favorited?: string,
-  pagination?: Pagination
-) {
+export function useArticlesPageQuery({
+  tag,
+  author,
+  favorited,
+  pagination,
+}: {
+  tag?: string;
+  author?: string;
+  favorited?: string;
+  pagination?: Pagination;
+} = {}) {
   const controller = useContext(ArticleControllerContext);
+
   return useAsync(
-    async (
-      tag?: string,
-      author?: string,
-      favorited?: string,
-      pagination?: Pagination
-    ) => controller?.list(tag, author, favorited, pagination),
+    async () => controller?.list({ tag, author, favorited, pagination }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [tag, author, favorited, pagination]
+    []
   );
 }
