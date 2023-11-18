@@ -1,11 +1,11 @@
 import { describe, expect, test } from "vitest";
-import { MockAppWrapper } from "./utils.utils";
+import { MockAppWrapper } from "./utils-wrapper";
 import { MemoryRouter, Route, Routes } from "react-router";
 import React from "react";
 import { fireEvent, render } from "@testing-library/react";
 import Layout from "../../src/layout/Layout";
-import { persistToken } from "../../src/utils/token";
-import { jwtToken } from "../viewModel/pact-comsumer/pact.utils";
+import { createStore } from "jotai";
+import { fakeLoginUser } from "./utils-tools";
 
 describe("AuthHeader Page", () => {
   test("can navigate to /editor to create articles", () => {
@@ -15,10 +15,11 @@ describe("AuthHeader Page", () => {
   });
 
   function renderAuthLayou() {
-    persistToken(jwtToken);
+    const store = createStore();
+    fakeLoginUser(store);
     const Wrapper = MockAppWrapper();
     return render(
-      <Wrapper>
+      <Wrapper store={store}>
         <MemoryRouter initialEntries={["/"]}>
           <Routes>
             <Route path="/" element={<Layout />}>

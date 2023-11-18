@@ -12,7 +12,7 @@ import { persistToken } from "../../../src/utils/token";
 import { fakeArticles } from "../../helpers";
 import { noop, omit } from "lodash";
 
-describe("consumer for create article", () => {
+describe("consumer for article CRUD", () => {
   let store: JotaiStore;
   let wrapper: any;
 
@@ -284,6 +284,30 @@ describe("consumer for create article", () => {
       });
     }
   );
+
+  test("should delete an existing article", async () => {
+    persistToken(jwtToken);
+    provider
+      .given("a article exist")
+      .uponReceiving("a request to delete the article")
+      .withRequest({
+        method: "DELETE",
+        path: "/articles/slug",
+        headers: {
+          Authorization: `Token ${jwtToken}`,
+        },
+      })
+      .willRespondWith({ status: 200 });
+
+    return await provider.executeTest(async (mockServer) => {
+      configEnv({ BASE_URL: mockServer.url });
+      initAxiosInstance();
+      const { result } = renderHook(() => useArticleController(), {
+        wrapper,
+      });
+      await result.current.delete("slug");
+    })
+  });
 
   test.todo("list articles by favorited");
   test.todo("list feed articles");

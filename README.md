@@ -57,7 +57,7 @@ Technology Stack: Springboot MVC with Kotlin, Springboot data jpa for database, 
     - [ ] Delete Article Page
 - [ ] CR-D Comments on articles (no updating required)
 - [ ] GET and display paginated lists of articles
-    - [ ] Article List Page
+    - [-] Article List Page
 - [ ] Favorite articles
 - [ ] Follow other users
 

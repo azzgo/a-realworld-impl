@@ -4,6 +4,24 @@
   },
   "interactions": [
     {
+      "description": "a request to delete the article",
+      "providerStates": [
+        {
+          "name": "a article exist"
+        }
+      ],
+      "request": {
+        "headers": {
+          "Authorization": "Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2OTc0NTkyMzQsImV4cCI6NDEwNTAwODAwMCwic3ViIjoiamFrZV9pZCIsInVzZXJuYW1lIjoiamFrZSIsImVtYWlsIjoiamFrZUBqYWtlLmpha2UifQ.ZDKKQ0noCRU3cHs9B2EW1GllM6lj5Wr07GBoJVf2v3g"
+        },
+        "method": "DELETE",
+        "path": "/articles/slug"
+      },
+      "response": {
+        "status": 200
+      }
+    },
+    {
       "description": "a request to register",
       "providerStates": [
         {

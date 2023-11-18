@@ -45,6 +45,7 @@ type MultipleArticleResponse = {
 export interface ArticleController {
   create(article: ArticleDto): Promise<Article>;
   update(slug: Slug, article: ArticleDto): Promise<Article>;
+  delete(slug: string): Promise<void>;
   get(slug: Slug): Promise<Article>;
   list(query: {
     tag?: string;
@@ -65,6 +66,9 @@ export function useArticleController(): ArticleController {
       return request()
         .put<SingleAritleResponse>(`/articles/${slug}`, { article })
         .then((res) => res.data.article);
+    },
+    async delete(slug: string) {
+      return request().delete(`/articles/${slug}`);
     },
     async get(slug: Slug) {
       return request()

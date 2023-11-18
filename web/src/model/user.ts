@@ -1,5 +1,5 @@
 import request from "../utils/request";
-import { atom, useAtomValue, useSetAtom, useStore } from "jotai";
+import { atom, useAtomValue, useSetAtom } from "jotai";
 import { clearToken, persistToken } from "../utils/token";
 import { omit } from "lodash";
 import { createContext } from "react";
@@ -55,7 +55,7 @@ export function useUserController(): UserController {
     },
     logout() {
       clearToken();
-      // updateUser(null);
+      updateUser(null);
     },
   };
 }
